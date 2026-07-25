@@ -1,0 +1,74 @@
+Mindmap Markdown — Licensing
+============================
+
+This repository contains two kinds of material, licensed differently.
+
+
+1. SPECIFICATION TEXT AND DOCUMENTATION
+---------------------------------------
+
+Licensed under the Creative Commons Attribution 4.0 International License
+(CC-BY-4.0). See LICENSE-CC-BY-4.0 for the full text, or visit:
+
+    https://creativecommons.org/licenses/by/4.0/
+
+This covers:
+
+    spec.md
+    docs/**
+    rfcs/**
+    README.md, GOVERNANCE.md, CONTRIBUTING.md, and other prose documents
+
+You are free to share and adapt this material, including for commercial
+purposes, provided you give appropriate credit. Translations and derivative
+specifications are explicitly welcome.
+
+
+2. SOURCE CODE, TOOLING, AND TEST DATA
+--------------------------------------
+
+Licensed under the Apache License, Version 2.0. See LICENSE-APACHE-2.0 for
+the full text, or visit:
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+This covers:
+
+    tools/**
+    examples/**
+    scripts, workflows, and any other executable or machine-readable artifact
+
+The Apache License grants an explicit patent license to implementers. This is
+deliberate: an implementer of an open specification should not be exposed to
+patent risk arising from that implementation.
+
+
+WHY TWO LICENSES
+----------------
+
+Specification text and code have different reuse expectations. Standards
+documents are quoted, translated, and republished, which a documentation
+license accommodates and a source-code license does not. Conversely, reference
+tooling needs an explicit patent grant, which Creative Commons licenses do not
+provide.
+
+Separating them is normal practice for open specifications and avoids
+ambiguity for anyone implementing this specification.
+
+
+CONTRIBUTIONS
+-------------
+
+Unless you state otherwise, any contribution you intentionally submit for
+inclusion in this repository shall be licensed as above, with no additional
+terms or conditions.
+
+Contributions are accepted under the Developer Certificate of Origin (DCO).
+See CONTRIBUTING.md.
+
+
+SPDX
+----
+
+    Documentation:  CC-BY-4.0
+    Code:           Apache-2.0
