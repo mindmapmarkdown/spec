@@ -154,16 +154,17 @@ is attributable.
 section whose requirement it demonstrates, where a reader encounters it in
 context and a reviewer sees it in the same diff as the rule it illustrates.
 
-**`examples.json` is generated, never hand-edited.** It is extracted from the
-fenced examples in `spec.md` by a generator in `tools/` and committed as a build
-artifact so that implementers can consume it without running our toolchain. A
-hand-edit to `examples.json` is a change to the conformance suite that leaves no
-trace in the specification — the two drift, and the machine-readable copy wins
-by accident. Change `spec.md`, regenerate, and commit both in the same commit:
+**`examples/examples.json` is generated, never hand-edited.** It is extracted
+from the fenced examples in `spec.md` by a generator in `tools/` and committed
+as a build artifact so that implementers can consume it without running our
+toolchain. A hand-edit to `examples.json` is a change to the conformance suite
+that leaves no trace in the specification — the two drift, and the
+machine-readable copy wins by accident. Change `spec.md`, regenerate, and commit
+both in the same commit:
 
 ```sh
-node tools/gen-examples.mjs   # rewrites examples.json from spec.md
-git add spec.md examples.json
+node tools/gen-examples.mjs   # rewrites examples/examples.json from spec.md
+git add spec.md examples/examples.json
 ```
 
 If a regenerated `examples.json` differs from what you expected, that difference
@@ -186,8 +187,8 @@ This repository is dual-licensed; see [`LICENSE`](LICENSE) for what falls under
 which.
 
 - **Prose and specification text** — `spec.md`, `docs/**`, `rfcs/**`,
-  `README.md`, `GOVERNANCE.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, and this
-  file — **CC-BY-4.0**.
+  `README.md`, `GOVERNANCE.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`,
+  `CLAUDE.md`, and this file — **CC-BY-4.0**.
 - **Code, tooling, and test data** — `tools/**`, `examples/**`, scripts, and
   workflows — **Apache-2.0**, which carries the explicit patent grant that
   implementers need.
