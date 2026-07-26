@@ -17,7 +17,8 @@ This covers:
     spec.md
     docs/**
     rfcs/**
-    README.md, GOVERNANCE.md, CONTRIBUTING.md, and other prose documents
+    README.md, GOVERNANCE.md, CONTRIBUTING.md, CODE_OF_CONDUCT.md,
+    SECURITY.md, CLAUDE.md, and other prose documents
 
 You are free to share and adapt this material, including for commercial
 purposes, provided you give appropriate credit. Translations and derivative
