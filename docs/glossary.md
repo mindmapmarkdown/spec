@@ -1,5 +1,7 @@
 # Glossary
 
+**Translations** — [한국어](ko/glossary.md)
+
 Plain-language explanations of the vocabulary used in this repository — the
 specification's own terms, the standards-process words that surround them, and
 the Markdown terminology both rely on.
@@ -8,6 +10,10 @@ the Markdown terminology both rely on.
 binding definition elsewhere points to it, and where an explanation here and a
 definition there disagree, the definition wins. Nothing in this file can make an
 implementation conformant or non-conformant.
+
+**This English text is the authoritative one.** Translations are welcome — the
+licence exists partly to permit them — but a translation may lag behind, and
+where one disagrees with this file, this file wins.
 
 It is written for someone meeting this kind of project for the first time. If a
 term is missing, or an explanation did not help,
