@@ -79,6 +79,7 @@ of claim and are not interchangeable.
 | [`spec.md`](spec.md) | The specification, with its normative examples written inline | Chapter 1 only |
 | `examples/examples.json` | Conformance test cases, **generated** from the examples in `spec.md` and never hand-edited | Not yet |
 | [`rfcs/`](rfcs/) | Proposals for normative change, including rejected ones | Template only |
+| [`docs/`](docs/) | Informative material about the specification, starting with a [glossary](docs/glossary.md) | |
 | `tools/` | The generator that extracts `examples.json`, and the repository checks | Not yet |
 
 The generated-not-written rule for `examples.json` is the point of the
@@ -96,7 +97,8 @@ What is worth doing now:
 
 - **Read [`spec.md`](spec.md).** It is short. §1.3 is the vocabulary the rest of
   the project will use, and the fastest way to find out whether this solves your
-  problem.
+  problem. If the standards vocabulary around it is unfamiliar,
+  [`docs/glossary.md`](docs/glossary.md) explains it in plain language.
 - **Check the boundary against your use case.** If what you need is in
   [§1.1.2](spec.md#112-what-this-specification-does-not-define), the answer will
   not arrive later — say so now, while the boundary is still cheap to move.
@@ -149,6 +151,7 @@ the succession story in [`GOVERNANCE.md`](GOVERNANCE.md).
 ## Related documents
 
 - [`spec.md`](spec.md) — the specification
+- [`docs/glossary.md`](docs/glossary.md) — the vocabulary, in plain language, for a first-time reader
 - [`GOVERNANCE.md`](GOVERNANCE.md) — roles, change classes, RFC process, phase transitions, succession
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — how to work on the specification
 - [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) — participation
