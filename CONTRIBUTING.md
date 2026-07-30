@@ -48,10 +48,11 @@ Conventions the checks enforce, so you may as well follow them by hand:
 - Relative links between documents in this repository (`GOVERNANCE.md`, not the
   full URL), so that forks and translations keep working.
 
-> The conformance suite and the generators are being extracted from the
-> reference application and are not all present yet. Where a command below does
-> not exist in your checkout, that is why — say so in your pull request rather
-> than working around it silently.
+> The example generator in `tools/` is present and is exercised by the checks on
+> every pull request. The separate conformance suite repository is not, and
+> neither are the adapters. Where something referenced here does not exist in
+> your checkout, that is why — say so in your pull request rather than working
+> around it silently.
 
 ## 3. Branches and pull requests
 
@@ -163,12 +164,22 @@ machine-readable copy wins by accident. Change `spec.md`, regenerate, and commit
 both in the same commit:
 
 ```sh
-node tools/gen-examples.mjs   # rewrites examples/examples.json from spec.md
+node tools/extract-examples.mjs      # rewrites examples/examples.json from spec.md
 git add spec.md examples/examples.json
 ```
 
 If a regenerated `examples.json` differs from what you expected, that difference
 is the review's subject — do not reconcile it by editing the output.
+
+The checks run the generator with `--check`, which regenerates in memory and
+fails if the committed file differs. So a pull request that changes an example
+without regenerating cannot merge, and neither can one that edits the output by
+hand. To run what the checks run:
+
+```sh
+node --test tools/*.test.mjs         # the generator's own tests
+node tools/extract-examples.mjs --check
+```
 
 Other conventions:
 

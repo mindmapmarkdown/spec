@@ -77,15 +77,16 @@ of claim and are not interchangeable.
 | Path | Contents | |
 |---|---|---|
 | [`spec.md`](spec.md) | The specification, with its normative examples written inline | Chapter 1 only |
-| `examples/examples.json` | Conformance test cases, **generated** from the examples in `spec.md` and never hand-edited | Not yet |
+| [`examples/examples.json`](examples/examples.json) | Conformance test cases, **generated** from the examples in `spec.md` and never hand-edited | Empty until Chapter 2 |
 | [`rfcs/`](rfcs/) | Proposals for normative change, including rejected ones | Template only |
 | [`docs/`](docs/) | Informative material about the specification, starting with a [glossary](docs/glossary.md) | |
-| `tools/` | The generator that extracts `examples.json`, and the repository checks | Not yet |
+| [`tools/`](tools/) | The generator that extracts `examples.json`, and its tests | |
 
 The generated-not-written rule for `examples.json` is the point of the
 arrangement: the specification and its test suite are the same source, so they
-cannot drift apart. That is the mechanism, more than the prose, that made
-CommonMark usable.
+cannot drift apart. The checks on every pull request regenerate the file and fail
+if it differs, which turns that from an intention into an invariant. It is the
+mechanism, more than the prose, that made CommonMark usable.
 
 ## For implementers
 
