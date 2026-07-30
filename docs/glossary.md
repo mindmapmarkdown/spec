@@ -20,6 +20,10 @@ term is missing, or an explanation did not help,
 [open an issue](https://github.com/mindmapmarkdown/spec/issues) — that is a
 defect in this document, not in the reader.
 
+For the shape rather than the words — how documents, trees, and views are
+layered, and why the conformance suite looks the way it does — see
+[`overview.md`](overview.md).
+
 **Contents** — [Process](#process) · [Specification](#specification) ·
 [Data model](#data-model) · [Markdown](#markdown) ·
 [Reading an RFC](#reading-an-rfc)
