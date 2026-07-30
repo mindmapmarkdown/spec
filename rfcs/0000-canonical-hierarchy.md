@@ -27,6 +27,12 @@ else), how heading levels are read (by nesting, not by number), what happens to
 trees that cannot be written in Markdown at all, and which CommonMark
 ambiguities canonical form resolves.
 
+Because the RFC introduces normative examples, it also has to say how an expected
+tree is written down. A tree is an abstract structure with no format of its own,
+and an example that states one in an unspecified notation cannot be compared —
+so §2.6 specifies the encoding the suite uses, as a test fixture format and
+explicitly not as an interchange format.
+
 ## Motivation
 
 ### The problem, shown
@@ -103,7 +109,8 @@ these rules do. Nothing else in the specification can be written first.
 ## Detailed design
 
 Numbering below is provisional: `L-n` for lift rules, `S-n` for tree
-well-formedness, `P-n` for projection rules. On acceptance these become
+well-formedness, `P-n` for projection rules, `E-n` for the encoding examples are
+written in. On acceptance these become
 Chapter 2 of `spec.md`, renumbered to its sections.
 
 ### 2.1 Node kind
@@ -232,11 +239,71 @@ Loose and tight lists are a rendering distinction — whether items are wrapped 
 paragraphs — and carry no structural meaning. Lift ignores the difference; P-7
 picks one so that projection is deterministic.
 
-### 2.6 Worked examples
+### 2.6 The tree encoding used by examples
 
-These are written in the format the extractor will consume: input, a `.`
-separator, and the expected tree. On acceptance they move into `spec.md` inline,
-and `examples/examples.json` is generated from them — never the reverse
+A tree is an abstract structure. It has no format, and this specification blesses
+none — a Markdown document is one projection of a tree and the only one specified
+(§1.1.2). But an example has to state its expected tree *in something*, and
+whatever that notation is, it has to be specified: two implementations reading
+the same suite differently is exactly the undecidable conformance §1.4.3 forbids.
+
+**This is a test fixture encoding and nothing more.** It is not an interchange
+format, not a serialisation implementations are expected to read or write outside
+the suite, and not a second format this specification undertakes to maintain.
+Whether a normative interchange encoding is ever wanted is left open below.
+
+**E-1.** A tree MUST be encoded as a JSON object with exactly one member,
+`children`, whose value is an array of node objects in order. The root is
+synthetic (L-4) and has no label and no kind, so it has no other members.
+
+**E-2.** A node MUST be encoded as a JSON object with exactly four members:
+`kind`, `label`, `content`, and `children`. All four MUST be present, including
+when `content` or `children` is empty.
+
+**E-3.** `kind` MUST be the string `section` or the string `item`.
+
+**E-4.** `label` MUST be the node's inline content exactly as it appears in the
+source, with leading and trailing whitespace removed. Inline markup MUST NOT be
+interpreted: the heading `## **Fast** start` has the label `**Fast** start`.
+
+**E-5.** `content` MUST be an array, in document order, of objects with exactly
+two members: `block`, the CommonMark block type name, and `source`, that block's
+Markdown source verbatim — internal line breaks included, with no trailing line
+feed.
+
+**E-6.** `children` MUST be an array of node objects, in document order.
+
+**E-7.** Two encoded trees are equal if and only if: objects have the same set of
+member names and each corresponding value is equal; arrays have the same length
+and are equal element-wise in order; strings are identical sequences of Unicode
+code points. **No Unicode normalisation is applied**, in either direction, at any
+point.
+
+**E-8.** Members SHOULD appear in the order `kind`, `label`, `content`,
+`children`. Member order is not significant to E-7, and an implementation MUST
+NOT depend on it.
+
+*(Informative)* E-2 forbids omitting an empty `content` or `children` because
+allowing it would mean two different JSON texts encode the same tree — an
+ambiguity in the one notation whose entire purpose is to remove ambiguity. The
+verbosity is the cheaper of the two costs, and it is paid by a generated file
+rather than by an author.
+
+*(Informative)* E-4 and E-5 carry source through verbatim so that the encoding is
+lossless without the suite having to model Markdown's inline or block semantics.
+A label reduced to plain text would drop emphasis and links, which would make
+round-trip untestable at exactly the point where it matters. A structured inline
+tree would re-specify CommonMark inside our test data, which §1.1.2 says this
+specification does not do.
+
+Identity is not encoded. Chapter 3 will add a member for it, and doing so will be
+a Normative change to this section rather than a clarification of it.
+
+### 2.7 Worked examples
+
+These are written in the format the extractor consumes: input, a `.` separator,
+and the expected tree encoded per §2.6. On acceptance they move into `spec.md`
+inline, and `examples/examples.json` is generated from them — never the reverse
 (`CONTRIBUTING.md` §6). Trees are shown without identity, which is Chapter 3.
 
 Sections nest by heading level:
@@ -284,7 +351,7 @@ Node.js 20 or later.
 .
 {"children":[
   {"kind":"section","label":"Install",
-   "content":[{"block":"paragraph","text":"Node.js 20 or later."}],
+   "content":[{"block":"paragraph","source":"Node.js 20 or later."}],
    "children":[]}]}
 ````
 
@@ -303,7 +370,7 @@ conforming but not canonical:
 Projecting that tree yields `# A` / `## B`, which lifts to the same tree. The
 round-trip is stable at the second pass, and idempotent thereafter.
 
-### 2.7 Effect on round-trip
+### 2.8 Effect on round-trip
 
 For a canonical document, lift followed by projection returns the document byte
 for byte — §1.2.4 L1 already requires this, and the rules above are what make it
@@ -315,14 +382,19 @@ changes a non-canonical document undergoes are confined to whitespace, marker
 characters, heading style, heading level, and code-fence style. No heading
 becomes a bullet and no bullet becomes a heading.
 
-### 2.8 Testing
+### 2.9 Testing
 
 Every rule above is decided by comparing two artifacts, with no renderer
 involved:
 
-- **Lift rules** — input document, expected tree, compared structurally. This is
-  the `example` block format above, and the generated `examples/examples.json`
-  is the suite.
+- **Lift rules** — input document, expected tree, compared structurally under
+  E-7. This is the `example` block format above, and the generated
+  `examples/examples.json` is the suite.
+- **The encoding itself** — the generator in `tools/` currently checks only that
+  an expected tree is well-formed JSON, because until this section exists there
+  is no shape to check against. On acceptance it can enforce E-1 to E-6, so that
+  a malformed example fails in the pull request that introduces it rather than in
+  somebody's implementation months later.
 - **Projection rules** — input tree, expected document, compared byte for byte.
 - **Mutual inversion** — for every canonical example, projecting its lift MUST
   reproduce the input exactly; for every non-canonical example, the second
@@ -410,6 +482,17 @@ being written into a corner.
 them; setext expresses only levels 1 and 2, so no information is lost. Whether
 lift should treat a setext heading as identical to its ATX equivalent in every
 respect is assumed here and not argued.
+
+**Whether a normative interchange encoding is ever wanted.** §2.6 defines how an
+expected tree is written in the test suite and says plainly that this is not an
+interchange format. But implementations will need to hand trees to each other —
+the subtree exchange L3 requires is precisely that — and they will either agree on
+something or each invent one. Blessing §2.6 for that purpose would be the obvious
+move and is deliberately not made here: an interchange format acquires
+requirements a fixture format does not have, starting with versioning, and
+committing to those inside a chapter about hierarchy would be scope creep of the
+kind §1.1.3 argues against. **This does not block Chapter 2.** It should be
+answered before L3 is specified, and by its own RFC.
 
 ## Decision and rationale
 
