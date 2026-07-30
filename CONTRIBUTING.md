@@ -147,7 +147,19 @@ repository that skips the sign-off.
 
 Use a real name and an address that reaches you. Anonymous and pseudonymous
 sign-offs cannot be accepted, because the certification is only meaningful if it
-is attributable.
+is attributable. An account handle is not a name — `Signed-off-by: dev-42` does
+not certify anything, whatever address follows it. A private or forwarding
+address is fine, including the one GitHub provides at
+`users.noreply.github.com`: attributability comes from the name, and nobody
+should have to publish an inbox to contribute a typo fix.
+
+**Tooling does not change who is contributing.** Draft your contribution with
+whatever you find useful — an editor, a generator, an AI assistant. The DCO is a
+statement about rights and responsibility, not about keystrokes: whoever signs
+off certifies they have the right to submit the contribution under this
+repository's licences, and answers for it in review. A file named after a tool,
+such as [`CLAUDE.md`](CLAUDE.md), configures that tool. It authors nothing, and
+it is not part of the specification.
 
 ## 6. Working on the specification text
 
