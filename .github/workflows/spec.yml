@@ -53,3 +53,21 @@ jobs:
 
       - name: examples.json matches spec.md
         run: node tools/extract-examples.mjs --check
+
+  links:
+    name: links
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Runs once rather than per Node version: the result depends on the
+      # contents of the repository, not on the runtime. It runs on Linux, which
+      # is the point — a link written `Spec.md` resolves on the maintainer's
+      # Windows checkout and breaks here and on github.com.
+      - name: Relative links and anchors
+        run: node tools/check-links.mjs
