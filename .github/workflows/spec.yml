@@ -1,0 +1,55 @@
+# Enforces the one invariant that keeps the specification and its test suite
+# from drifting apart: examples/examples.json is generated from the examples in
+# spec.md, and a pull request in which the two disagree fails.
+#
+# That is the whole point of the arrangement. A conformance suite maintained by
+# hand alongside a specification will eventually contradict it, and the
+# machine-readable copy wins by accident because that is the one implementers
+# run. Generating the suite makes the contradiction impossible to commit.
+#
+# The unit tests run first, and on more than one Node version. The extractor is
+# currently unexercised by the real source — spec.md has no examples yet — so
+# the fixtures are the only evidence it works, and they earned their place
+# immediately: the first run found a genuine bug, and a later one found that
+# `node --test` takes different arguments on Node 20 and Node 24.
+
+name: spec
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: spec-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tools:
+    name: tools (node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # 20 is the floor CONTRIBUTING.md §2 promises; 24 is current. Both are
+        # tested because the test runner's own interface has changed between
+        # them, and a contributor on either should not meet a failure the
+        # maintainer cannot reproduce.
+        node: ['20', '24']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Unit tests
+        run: node --test tools/*.test.mjs
+
+      - name: examples.json matches spec.md
+        run: node tools/extract-examples.mjs --check
