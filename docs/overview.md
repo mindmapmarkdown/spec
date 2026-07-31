@@ -74,6 +74,40 @@ So the project's promise is narrower than "a standard for mindmaps", on purpose.
 A tree that survives the trip out and back is something every view can be built
 on. A standardised mindmap is something only mindmap software can use.
 
+### A worked case
+
+The boundary sounds clean until a real question lands on it. Here is one that
+did.
+
+A document ends with three things in a row under one heading — a code block, a
+table, and an image, each standing alone between blank lines. Should each become
+its own node?
+
+**markmap says yes.** Render its own sample document and the three blocks appear
+as three sibling nodes. Anyone importing a file into a mindmap editor expects the
+same, because on screen those three things obviously are three things.
+
+**This specification says no.** They are *content* of the node above them, held
+in order. Nodes come from headings and list items, and nothing else.
+
+Both answers are right, because they answer different questions. markmap is
+deciding **what to draw**. The specification is deciding **what the document
+says**. And an application that wants three bubbles is not blocked by that: a
+node's content is an ordered sequence of blocks, so everything needed to draw
+them separately is already there. Where they appear on screen is a projection —
+which is the layer this specification leaves to whoever is drawing.
+
+The test that settles which side a question falls on:
+
+> Could two implementations answer it differently without either being wrong?
+> If the only thing that changes is what a reader sees, it is a view.
+
+Two mindmap tools can lay the same tree out differently and both be correct.
+They cannot disagree about whether a document has three nodes or one.
+
+*This case is recorded in full — including why it was tempting — in the
+[open RFC](https://github.com/mindmapmarkdown/spec/pull/4), under Alternatives.*
+
 ## Both directions are specified
 
 It would be easier to specify only reading — document to tree. That is not
