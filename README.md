@@ -79,7 +79,7 @@ of claim and are not interchangeable.
 | [`spec.md`](spec.md) | The specification, with its normative examples written inline | Chapter 1 only |
 | [`examples/examples.json`](examples/examples.json) | Conformance test cases, **generated** from the examples in `spec.md` and never hand-edited | Empty until Chapter 2 |
 | [`rfcs/`](rfcs/) | Proposals for normative change, including rejected ones | Template only |
-| [`docs/`](docs/) | Informative material — an [overview](docs/overview.md) of how the pieces fit together, and a [glossary](docs/glossary.md) | |
+| [`docs/`](docs/) | Informative material — an [overview](docs/overview.md) of how the pieces fit together, a [glossary](docs/glossary.md), and a guide to [reading a worked example](docs/reading-examples.md) | |
 | [`tools/`](tools/) | The generator that extracts `examples.json`, the link checker, and their tests | |
 
 The generated-not-written rule for `examples.json` is the point of the
@@ -154,6 +154,7 @@ the succession story in [`GOVERNANCE.md`](GOVERNANCE.md).
 - [`spec.md`](spec.md) — the specification
 - [`docs/overview.md`](docs/overview.md) — how documents, trees, and views are layered, and why the boundary is where it is
 - [`docs/glossary.md`](docs/glossary.md) — the vocabulary, in plain language, for a first-time reader
+- [`docs/reading-examples.md`](docs/reading-examples.md) — how to read a worked example and the JSON tree it expects, from no prior JSON
 - [`GOVERNANCE.md`](GOVERNANCE.md) — roles, change classes, RFC process, phase transitions, succession
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — how to work on the specification
 - [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) — participation

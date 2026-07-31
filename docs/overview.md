@@ -142,6 +142,8 @@ when you convert a Markdown file. It is a **test paper**: a list of pairs saying
 An implementer writing a tool in Rust or Python downloads that file, runs each
 `markdown` value through their reader, and compares the result against `tree`.
 Agreement across the whole file is what "conformant" means.
+[`reading-examples.md`](reading-examples.md) unpacks one, symbol by symbol, for
+a reader who has not worked with JSON before.
 
 **It is generated from `spec.md`, never written by hand.** The examples live in
 the specification, beside the rules they demonstrate, and the JSON is extracted
