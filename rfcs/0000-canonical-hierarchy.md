@@ -155,6 +155,25 @@ Content appearing before any node attaches to the root.
 corresponding text in the document. A document whose entire content sits under a
 single level-1 heading therefore lifts to a root with exactly one child.
 
+**L-8.** Lift MUST be a function of the document text alone. An implementation
+MUST NOT resolve, fetch, or otherwise depend on any resource a document
+references — an image URL, a link target, an included file — when determining the
+tree.
+
+*(Informative)* L-8 follows from the determinism L1 already requires: the same
+input must produce the same output in any conforming implementation. A tree that
+depended on a network fetch would differ between implementations, between runs of
+the same implementation, and over time as servers change or disappear, and
+conformance would stop being decidable (§1.4.3). It also keeps a parser from
+becoming a network client on behalf of whoever supplied the document — a property
+`SECURITY.md` would otherwise have to impose after the fact, on every
+implementation separately.
+
+An application may of course fetch a referenced image and embed it;
+`easymindmap` does, with a size cap and a fallback when the origin refuses. That
+is a product behaviour layered on the tree, and L-8 is what stops it from
+quietly becoming part of what the document means.
+
 *(Informative)* L-1 is what keeps a prose document from exploding. A README with
 forty paragraphs and six headings has six nodes, not forty-six. The test for
 whether something should be a node is whether Markdown gives it a hierarchy of
@@ -231,6 +250,20 @@ be loose.
 
 **P-8.** No line may end in whitespace, and the document MUST end with exactly
 one line feed.
+
+**P-9.** Each entry in a node's `content` MUST be written as the Markdown block it
+records, in the recorded order, retaining that block's own line structure. A
+table MUST be written as a table, a code block as a fenced block, a block quote as
+a block quote. Content MUST NOT be folded into the node's label, and MUST NOT be
+joined into a single line.
+
+*(Informative)* P-9 states something §1.2.4 L1 already implies, because the
+failure it prevents is easy to introduce and hard to notice. An implementation
+that models a node as *a line of text with some attachments* will serialise it
+that way, and the output still looks like a valid Markdown document — but a table
+folded onto one line lifts back as a paragraph, so the tree has changed and
+mutual inversion has failed silently. This was observed in an implementation
+(`easymindmap` #150) before it was written down here, which is the usual order.
 
 *(Informative)* P-5 is doing more work than it appears to. The worst ambiguity in
 CommonMark for this specification is that four spaces of indentation may mean an
@@ -411,6 +444,9 @@ involved:
   round-trip MUST be byte-stable.
 - **Well-formedness** — a tree violating S-1 or S-2 MUST produce an error, and a
   test asserts the error rather than an output.
+- **Purity of lift (L-8)** — lift run with no network available MUST produce the
+  same tree as lift run with one. The test does not need a network at all: it
+  asserts that no request is attempted.
 
 ## Alternatives
 
