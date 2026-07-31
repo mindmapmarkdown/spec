@@ -458,6 +458,37 @@ whose second-level nodes were written as bullets comes back with them written as
 `##`. See the prior art below — that is the strongest evidence available either
 way, and it is evidence for kind belonging to the tree.
 
+**Standalone blocks as nodes.** A fenced code block, a table, or an image
+standing alone between blank lines has a visible boundary, and a reader looking
+at a mindmap expects it as its own bubble rather than buried inside the node
+above it. markmap does exactly this: in its own sample document the three blocks
+under *Blocks* become three sibling nodes. `easymindmap` added the same
+behaviour as an import option in
+[#151](https://github.com/okpojung/easymindmap/pull/151). Rejected for Chapter 2
+on three grounds.
+
+1. **A node needs a label and a block has none.** E-2 requires `label` on every
+   node, so a code-block node would carry an empty one, and P-1 would then have
+   to write it back as an empty heading or an empty bullet — visible noise in a
+   plain renderer, which fails L0. Making it work needs a **third kind**, which
+   is a larger change than it appears and pushes on the same question the
+   checkbox does, below.
+2. **The line being drawn is presentational.** The proposed test is that a fenced
+   block has a clear boundary while a paragraph blends into the flow. That is
+   true of how they *look* and not of what they *are* — in the document model a
+   paragraph is exactly as bounded as a table. A rule that separates them has to
+   appeal to appearance, which §1.1.3 places outside this specification.
+3. **Nothing is lost by leaving it to the view.** `content` is an ordered
+   sequence of blocks (E-5), so an application that wants three bubbles under a
+   node already has everything it needs to draw them. It does not need the tree
+   to be different, and drawing them is a projection (§1.1.2).
+
+The distinction behind the proposal is real, though, and the encoding already
+keeps it. A block standing alone becomes its own entry in `content`; an image or
+a table embedded in a run of prose — a pasted article, a form — stays inside that
+paragraph's `source`. **Standalone and embedded are already different in the
+tree.** What this RFC declines to do is make one of them a node.
+
 **Prior art.**
 
 - **EMM (EasyMindMap Markdown)** is the closest prior art by a wide margin, and
@@ -498,6 +529,15 @@ way, and it is evidence for kind belonging to the tree.
   implementation rather than in a published specification, so they cannot be
   cited, targeted by another tool, or argued with. This RFC is in part an attempt
   to write down, testably, something markmap already does usefully.
+
+  Its own sample document shows what that costs. Standalone blocks become
+  sibling nodes; ordered list items keep their numbers inside the node text; a
+  task list item renders as a checkbox; and the sample carries a prose warning
+  that where blocks and lists appear at the same level, the lists are dropped.
+  Each of those is a decision this specification has to make explicitly, and
+  none of them can be quoted from anything — they can only be observed, one
+  version at a time. **Behaviour that can be watched but not cited is exactly
+  what a specification is for.**
 - **OPML** settles the question by not having it: an outline is a list of
   `<outline>` elements and there is no second way to spell one. That is available
   to a format whose documents are not also prose. It is not available here, and
@@ -519,6 +559,16 @@ to survive diff and merge.
 **Task list items.** `- [ ]` is a widespread extension, not CommonMark. Whether
 the checkbox is node content, an attribute, or invisible to this specification is
 open, and touches whether two kinds are enough.
+
+**Whether two kinds are enough** is now pushed on from two directions, which is
+worth stating as its own question rather than leaving it as an aside under the
+checkbox. A task list item is arguably not the same assertion as a bullet, and a
+standalone block would need a kind of its own to become a node at all (see
+Alternatives). Both are rejected here, and both would be answered together by a
+third kind rather than separately. **If a third kind is ever added, it should be
+added once, by an RFC that considers every candidate for it at the same time** —
+adding one per problem is how a two-value field becomes an unstructured
+vocabulary.
 
 **Where identity is written.** Chapter 3's problem, but constrained here: L0
 forbids any construct that renders as literal text, which leaves very little room
