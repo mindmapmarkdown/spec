@@ -442,7 +442,46 @@ on a node's *absolute* depth, so a subtree extracted on its own would project
 differently from the same subtree in place — which breaks the subtree operation
 L3 requires (§1.2.4).
 
+This alternative is not hypothetical. **EMM implements it**, with the constant at
+six, and the observable result is the one this RFC is trying to avoid: a document
+whose second-level nodes were written as bullets comes back with them written as
+`##`. See the prior art below — that is the strongest evidence available either
+way, and it is evidence for kind belonging to the tree.
+
 **Prior art.**
+
+- **EMM (EasyMindMap Markdown)** is the closest prior art by a wide margin, and
+  it is not third-party: it is specified and implemented in
+  [`easymindmap`](https://github.com/okpojung/easymindmap) by this RFC's author,
+  which is disclosed here because prior art one controls is still prior art and
+  hiding the overlap would be worse than the overlap. Its specification is at
+  `docs/04-extensions/emm-spec.md`, with a reference parser and a twelve-case
+  conformance corpus.
+
+  EMM reaches largely the same conclusions this RFC does — headings and list
+  items both produce nodes, no new syntax is invented in the body, structure is
+  separated from style, round-trip fidelity is the central promise, and
+  conformance is a specification plus a corpus rather than an implementation.
+  Chapter 1 was written without consulting it, and the convergence is worth more
+  than agreement obtained by copying.
+
+  It differs on three points that this RFC decides the other way:
+
+  1. **Kind is not preserved.** Nodes are written by depth — levels 2 to 6 as
+     `##` to `######`, level 7 and beyond as indented list items. A bullet at
+     depth 2 therefore returns as a heading. This is coherent when the *map* is
+     the source of truth and the Markdown is an export of it, which is EMM's
+     case. It is damaging when the *document* is the source of truth and was
+     written by someone else, which is the case this specification targets. The
+     divergence is a difference in starting point, not a defect.
+  2. **Heading levels are read by number**, with an `h1Mode` shift for documents
+     whose body contains `#`. L-5 reads them by nesting instead, which handles
+     that case and the skipped-level case with one rule rather than a mode.
+  3. **Empty headings are ignored.** This RFC keeps an empty node, on the ground
+     that discarding it loses information a round-trip promised to preserve.
+
+  How the two specifications relate is not settled by this RFC; see the
+  unresolved questions.
 
 - **markmap** derives a hierarchy from headings and lists together, and is the
   closest existing behaviour to what this RFC describes. Its rules live in its
@@ -477,6 +516,29 @@ in Markdown — realistically an HTML comment, or a convention over existing
 attributes. If no acceptable carrier exists, the L2 requirement in §1.2.4 has to
 be revisited rather than fudged. Naming it now is what prevents Chapter 2 from
 being written into a corner.
+
+The HTML-comment carrier is no longer a guess. EMM ships one — a single
+`<!-- easymindmap:v1:BASE64 -->` line at the end of the file, carrying style,
+layout, and images, with round-trip proven against its corpus. So the carrier
+works, survives real documents, and stays invisible in every Markdown reader.
+
+What it also demonstrates is a tension this specification has not resolved.
+§1.4.2 puts presentation in a sidecar and forbids a document's meaning from
+depending on one; EMM puts it *in the document*. Both are defensible, and the
+choice is not free: an in-document carrier travels with the file and needs no
+second artifact, while a sidecar keeps the document readable and diffable and
+cannot bloat it with base64. Chapter 3 has to choose knowingly rather than
+inherit §1.4.2 by default, and an existence proof on one side is a reason to
+argue the question rather than to assume it is settled.
+
+**How EMM and this specification relate.** Out of scope for Chapter 2, and
+recorded because it will not stay out of scope. EMM is a maintained format with a
+specification, a reference implementation, and a conformance corpus; this is a
+specification with one chapter. Two specifications for one format, in two
+repositories, under one maintainer, will contradict each other — the failure this
+project exists to prevent, one level up. Whether EMM is the prototype this
+supersedes, a profile of it, or a separate format that merely interoperates has
+to be answered before either can claim a version 1.0. It does not block this RFC.
 
 **Setext heading levels on lift.** L-1 accepts setext headings and P-6 removes
 them; setext expresses only levels 1 and 2, so no information is lost. Whether
