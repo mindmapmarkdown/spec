@@ -80,7 +80,7 @@ of claim and are not interchangeable.
 | [`examples/examples.json`](examples/examples.json) | Conformance test cases, **generated** from the examples in `spec.md` and never hand-edited | Empty until Chapter 2 |
 | [`rfcs/`](rfcs/) | Proposals for normative change, including rejected ones | Template only |
 | [`docs/`](docs/) | Informative material — an [overview](docs/overview.md) of how the pieces fit together, and a [glossary](docs/glossary.md) | |
-| [`tools/`](tools/) | The generator that extracts `examples.json`, and its tests | |
+| [`tools/`](tools/) | The generator that extracts `examples.json`, the link checker, and their tests | |
 
 The generated-not-written rule for `examples.json` is the point of the
 arrangement: the specification and its test suite are the same source, so they

@@ -46,7 +46,10 @@ Conventions the checks enforce, so you may as well follow them by hand:
 - One sentence per line is welcome but not required. What *is* required is that
   you do not rewrap paragraphs you did not otherwise change.
 - Relative links between documents in this repository (`GOVERNANCE.md`, not the
-  full URL), so that forks and translations keep working.
+  full URL), so that forks and translations keep working. These are checked,
+  including that a `#fragment` matches a real heading and that the path is
+  spelled with the right case — a link written `Spec.md` resolves on Windows and
+  macOS and breaks on Linux and on github.com.
 
 > The example generator in `tools/` is present and is exercised by the checks on
 > every pull request. The separate conformance suite repository is not, and
@@ -189,8 +192,9 @@ without regenerating cannot merge, and neither can one that edits the output by
 hand. To run what the checks run:
 
 ```sh
-node --test tools/*.test.mjs         # the generator's own tests
+node --test tools/*.test.mjs         # the tools' own tests
 node tools/extract-examples.mjs --check
+node tools/check-links.mjs           # relative links and heading anchors
 ```
 
 Other conventions:
