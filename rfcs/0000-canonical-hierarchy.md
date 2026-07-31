@@ -310,7 +310,11 @@ and the expected tree encoded per §2.6. On acceptance they move into `spec.md`
 inline, and `examples/examples.json` is generated from them — never the reverse
 (`CONTRIBUTING.md` §6). Trees are shown without identity, which is Chapter 3.
 
-Sections nest by heading level:
+The five are numbered here so that they can be referred to in review. Those
+numbers are local to this RFC: the numbering `examples.json` assigns depends on
+where each example finally sits in `spec.md`.
+
+**Example 1 — sections nest by heading level.**
 
 ````example
 # Project
@@ -321,7 +325,7 @@ Sections nest by heading level:
     {"kind":"section","label":"Install","content":[],"children":[]}]}]}
 ````
 
-Items nest by indentation:
+**Example 2 — items nest by indentation.**
 
 ````example
 - Project
@@ -332,9 +336,11 @@ Items nest by indentation:
     {"kind":"item","label":"Install","content":[],"children":[]}]}]}
 ````
 
-The two are different trees. Both are canonical.
+Examples 1 and 2 describe the same shape and are **different trees**, because
+their nodes differ in kind. Both are canonical, and neither is rewritten into the
+other. That is the whole proposal, in six lines.
 
-Mixed documents keep both kinds, sections above items:
+**Example 3 — a mixed document keeps both kinds, sections above items.**
 
 ````example
 # Install
@@ -347,7 +353,7 @@ Mixed documents keep both kinds, sections above items:
     {"kind":"item","label":"pnpm","content":[],"children":[]}]}]}
 ````
 
-A paragraph is content, not a node:
+**Example 4 — a paragraph is content, not a node.**
 
 ````example
 # Install
@@ -359,8 +365,8 @@ Node.js 20 or later.
    "children":[]}]}
 ````
 
-A skipped heading level lifts by nesting (L-5), which makes the document
-conforming but not canonical:
+**Example 5 — a skipped heading level lifts by nesting (L-5), which makes the
+document conforming but not canonical.**
 
 ````example
 # A
