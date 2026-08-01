@@ -174,6 +174,30 @@ An application may of course fetch a referenced image and embed it;
 is a product behaviour layered on the tree, and L-8 is what stops it from
 quietly becoming part of what the document means.
 
+**L-9.** A hard line break is one construct however it is spelled — two or more
+trailing spaces, or a trailing backslash. Lift MUST produce the same tree for
+both spellings, and MUST record the break in `source` in the backslash form.
+
+*(Informative)* L-9 resolves a conflict between three rules that would otherwise
+have no consistent reading. E-5 records a block's source verbatim; P-9 writes
+that source back; P-8 forbids a line ending in whitespace. A paragraph carrying a
+two-space hard break satisfies the first two and violates the third, so a
+document using that spelling could never be canonical and a tree holding it could
+never be projected. Normalising at lift rather than at projection is what keeps
+mutual inversion intact: if the tree kept the spelling and projection changed it,
+the first round-trip would already produce a different tree.
+
+The backslash form is the one canonical form keeps because the other is
+invisible. A break whose meaning is carried by trailing spaces is silently
+destroyed by editors that trim them, by formatters, and by this repository's own
+conventions — `CONTRIBUTING.md` §2 bans trailing whitespace outright. A format
+should not have a construct that a reasonable tool removes without being asked.
+
+This was found in a real export: a ChatGPT conversation saved to Markdown ends
+five consecutive lines with two spaces, which is how that exporter separates its
+metadata lines. Documents of that shape are common, and every one of them would
+have been unprojectable.
+
 *(Informative)* L-1 is what keeps a prose document from exploding. A README with
 forty paragraphs and six headings has six nodes, not forty-six. The test for
 whether something should be a node is whether Markdown gives it a hierarchy of
@@ -333,6 +357,17 @@ round-trip untestable at exactly the point where it matters. A structured inline
 tree would re-specify CommonMark inside our test data, which §1.1.2 says this
 specification does not do.
 
+Links are the case where this is asked most often, so it is worth stating
+outright: a node written `- [How to install Apache2](https://ubuntu.com/…)` has
+that whole string as its label, brackets and URL included. The tree does not
+split it into a caption and an address. An application is free to display the
+caption and hang the address off an icon — `easymindmap` does exactly that, and
+it is a good product decision — but splitting it in the *tree* would mean
+teaching the encoding what a link is, and then what a reference link is, an
+autolink, an image, a link with a title attribute. That is CommonMark's inline
+grammar, arriving one construct at a time through a door this specification
+closed on purpose.
+
 Identity is not encoded. Chapter 3 will add a member for it, and doing so will be
 a Normative change to this section rather than a clarification of it.
 
@@ -447,6 +482,9 @@ involved:
 - **Purity of lift (L-8)** — lift run with no network available MUST produce the
   same tree as lift run with one. The test does not need a network at all: it
   asserts that no request is attempted.
+- **Hard line breaks (L-9)** — two documents differing only in how a hard break
+  is spelled MUST lift to the same tree, and neither projection MUST end a line
+  in whitespace. One example pair settles both.
 
 ## Alternatives
 
