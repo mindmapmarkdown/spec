@@ -191,6 +191,18 @@ E-5는 블록의 원문을 그대로 기록하고, P-9는 그 원문을 그대�
 **연속된 다섯 줄을 공백 두 칸으로 끝낸다.** 그 내보내기 도구가 메타데이터 줄을
 구분하는 방식이다. 그런 모양의 문서는 흔하고, **그 전부가 투영 불가능했을 것이다.**
 
+*(참고)* L-3은 노드의 *제목*이 무엇이고 무엇이 아닌지도 함께 정한다. **라벨은 노드
+자신의 인라인 텍스트일 뿐이며 그 이상이 아니다.** 뒤따르는 블록들은 그 노드에 붙되
+분리된 채로 남는다. 첫 헤딩 뒤에 메타데이터 블록이 오는 문서는 따라서 **제목만을
+라벨로 갖고 메타데이터를 내용으로 지닌 노드**로 lift된다. 제목과 메타데이터가 뒤섞인
+라벨을 가진 노드가 되지 않는다. 둘은 **어느 방향으로도 합쳐지지 않는다** — 나가는
+방향은 P-9가 금지한다.
+
+이것이 긴 문서의 마인드맵을 **첫 풍선이 글자 벽이 되는 대신 읽을 수 있게** 만든다.
+그리고 그것은 모델에 대한 양보가 아니라 모델의 귀결이다. 붙은 내용을 어떻게 보여줄지는
+애플리케이션이 정한다 — `easymindmap`은 인디케이터를 띄우고 필요할 때 펼친다. **어디에
+보여줄지는 뷰의 결정이고, 라벨과 분리되어 있다는 사실은 그렇지 않다.**
+
 *(참고)* L-1이 산문 문서의 폭발을 막는다. 문단 40개와 헤딩 6개짜리 README는 노드
 46개가 아니라 6개를 갖는다. 무언가가 노드가 되어야 하는지의 판단 기준은 **마크다운이
 그것에 자체 계층을 부여하는가**이며, 문단과 표에는 그런 계층이 없다.
@@ -293,9 +305,11 @@ S-1과 S-2를 만족하는 트리를 **적격(well-formed)**하다고 한다. li
 구현이 읽거나 쓰리라 기대되는 직렬화가 아니며, 이 사양이 유지보수를 떠맡는 두 번째
 포맷도 아니다. 규범적 교환 인코딩이 언젠가 필요한지는 아래 미해결 질문으로 남긴다.
 
-**E-1.** 트리는 멤버가 정확히 하나, `children`인 JSON 객체로 인코딩되어야 하며(MUST),
-그 값은 순서를 가진 노드 객체의 배열이다. 루트는 합성된 것이고(L-4) 라벨도 종류도
-없으므로 다른 멤버를 갖지 않는다.
+**E-1.** 트리는 멤버가 정확히 둘, `content`와 `children`인 JSON 객체로 인코딩되어야
+한다(MUST). `content`는 어떤 노드보다도 앞서는 블록들을 담으며(L-3) E-5와 같은 방식으로
+인코딩한다. `children`은 문서 순서대로의 노드 객체를 담는다. **비어 있을 때를 포함해
+둘 다 존재해야 한다**(MUST). 루트는 문서에 자기 텍스트가 없으므로(L-4) `label`도
+`kind`도 갖지 않는다.
 
 **E-2.** 노드는 멤버가 정확히 네 개 — `kind`, `label`, `content`, `children` — 인
 JSON 객체로 인코딩되어야 한다(MUST). `content`나 `children`이 비어 있을 때를 포함해
@@ -351,7 +365,7 @@ URL도 포함해서다. **트리는 그것을 표제와 주소로 쪼개지 않�
 거기서 생성된다. 결코 그 반대가 아니다(`CONTRIBUTING.md` §6). 트리는 식별자 없이
 표시되며, 식별자는 3장이다.
 
-다섯 개에 번호를 붙인 것은 리뷰에서 가리키기 쉽게 하기 위해서다. 이 번호는 이 RFC
+여섯 개에 번호를 붙인 것은 리뷰에서 가리키기 쉽게 하기 위해서다. 이 번호는 이 RFC
 안에서만 유효하다. `examples.json`이 매기는 번호는 각 예제가 최종적으로 `spec.md`의
 어디에 놓이느냐에 따라 달라진다.
 
@@ -361,7 +375,7 @@ URL도 포함해서다. **트리는 그것을 표제와 주소로 쪼개지 않�
 # Project
 ## Install
 .
-{"children":[
+{"content":[],"children":[
   {"kind":"section","label":"Project","content":[],"children":[
     {"kind":"section","label":"Install","content":[],"children":[]}]}]}
 ````
@@ -372,7 +386,7 @@ URL도 포함해서다. **트리는 그것을 표제와 주소로 쪼개지 않�
 - Project
   - Install
 .
-{"children":[
+{"content":[],"children":[
   {"kind":"item","label":"Project","content":[],"children":[
     {"kind":"item","label":"Install","content":[],"children":[]}]}]}
 ````
@@ -388,7 +402,7 @@ URL도 포함해서다. **트리는 그것을 표제와 주소로 쪼개지 않�
 - npm
 - pnpm
 .
-{"children":[
+{"content":[],"children":[
   {"kind":"section","label":"Install","content":[],"children":[
     {"kind":"item","label":"npm","content":[],"children":[]},
     {"kind":"item","label":"pnpm","content":[],"children":[]}]}]}
@@ -400,7 +414,7 @@ URL도 포함해서다. **트리는 그것을 표제와 주소로 쪼개지 않�
 # Install
 Node.js 20 or later.
 .
-{"children":[
+{"content":[],"children":[
   {"kind":"section","label":"Install",
    "content":[{"block":"paragraph","source":"Node.js 20 or later."}],
    "children":[]}]}
@@ -413,13 +427,25 @@ Node.js 20 or later.
 # A
 ### B
 .
-{"children":[
+{"content":[],"children":[
   {"kind":"section","label":"A","content":[],"children":[
     {"kind":"section","label":"B","content":[],"children":[]}]}]}
 ````
 
 그 트리를 투영하면 `# A` / `## B`가 나오고, 그것은 같은 트리로 lift된다. 왕복은 두
 번째 통과에서 안정되며 그 이후로는 멱등이다.
+
+**예제 6 — 첫 노드보다 앞선 내용은 루트에 붙으며(L-3), 그래서 루트가 `content`를
+갖는다(E-1).**
+
+````example
+Some prose.
+
+# A
+.
+{"content":[{"block":"paragraph","source":"Some prose."}],"children":[
+  {"kind":"section","label":"A","content":[],"children":[]}]}
+````
 
 ### 2.8 왕복에 미치는 영향
 

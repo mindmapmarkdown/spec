@@ -198,6 +198,20 @@ five consecutive lines with two spaces, which is how that exporter separates its
 metadata lines. Documents of that shape are common, and every one of them would
 have been unprojectable.
 
+*(Informative)* L-3 also settles what a node's *title* is and is not. A label is
+the node's own inline text and nothing more; the blocks that follow it are
+attached to it and stay separate. A document whose first heading is followed by a
+metadata block therefore lifts to a node labelled with the title alone, carrying
+the metadata as content — not to a node whose label is the title and the metadata
+run together. The two are never merged in either direction: P-9 forbids the
+reverse on the way out.
+
+This is what makes a mindmap of a long document readable rather than a wall of
+text in its first bubble, and it is a consequence of the model rather than a
+concession to one. An application decides how to show attached content —
+`easymindmap` shows an indicator and opens it on demand. Where it goes is a view
+decision; that it is separate from the label is not.
+
 *(Informative)* L-1 is what keeps a prose document from exploding. A README with
 forty paragraphs and six headings has six nodes, not forty-six. The test for
 whether something should be a node is whether Markdown gives it a hierarchy of
@@ -313,9 +327,11 @@ format, not a serialisation implementations are expected to read or write outsid
 the suite, and not a second format this specification undertakes to maintain.
 Whether a normative interchange encoding is ever wanted is left open below.
 
-**E-1.** A tree MUST be encoded as a JSON object with exactly one member,
-`children`, whose value is an array of node objects in order. The root is
-synthetic (L-4) and has no label and no kind, so it has no other members.
+**E-1.** A tree MUST be encoded as a JSON object with exactly two members,
+`content` and `children`. `content` holds the blocks that precede every node
+(L-3), encoded as in E-5; `children` holds node objects in document order. Both
+MUST be present, including when empty. The root has no `label` and no `kind`,
+because it has no text of its own in the document (L-4).
 
 **E-2.** A node MUST be encoded as a JSON object with exactly four members:
 `kind`, `label`, `content`, and `children`. All four MUST be present, including
@@ -378,7 +394,7 @@ and the expected tree encoded per §2.6. On acceptance they move into `spec.md`
 inline, and `examples/examples.json` is generated from them — never the reverse
 (`CONTRIBUTING.md` §6). Trees are shown without identity, which is Chapter 3.
 
-The five are numbered here so that they can be referred to in review. Those
+The six are numbered here so that they can be referred to in review. Those
 numbers are local to this RFC: the numbering `examples.json` assigns depends on
 where each example finally sits in `spec.md`.
 
@@ -388,7 +404,7 @@ where each example finally sits in `spec.md`.
 # Project
 ## Install
 .
-{"children":[
+{"content":[],"children":[
   {"kind":"section","label":"Project","content":[],"children":[
     {"kind":"section","label":"Install","content":[],"children":[]}]}]}
 ````
@@ -399,7 +415,7 @@ where each example finally sits in `spec.md`.
 - Project
   - Install
 .
-{"children":[
+{"content":[],"children":[
   {"kind":"item","label":"Project","content":[],"children":[
     {"kind":"item","label":"Install","content":[],"children":[]}]}]}
 ````
@@ -415,7 +431,7 @@ other. That is the whole proposal, in six lines.
 - npm
 - pnpm
 .
-{"children":[
+{"content":[],"children":[
   {"kind":"section","label":"Install","content":[],"children":[
     {"kind":"item","label":"npm","content":[],"children":[]},
     {"kind":"item","label":"pnpm","content":[],"children":[]}]}]}
@@ -427,7 +443,7 @@ other. That is the whole proposal, in six lines.
 # Install
 Node.js 20 or later.
 .
-{"children":[
+{"content":[],"children":[
   {"kind":"section","label":"Install",
    "content":[{"block":"paragraph","source":"Node.js 20 or later."}],
    "children":[]}]}
@@ -440,13 +456,25 @@ document conforming but not canonical.**
 # A
 ### B
 .
-{"children":[
+{"content":[],"children":[
   {"kind":"section","label":"A","content":[],"children":[
     {"kind":"section","label":"B","content":[],"children":[]}]}]}
 ````
 
 Projecting that tree yields `# A` / `## B`, which lifts to the same tree. The
 round-trip is stable at the second pass, and idempotent thereafter.
+
+**Example 6 — content before the first node attaches to the root (L-3), which is
+why the root carries `content` (E-1).**
+
+````example
+Some prose.
+
+# A
+.
+{"content":[{"block":"paragraph","source":"Some prose."}],"children":[
+  {"kind":"section","label":"A","content":[],"children":[]}]}
+````
 
 ### 2.8 Effect on round-trip
 
