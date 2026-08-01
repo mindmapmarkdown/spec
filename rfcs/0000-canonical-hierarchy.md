@@ -672,12 +672,55 @@ added once, by an RFC that considers every candidate for it at the same time** �
 adding one per problem is how a two-value field becomes an unstructured
 vocabulary.
 
-**Where identity is written.** Chapter 3's problem, but constrained here: L0
-forbids any construct that renders as literal text, which leaves very little room
-in Markdown — realistically an HTML comment, or a convention over existing
-attributes. If no acceptable carrier exists, the L2 requirement in §1.2.4 has to
-be revisited rather than fudged. Naming it now is what prevents Chapter 2 from
-being written into a corner.
+**Whether identity belongs in this specification at all.** This was recorded as
+*where identity is written*, on the assumption that it had to be written
+somewhere. Asked during the comment period why identity could not simply live
+inside a mindmap application, and following the answer through, that assumption
+turns out to contradict Chapter 1.
+
+Three statements in the merged text cannot all hold:
+
+1. §1.3 makes identity **a property of a node**, so it is part of the tree.
+2. §1.2.4 L1 requires lift to be **deterministic** — the same input producing the
+   same output "in any other conforming implementation".
+3. §1.2.4 L2 requires an implementation to **assign** identity.
+
+Give two conforming implementations an ordinary Markdown document with no
+identity written in it. Both must assign, neither has anything to derive the
+value from, so they assign different values and lift the same document to
+different trees. L1 is broken by L2.
+
+It is worse for the suite than for the implementations. A normative example
+would have to state an expected tree, and the expected identity would differ per
+implementation, so no value could be written down. Conformance would not be
+decidable (§1.4.3) for any example at all.
+
+The resolution that looks right is to **drop `assign` and keep `read and
+preserve`**: the specification says how identity is written *when a document
+carries it*, requires nothing to carry it, and never manufactures one. A document
+without identity then lifts to a tree without identity, deterministically, and an
+example can state exactly what its document contains. Creating identity becomes
+an application's business, which is where the question started.
+
+The cost is real and should be weighed rather than waved through. Sidecars stop
+being interoperable between tools; there is no standard way for one document to
+reference a node in another; and diff and merge have to match nodes structurally
+rather than by identity, which is less precise. **The third cost is not actually
+new** — a document that has been through a language model comes back without its
+identity regardless, so structural matching was always going to be needed. This
+choice only makes it the primary mechanism instead of the fallback.
+
+Two things follow for process. This cannot be settled inside this RFC: §1.2.4 and
+§1.3 are merged text, so changing them is a Normative change needing **its own
+RFC**. And Chapter 2 does not depend on the answer — no rule in §2.1 to §2.6
+mentions identity, and E-2's four members are complete without it.
+
+The rest of this entry is the earlier discussion, which stands whichever way the
+question above is decided.
+
+L0 forbids any construct that renders as literal text, which leaves very little
+room in Markdown — realistically an HTML comment, or a convention over existing
+attributes.
 
 The HTML-comment carrier is no longer a guess. EMM ships one — a single
 `<!-- easymindmap:v1:BASE64 -->` line at the end of the file, carrying style,
@@ -692,6 +735,27 @@ second artifact, while a sidecar keeps the document readable and diffable and
 cannot bloat it with base64. Chapter 3 has to choose knowingly rather than
 inherit §1.4.2 by default, and an existence proof on one side is a reason to
 argue the question rather than to assume it is settled.
+
+One argument bears on that choice and was not obvious until the purpose of the
+round-trip was stated plainly: **the party a document round-trips through is a
+language model**, not a person and not another mindmap tool. Markdown is chosen
+because a model reads and writes it natively; HTML and web publishing carry a
+finished map to human readers, so the Markdown file never has to serve that job.
+
+A model cannot be relied on to carry an opaque token through an edit. Asked to
+reorganise a document, it may drop the comments, omit them from nodes it adds,
+copy one onto two nodes, or leave them attached to content that moved. None of
+those is a bug in the model — it was never told the tokens were load-bearing, and
+no instruction makes the guarantee testable. A base64 trailer is worse on three
+counts: it is paid for in tokens on every request, a long meaningless string is
+the thing a model is likeliest to truncate, and if it does survive an edit it now
+describes the structure that existed before.
+
+That is an argument for the sidecar, and it is worth noting that it does not make
+EMM's opposite choice wrong. **EMM's round-trip partner is the application
+itself**, which never mangles anything, and an in-document carrier is the simpler
+answer when nothing untrusted sits in the middle. The divergence is the same
+difference in starting point recorded under prior art, arriving a second time.
 
 **How EMM and this specification relate.** Out of scope for Chapter 2, and
 recorded because it will not stay out of scope. EMM is a maintained format with a
