@@ -69,6 +69,22 @@ Without a rule, three things follow, all of them bad:
    wrong. This is the failure mode §1.4.3 exists to prevent, and today the
    specification has no answer to it.
 
+The third has a sharper form in the case this specification was written for, and
+it needs no second implementation to appear. A document round-trips through a
+**language model**, and a model does not edit a document — it re-emits one.
+Everything comes back retyped, including the parts nobody asked it to touch. An
+application that sends a map out as Markdown and reads the result back is
+therefore reading text it did not write, on every pass, indefinitely.
+
+If reading is not pinned down, that application disagrees with **its own previous
+self**. A table exported onto a single line returns as a paragraph, and the map
+has changed although no person and no model intended a change. That happened
+during the drafting of this RFC, in one application, with no second tool anywhere
+near it — see `easymindmap` #150, which is also why P-9 exists.
+
+The interoperability argument describes a hazard that arrives when a second
+implementation does. This one is already here.
+
 ### What is at stake in the answer
 
 The obvious fix is to pick one form and require it — the `gofmt` approach. It is
