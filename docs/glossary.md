@@ -277,7 +277,54 @@ its label, its position, and its content. Two nodes with the same label are not
 thereby the same node; a node whose label is rewritten is still the same one.
 
 Identity is what a sidecar, a diff, and a merge all key on. How it is
-represented is not yet specified.
+represented is not yet specified — and **whether this specification should
+define it at all** was reopened during the comment period on
+[the open RFC](https://github.com/mindmapmarkdown/spec/pull/4), which records
+why. It is a live question, not a settled one.
+
+### Diff
+
+**What changed between two versions.** Comparing two things and keeping only the
+difference, because nobody can review a whole document but anyone can review a
+change.
+
+You have already read hundreds of them. The **Files changed** tab on a pull
+request is a diff: `+` marks an added line, `-` a removed one, and unmarked lines
+are unchanged context.
+
+Git compares **lines of text**, which is fast, universal, and blind to meaning.
+Rename a heading and git reports one line deleted and one line added, because it
+has no concept of *renamed*. That gap is the reason this specification exists,
+and it opens in two directions:
+
+- **Nothing changed but everything looks changed.** Re-wrap a paragraph and every
+  line is rewritten while the content is identical.
+- **Something changed but almost nothing looks changed.** `## Install` to
+  `- Install` is one character, and it moves a section into a list.
+
+Canonical form closes the first gap by making one tree always spell itself the
+same way. A **tree diff** — comparing nodes instead of lines — would close the
+second, and is not specified yet.
+
+### Merge
+
+**Combining two sets of changes to the same thing.** Not the same operation as
+merging a pull request, though the word is shared: git merges *files*, and what
+is described here merges *trees*.
+
+Two people open the same map. One adds a child under a node; the other renames
+that node. A correct merge produces both changes. A merge that cannot tell the
+renamed node is the same node produces two nodes and silently splits the map —
+which is why merge is listed at L3, above identity at L2.
+
+### Subtree
+
+**One branch of a tree** — a node together with everything beneath it.
+
+It matters because documents get large and the things that read them do not want
+all of it. Handing one branch to a tool or a model, getting it back, and putting
+it where it came from is cheaper and more accurate than sending the whole
+document. Doing so requires knowing where it came from, which is identity again.
 
 ### Sidecar
 

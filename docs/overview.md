@@ -49,6 +49,37 @@ invented next.
 **The specification defines the top row only.** Views are out of scope, and that
 is the load-bearing decision of the whole project.
 
+## Who the Markdown is for
+
+An obvious question about that diagram: if the tree is the thing that matters and
+an application owns the file, why is the left box Markdown at all? JSON would be
+easier to write and easier to parse.
+
+Because of who reads it. **The party a document travels to is often a language
+model**, and a model reads and writes Markdown natively — it is the format models
+have seen most. A bespoke JSON schema would have to be explained in every prompt,
+and explained again whenever it changed.
+
+Human readers are served differently, and that is what frees the Markdown file
+from having to serve them. A finished map goes out as HTML or a published page,
+where it needs no application to open and no format to agree on.
+
+Two things follow, and both are easy to miss:
+
+**L0 earns its place for a new reason.** The floor — *a conforming document is
+ordinary Markdown* — was argued as courtesy to existing tools. Its sharper value
+is that a model which has never encountered this specification can still read a
+conforming document, and can produce one by writing ordinary Markdown. Adoption
+costs the model nothing because there is nothing to adopt.
+
+**A model does not edit a document; it re-emits one.** Everything comes back
+retyped, including the parts nobody asked it to touch. So an application that
+exports a map and reads the result back is reading text it did not write, on
+every pass. If reading is not pinned down, that application ends up disagreeing
+with its own previous self — no second tool required. This is why the rules for
+reading have to be exact even for someone who will never interoperate with
+anybody.
+
 ## Why the boundary is drawn there
 
 Two reasons, and the second is the one that actually decides it.
