@@ -80,6 +80,20 @@ with its own previous self — no second tool required. This is why the rules fo
 reading have to be exact even for someone who will never interoperate with
 anybody.
 
+**How the text reaches you is part of the round-trip.** A model may *render*
+Markdown rather than emit it, showing headings as headings and tables as tables
+in its own interface. Copy that rendered view and the syntax is gone: `## Install`
+arrives as `Install`, a block quote arrives as an ordinary line, a table arrives
+as loose words. Lifting the result gives a flatter tree than the one the model
+composed — and nothing reports an error, because what arrived is still perfectly
+valid Markdown. It just says less.
+
+**L0 is what makes that loss invisible.** The property that a conforming document
+renders cleanly anywhere is the same property that lets a rendered copy look
+complete. The defence is not in the format, and cannot be: it is in how the text
+is carried. Ask for the answer inside a fenced block and take the block, rather
+than selecting rendered output.
+
 ## Why the boundary is drawn there
 
 Two reasons, and the second is the one that actually decides it.
