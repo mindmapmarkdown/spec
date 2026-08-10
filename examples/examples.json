@@ -1,5 +1,164 @@
 {
   "_comment": "GENERATED FILE — DO NOT EDIT. Extracted from spec.md by tools/extract-examples.mjs. Edit the example in spec.md and regenerate; a hand-edit here changes the conformance suite without changing the specification, and the two silently disagree. See CONTRIBUTING.md §6.",
   "source": "spec.md",
-  "examples": []
+  "examples": [
+    {
+      "example": 1,
+      "section": "2.1",
+      "heading": "Node kind",
+      "start_line": 449,
+      "end_line": 456,
+      "markdown": "# Project\n## Install\n",
+      "tree": {
+        "content": [],
+        "children": [
+          {
+            "kind": "section",
+            "label": "Project",
+            "content": [],
+            "children": [
+              {
+                "kind": "section",
+                "label": "Install",
+                "content": [],
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "example": 2,
+      "section": "2.1",
+      "heading": "Node kind",
+      "start_line": 460,
+      "end_line": 467,
+      "markdown": "- Project\n  - Install\n",
+      "tree": {
+        "content": [],
+        "children": [
+          {
+            "kind": "item",
+            "label": "Project",
+            "content": [],
+            "children": [
+              {
+                "kind": "item",
+                "label": "Install",
+                "content": [],
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "example": 3,
+      "section": "2.1",
+      "heading": "Node kind",
+      "start_line": 475,
+      "end_line": 484,
+      "markdown": "# Install\n- npm\n- pnpm\n",
+      "tree": {
+        "content": [],
+        "children": [
+          {
+            "kind": "section",
+            "label": "Install",
+            "content": [],
+            "children": [
+              {
+                "kind": "item",
+                "label": "npm",
+                "content": [],
+                "children": []
+              },
+              {
+                "kind": "item",
+                "label": "pnpm",
+                "content": [],
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "example": 4,
+      "section": "2.2",
+      "heading": "What becomes a node",
+      "start_line": 549,
+      "end_line": 557,
+      "markdown": "# Install\nNode.js 20 or later.\n",
+      "tree": {
+        "content": [],
+        "children": [
+          {
+            "kind": "section",
+            "label": "Install",
+            "content": [
+              {
+                "block": "paragraph",
+                "source": "Node.js 20 or later."
+              }
+            ],
+            "children": []
+          }
+        ]
+      }
+    },
+    {
+      "example": 5,
+      "section": "2.2",
+      "heading": "What becomes a node",
+      "start_line": 562,
+      "end_line": 569,
+      "markdown": "Some prose.\n\n# A\n",
+      "tree": {
+        "content": [
+          {
+            "block": "paragraph",
+            "source": "Some prose."
+          }
+        ],
+        "children": [
+          {
+            "kind": "section",
+            "label": "A",
+            "content": [],
+            "children": []
+          }
+        ]
+      }
+    },
+    {
+      "example": 6,
+      "section": "2.3",
+      "heading": "Depth, and heading levels",
+      "start_line": 595,
+      "end_line": 602,
+      "markdown": "# A\n### B\n",
+      "tree": {
+        "content": [],
+        "children": [
+          {
+            "kind": "section",
+            "label": "A",
+            "content": [],
+            "children": [
+              {
+                "kind": "section",
+                "label": "B",
+                "content": [],
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }

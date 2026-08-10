@@ -310,16 +310,19 @@ git은 **글자를 줄 단위로** 비교한다. 빠르고 어디에나 쓰이�
 ([`spec.md` §1.4.2](../../spec.md#142-meaning-in-the-document-presentation-in-the-sidecar)).
 사이드카를 전부 지워도 어떤 트리도 바뀌면 안 된다.
 
-### Kind — 종류 *(제안됨, 확정 아님)*
+### Kind — 종류
 
-노드가 헤딩으로 쓰였는지(`section`) 리스트 항목으로 쓰였는지(`item`), 그리고 그
-구분이 트리의 일부인지의 문제.
+노드가 헤딩으로 쓰였는지(`section`) 리스트 항목으로 쓰였는지(`item`).
 
-**현재 사양의 일부가 아니다.** 코멘트 기간이 열려 있는 RFC
-[*Canonical hierarchy*](https://github.com/mindmapmarkdown/spec/pull/4)가 제안하는
-내용이다. 제안의 요지는 종류가 트리에 속한다는 것 — 그래서 헤딩으로 쓴 문서는 헤딩으로
-돌아온다. 헤딩과 불릿은 읽는 사람에게 서로 다른 것이지, 한 가지의 두 표기가 아니기
-때문이다.
+**이 구분은 트리의 일부다.** 그래서 헤딩으로 쓴 문서는 헤딩으로 돌아온다. 헤딩과
+불릿은 읽는 사람에게 서로 다른 것이지, 한 가지의 두 표기가 아니기 때문이다. 다른 모든
+것이 같아도 어느 한 노드의 종류가 다른 두 트리는 서로 다른 트리다.
+
+[`spec.md` §1.3](../../spec.md#13-terminology)에 정의되어 있고, 그것을 동작으로
+만드는 규칙은 [§2.1](../../spec.md#21-node-kind)과
+[§2.5](../../spec.md#25-canonical-projection)다. 그 선택의 근거와 기각된 대안들은
+[`rfcs/0004-canonical-hierarchy.md`](../../rfcs/0004-canonical-hierarchy.md)에
+기록되어 있다.
 
 ---
 
