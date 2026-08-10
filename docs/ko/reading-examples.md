@@ -10,10 +10,10 @@ JSON으로 쓴다. 이 문서는 JSON을 다뤄본 적 없는 사람을 위해 �
 
 **이 문서는 참고용(informative)이며 아무것도 정의하지 않는다.**
 
-> **여기서 설명하는 것 중 일부는 확정이 아니라 제안이다.** 노드의 *종류(kind)*와
-> 트리의 JSON 인코딩은 [코멘트 기간이 열려 있는 RFC](https://github.com/mindmapmarkdown/spec/pull/4)에서
-> 온 것이며, 바뀌거나 기각될 수 있다. JSON 문법 자체와 예제 블록의 모양은 논쟁
-> 대상이 아니다.
+> 노드의 *종류(kind)*와 트리의 JSON 인코딩은 **확정되었다** —
+> [RFC 0004](../../rfcs/0004-canonical-hierarchy.md)로 채택되어 이제
+> [`spec.md` §2](../../spec.md#2-canonical-hierarchy)다. 이 문서와 사양이 어긋나면
+> **사양이 이긴다.**
 
 **목차** — [기호 다섯 개로 보는 JSON](#기호-다섯-개로-보는-json) ·
 [예제 블록의 모양](#예제-블록의-모양) ·
@@ -253,8 +253,11 @@ JSON은 **구조가 있는 데이터를 글자로 적는 방법**이다. 프로�
 
 - **예제 블록 형식** — `tools/extract-examples.mjs`와
   [`CONTRIBUTING.md` §6](../../CONTRIBUTING.md#6-working-on-the-specification-text).
-- **트리 인코딩과 `kind`** — [열려 있는 RFC](https://github.com/mindmapmarkdown/spec/pull/4)의
-  §2.1과 §2.6. 승인되기 전까지 이것들은 제안이다.
+- **`kind`와 트리 인코딩** — [`spec.md` §2.1](../../spec.md#21-node-kind)과
+  [§2.6](../../spec.md#26-the-tree-encoding-used-by-examples). 그 근거와 기각된
+  대안들은
+  [`rfcs/0004-canonical-hierarchy.md`](../../rfcs/0004-canonical-hierarchy.md)에
+  있다.
 - **적합성** — [`spec.md` §1.2](../../spec.md#12-conformance).
 
 예제와 이 문서가 어긋나면 **예제가 옳다.**

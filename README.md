@@ -13,12 +13,13 @@ what the project is and why it exists, start at
 [the organisation page](https://github.com/mindmapmarkdown). If you are here to
 read the specification, implement it, or argue with it, this page is the map.
 
-> **⚠ Draft. Nothing conforms to this yet, including us.**
+> **⚠ Draft. Nothing conforms to this yet.**
 >
-> [`spec.md`](spec.md) currently contains **Chapter 1 only** — scope,
-> conformance, and terminology. The rules that decide what a document actually
-> means are Chapter 2 onwards, and they are not written. There is no version
-> number, no release, and no conformance suite. Requirements will change.
+> [`spec.md`](spec.md) contains **Chapters 1 and 2** — scope, conformance and
+> terminology, then the rules that decide which tree a document denotes and
+> which document a tree denotes. That is enough to build a reader and a writer
+> against. **Identity and the operations that depend on it are not written**,
+> and there is no version number and no release. Requirements will change.
 >
 > The useful thing to do with a draft this early is disagree with it. See
 > [participating](#participating).
@@ -76,9 +77,9 @@ of claim and are not interchangeable.
 
 | Path | Contents | |
 |---|---|---|
-| [`spec.md`](spec.md) | The specification, with its normative examples written inline | Chapter 1 only |
-| [`examples/examples.json`](examples/examples.json) | Conformance test cases, **generated** from the examples in `spec.md` and never hand-edited | Empty until Chapter 2 |
-| [`rfcs/`](rfcs/) | Proposals for normative change, including rejected ones | Template only |
+| [`spec.md`](spec.md) | The specification, with its normative examples written inline | Chapters 1–2 |
+| [`examples/examples.json`](examples/examples.json) | Conformance test cases, **generated** from the examples in `spec.md` and never hand-edited | 6 examples |
+| [`rfcs/`](rfcs/) | Proposals for normative change, including rejected ones | |
 | [`docs/`](docs/) | Informative material — an [overview](docs/overview.md) of how the pieces fit together, a [glossary](docs/glossary.md), and a guide to [reading a worked example](docs/reading-examples.md) | |
 | [`tools/`](tools/) | The generator that extracts `examples.json`, the link checker, and their tests | |
 
@@ -90,22 +91,31 @@ mechanism, more than the prose, that made CommonMark usable.
 
 ## For implementers
 
-Honestly: you cannot implement anything yet, and it would be a waste of your
-time to try. Chapter 1 fixes the vocabulary and the conformance levels; the
-rules that decide which Markdown constructs become nodes are unwritten.
+**L0 and L1 can now be implemented.** Chapter 2 says which tree a document
+denotes and which document a tree denotes, so a reader and a writer can be built
+and checked. L2 and L3 cannot: identity is not specified, and whether it belongs
+in this specification at all is
+[an open question](rfcs/0004-canonical-hierarchy.md).
 
-What is worth doing now:
+Where to start:
 
-- **Read [`spec.md`](spec.md).** It is short. §1.3 is the vocabulary the rest of
-  the project will use, and the fastest way to find out whether this solves your
-  problem. If the standards vocabulary around it is unfamiliar,
-  [`docs/glossary.md`](docs/glossary.md) explains it in plain language.
+- **[`spec.md` §2](spec.md#2-canonical-hierarchy)** — the rules, with their
+  normative examples beside them. §1.3 is the vocabulary they use; if the
+  standards terms around it are unfamiliar,
+  [`docs/glossary.md`](docs/glossary.md) explains them in plain language, and
+  [`docs/reading-examples.md`](docs/reading-examples.md) unpacks an example for
+  a reader new to JSON.
+- **[`examples/examples.json`](examples/examples.json)** — the suite. Run each
+  `markdown` value through your reader and compare against `tree`. It covers
+  lift; projection is checked the other way round, a tree in and a document out,
+  compared byte for byte.
 - **Check the boundary against your use case.** If what you need is in
   [§1.1.2](spec.md#112-what-this-specification-does-not-define), the answer will
   not arrive later — say so now, while the boundary is still cheap to move.
 - **Bring a document that breaks it.** A Markdown file whose structure is
-  genuinely ambiguous is worth more to Chapter 2 than any amount of comment on
-  Chapter 1.
+  genuinely ambiguous is worth more than any amount of comment on the prose.
+  Every defect found in Chapter 2 during its comment period came from running a
+  real document through it.
 
 An implementation is expected to be a layer over an existing CommonMark parser.
 This specification defines no Markdown grammar and modifies none of CommonMark's

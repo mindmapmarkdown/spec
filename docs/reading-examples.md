@@ -8,11 +8,10 @@ someone who has not worked with JSON before.
 
 **This document is informative. It defines nothing.**
 
-> **Part of what is described here is proposed, not decided.** Node *kind* and
-> the JSON encoding of a tree come from
-> [an RFC that is open for comment](https://github.com/mindmapmarkdown/spec/pull/4)
-> and may change or be rejected. The JSON syntax itself, and the shape of an
-> example block, are not in question.
+> Node *kind* and the JSON encoding of a tree are settled — they were accepted in
+> [RFC 0004](../rfcs/0004-canonical-hierarchy.md) and are now
+> [`spec.md` §2](../spec.md#2-canonical-hierarchy). Where this document and the
+> specification disagree, the specification wins.
 
 **Contents** — [JSON in five symbols](#json-in-five-symbols) ·
 [The shape of an example](#the-shape-of-an-example) ·
@@ -259,9 +258,10 @@ Nothing above is a rule. The rules are:
 
 - **The example block format** — `tools/extract-examples.mjs`, and
   [`CONTRIBUTING.md` §6](../CONTRIBUTING.md#6-working-on-the-specification-text).
-- **The tree encoding, and `kind`** — §2.1 and §2.6 of
-  [the open RFC](https://github.com/mindmapmarkdown/spec/pull/4). Until it is
-  accepted, these are a proposal.
+- **`kind` and the tree encoding** — [`spec.md` §2.1](../spec.md#21-node-kind)
+  and [§2.6](../spec.md#26-the-tree-encoding-used-by-examples). The reasoning
+  and the rejected alternatives are in
+  [`rfcs/0004-canonical-hierarchy.md`](../rfcs/0004-canonical-hierarchy.md).
 - **Conformance** — [`spec.md` §1.2](../spec.md#12-conformance).
 
 If an example ever contradicts this document, the example is right.

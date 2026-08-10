@@ -337,16 +337,20 @@ The governing principle is **meaning in the document, presentation in the
 sidecar** ([`spec.md` §1.4.2](../spec.md#142-meaning-in-the-document-presentation-in-the-sidecar)).
 Deleting every sidecar must not change any tree.
 
-### Kind — *proposed, not settled*
+### Kind
 
-Whether a node was written as a heading (`section`) or as a list item (`item`),
-and whether that distinction is part of the tree.
+Whether a node was written as a heading (`section`) or as a list item (`item`).
 
-This is **not currently part of the specification.** It is proposed in
-[*Canonical hierarchy*](https://github.com/mindmapmarkdown/spec/pull/4), an RFC
-open for comment. The proposal is that kind belongs to the tree, so that a
-document written with headings comes back with headings — a heading and a bullet
-being different things to a reader, not two spellings of one thing.
+**The distinction is part of the tree**, so a document written with headings
+comes back with headings — a heading and a bullet being different things to a
+reader, not two spellings of one thing. Two trees that are otherwise equal but
+differ in the kind of any node are different trees.
+
+Defined in [`spec.md` §1.3](../spec.md#13-terminology); the rules that turn it
+into behaviour are [§2.1](../spec.md#21-node-kind) and
+[§2.5](../spec.md#25-canonical-projection). The reasoning behind the choice, and
+the alternatives rejected, are recorded in
+[`rfcs/0004-canonical-hierarchy.md`](../rfcs/0004-canonical-hierarchy.md).
 
 ---
 
