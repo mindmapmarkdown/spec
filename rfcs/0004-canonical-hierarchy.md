@@ -1,16 +1,17 @@
 # RFC 0000: Canonical hierarchy — node kind and the heading/list boundary
 
-**Translations** — [한국어](ko/0000-canonical-hierarchy.md). This English text is
+**Translations** — [한국어](ko/0004-canonical-hierarchy.md). This English text is
 the authoritative one; a translation is a reading aid and carries no normative
 force, and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-07-27 |
-| **Comment period ends** | 2026-08-10 |
+| **Comment period ends** | 2026-08-10 (closed) |
+| **Decided** | 2026-08-10 — Accepted, lazy consensus |
 | **Discussion** | <https://github.com/mindmapmarkdown/spec/pull/4> |
 | **Supersedes** | — |
 | **Superseded by** | — |
@@ -800,5 +801,87 @@ answered before L3 is specified, and by its own RFC.
 
 ## Decision and rationale
 
-<!-- Left empty until the comment period ends, per rfcs/0000-template.md and
-     GOVERNANCE.md §4. -->
+**Accepted on 2026-08-10 by lazy consensus**, the fourteen-day comment period
+having closed with no unresolved objection ([`GOVERNANCE.md`
+§4](../GOVERNANCE.md#4-decision-making)).
+
+That sentence needs qualifying, because the record should not read stronger than
+it is. **No comment arrived from outside this project.** There were no reviews
+and no participants other than the maintainer, so the proposal was never tested
+by disagreement. What it was tested by is use — every substantive change below
+came from re-reading the text or from running real documents through an
+implementation. That is worth something. It is worth less than an opposing
+reviewer would have been, and a later reader should weigh the acceptance
+accordingly.
+
+### Why this outcome and not the other
+
+The choice was between preserving the heading/list distinction in the tree and
+normalising it away into a single canonical form. The second is simpler to
+specify, simpler to test, and gives a stronger diff guarantee. It was rejected
+because it rewrites a user's document the first time a tool touches it, and the
+round-trip this project promises is experienced as a *file* going out and coming
+back, not as a tree.
+
+During the comment period that argument stopped being a prediction. **EMM
+implements the alternative** — depth-switching at a fixed level, the constant at
+six — and the observable result is the one this RFC set out to avoid: a document
+whose second-level nodes were written as bullets returns with them written as
+`##`. That is not a criticism of EMM, whose round-trip partner is the
+application itself rather than a document somebody else wrote. It is the
+strongest evidence available, and it points the same way the reasoning did.
+
+### What the comment period changed
+
+Nothing in §2.1 through §2.5 changed after the proposal was written. The kind
+decision, what becomes a node, how depth is read, and well-formedness all stand
+as first drafted. Everything below was added to them.
+
+| Added | Because |
+|---|---|
+| **§2.6**, the tree encoding | The examples stated expected trees in a notation nothing defined. Two implementations could have read the same suite differently — undecidable conformance inside the section meant to remove ambiguity |
+| **P-9**, content projects as blocks | §2.5 said how a *node* projects and never how its *content* does. A table folded onto one line returns as a paragraph, so the tree changes and mutual inversion fails silently |
+| **L-8**, lift never fetches | Absent entirely. A tree that depended on a network request would differ between implementations, between runs, and over time — and a parser would become a network client for whoever supplied the document |
+| **L-9**, hard line breaks | E-5, P-9, and P-8 had no consistent reading for a two-space break. Documents of that shape — every ChatGPT export — were unprojectable |
+| **E-1**, the root carries content | L-3 sent a preamble to the root; E-1 gave the root no place to put it. A document opening with prose before its first heading could not be encoded |
+
+The first was found by asking why the expected value was JSON rather than a
+mindmap file. Three came from an implementation meeting real documents. The last
+came from asking whether a rule about a document's preamble was covered.
+
+**Three of those were defects, not improvements** — L-9 and E-1 made ordinary
+documents impossible to handle, and P-9 permitted a silent structural change. A
+comment period that produced only polish would not have earned its cost. This one
+found things that would otherwise have been found by an implementer, later, with
+the specification already published.
+
+Two proposals were considered and **rejected**, and are recorded under
+Alternatives rather than adopted: making standalone blocks into nodes, and
+splitting a Markdown link into a caption and an address inside the tree. Both
+would have required teaching the encoding something the boundary in §1.1.2 keeps
+out of it.
+
+### What lands, and what still has to happen
+
+On acceptance this text becomes **Chapter 2 of `spec.md`**, renumbered to its
+sections, with the six worked examples moved inline beside the rules they
+demonstrate. `examples/examples.json` is regenerated from them and stops being
+empty for the first time. **That is a separate pull request**; merging this RFC
+records the decision and does not change the specification.
+
+Chapter 2 makes the specification implementable. Until it lands, `README.md` is
+correct to say that nothing can conform.
+
+### What this RFC does not settle
+
+The unresolved questions above stand, and one of them grew during the comment
+period into something larger than this RFC: **whether identity belongs in this
+specification at all.** Following that question found a contradiction in already
+merged text — §1.3 makes identity part of the tree, §1.2.4 L1 requires lift to be
+deterministic across implementations, and §1.2.4 L2 requires an implementation to
+assign identity, and all three cannot hold at once.
+
+Chapter 2 does not depend on the answer; no rule in §2.1 to §2.6 mentions
+identity, and E-2's four members are complete without it. But §1.2.4 and §1.3 are
+merged text, so **that question needs its own RFC, and it should be answered
+before Chapter 3 rather than inside it.**
