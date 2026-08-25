@@ -187,6 +187,32 @@ identity is needed: rename a node and the derived value changes, so it is an
 address rather than an identity. §1.3 required identity to be independent of
 label and position precisely to exclude this.
 
+**Carry identity in front matter.** The obvious third candidate, and the one
+this RFC did not consider until it was raised in review: a fenced block at the
+top of the document, as Jekyll, Hugo, Obsidian, and markmap all use. It is one
+block rather than a token per node, it is human-writable, and a language model
+can be asked for it in plain words — all of which the HTML comment is not.
+
+Rejected on three counts, the last of which is decisive.
+
+It **fails L0 in the general case.** Front matter is not CommonMark. Parsed by
+the reference implementation, `---` / `title: …` / `---` is a thematic break
+followed by a **setext heading**, because a line of hyphens after a paragraph is
+a heading underline rather than a break. It is invisible only in readers that
+special-case it, and L0 asks for any Markdown tool, not a favoured subset.
+
+It is **not obviously safer through a model.** Being one block at the top helps,
+but it is also the block a model is most likely to rewrite or drop when asked to
+restructure a document, and it is the part with no visible connection to the
+content.
+
+And it **relocates the problem rather than solving it.** Front matter sits at the
+top; identity has to attach to nodes throughout. Carrying it there means a side
+table inside the block, which needs some way to name the node each entry belongs
+to — an address. Whatever that address is, it is either a position or a label,
+and §1.3 required identity to be independent of both. **The candidate that looks
+like it avoids the addressing problem turns out to contain it.**
+
 **Prior art.**
 
 - **EMM** carries a map snapshot — styles, layout, images, and its own node
