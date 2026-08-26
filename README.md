@@ -75,10 +75,12 @@ of claim and are not interchangeable.
 | Path | Contents | |
 |---|---|---|
 | [`spec.md`](spec.md) | The specification, with its normative examples written inline | Chapters 1–2 |
-| [`examples/examples.json`](examples/examples.json) | Conformance test cases, **generated** from the examples in `spec.md` and never hand-edited | 6 examples |
+| [`examples/examples.json`](examples/examples.json) | Conformance test cases, **generated** from the examples in `spec.md` and never hand-edited | 18 examples |
 | [`rfcs/`](rfcs/) | Proposals for normative change, including rejected ones | |
 | [`docs/`](docs/) | Informative material — an [overview](docs/overview.md) of how the pieces fit together, a [glossary](docs/glossary.md), and a guide to [reading a worked example](docs/reading-examples.md) | |
 | [`tools/`](tools/) | The generator that extracts `examples.json`, the link checker, and their tests | |
+| [`VERSIONING.md`](VERSIONING.md) | What a version number means, when it changes, and what 1.0 would require | |
+| [`CHANGELOG.md`](CHANGELOG.md) | What changed, and in which release | no release yet |
 
 The generated-not-written rule for `examples.json` is the point of the
 arrangement: the specification and its test suite are the same source, so they
