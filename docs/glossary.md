@@ -169,11 +169,15 @@ that appears in prose without intending a requirement. `CONTRIBUTING.md` §6 ask
 contributors to avoid the keywords entirely outside `spec.md`, where they would
 read as emphasis but scan as obligations.
 
-### Conformance level (L0–L3)
+### Conformance level (L0–L2)
 
 A staircase, so that an implementation can say how far up it has come instead of
-facing an all-or-nothing claim. L0 is a property of documents; L1 through L3 are
+facing an all-or-nothing claim. L0 is a property of documents; L1 and L2 are
 increasing obligations on software, and each includes the ones below it.
+
+There were four levels until 2026-08-27. The old L2 required node identity, was
+removed with it, and the level above moved down into its place; see
+[RFC 0016](../rfcs/0016-remove-node-identity.md).
 
 Defined in [`spec.md` §1.2.4](../spec.md#124-conforming-implementations); the
 README carries a summary table.
@@ -272,15 +276,27 @@ would show up as a diff.
 
 ### Identity
 
-What makes a node *the same node* across edits and round-trips, independent of
-its label, its position, and its content. Two nodes with the same label are not
-thereby the same node; a node whose label is rewritten is still the same one.
+What would make a node *the same node* across edits and round-trips, independent
+of its label, its position, and its content. Two nodes with the same label would
+not thereby be the same node; a node whose label was rewritten would still be
+the same one.
 
-Identity is what a sidecar, a diff, and a merge all key on. How it is
-represented is not yet specified — and **whether this specification should
-define it at all** was reopened during the comment period on
-[the open RFC](https://github.com/mindmapmarkdown/spec/pull/4), which records
-why. It is a live question, not a settled one.
+The tense is deliberate. **This specification does not define identity**, and
+[RFC 0016](../rfcs/0016-remove-node-identity.md) is the decision that removed it
+on 2026-08-27. The word is kept here because it is the natural name for the
+problem, and because a reader will meet it in older text.
+
+The reason is worth knowing, because it is the kind of thing that looks like an
+oversight. Identity has to be *written down somewhere* for a second tool to read
+it, and every place to write it fails one of two tests. Written where a reader
+can see it, it fails L0 — the promise that a conforming document is ordinary
+Markdown. Written invisibly, realistically as an HTML comment, it survives L0
+and does not survive the trip this project exists for: a language model does not
+edit a document, it re-emits one, and there is no way to require that the
+invisible tokens come back attached to the same nodes.
+
+So recognising a node across revisions is left to applications, which is what
+they already do. What it costs is a sidecar that a *different* tool could read.
 
 ### Diff
 
@@ -314,8 +330,12 @@ is described here merges *trees*.
 
 Two people open the same map. One adds a child under a node; the other renames
 that node. A correct merge produces both changes. A merge that cannot tell the
-renamed node is the same node produces two nodes and silently splits the map —
-which is why merge is listed at L3, above identity at L2.
+renamed node is the same node produces two nodes and silently splits the map.
+
+Deciding that the renamed node is the same node is the hard part, and there is
+no identity to look it up by. A merge has to work it out from kind, label,
+position, and content — which is why L2 is not yet implementable even though its
+requirements are written.
 
 ### Subtree
 
@@ -324,7 +344,8 @@ which is why merge is listed at L3, above identity at L2.
 It matters because documents get large and the things that read them do not want
 all of it. Handing one branch to a tool or a model, getting it back, and putting
 it where it came from is cheaper and more accurate than sending the whole
-document. Doing so requires knowing where it came from, which is identity again.
+document. Doing so requires knowing where it came from, and with no identity to
+record that, it is the same matching problem the merge entry describes.
 
 ### Sidecar
 

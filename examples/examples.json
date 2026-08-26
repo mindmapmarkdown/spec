@@ -6,8 +6,8 @@
       "example": 1,
       "section": "2.1",
       "heading": "Node kind",
-      "start_line": 449,
-      "end_line": 456,
+      "start_line": 430,
+      "end_line": 437,
       "markdown": "# Project\n## Install\n",
       "tree": {
         "content": [],
@@ -32,8 +32,8 @@
       "example": 2,
       "section": "2.1",
       "heading": "Node kind",
-      "start_line": 460,
-      "end_line": 467,
+      "start_line": 441,
+      "end_line": 448,
       "markdown": "- Project\n  - Install\n",
       "tree": {
         "content": [],
@@ -58,8 +58,8 @@
       "example": 3,
       "section": "2.1",
       "heading": "Node kind",
-      "start_line": 475,
-      "end_line": 484,
+      "start_line": 456,
+      "end_line": 465,
       "markdown": "# Install\n- npm\n- pnpm\n",
       "tree": {
         "content": [],
@@ -90,8 +90,8 @@
       "example": 4,
       "section": "2.2",
       "heading": "What becomes a node",
-      "start_line": 549,
-      "end_line": 557,
+      "start_line": 530,
+      "end_line": 538,
       "markdown": "# Install\nNode.js 20 or later.\n",
       "tree": {
         "content": [],
@@ -114,8 +114,8 @@
       "example": 5,
       "section": "2.2",
       "heading": "What becomes a node",
-      "start_line": 562,
-      "end_line": 569,
+      "start_line": 543,
+      "end_line": 550,
       "markdown": "Some prose.\n\n# A\n",
       "tree": {
         "content": [
@@ -138,8 +138,8 @@
       "example": 6,
       "section": "2.3",
       "heading": "Depth, and heading levels",
-      "start_line": 595,
-      "end_line": 602,
+      "start_line": 576,
+      "end_line": 583,
       "markdown": "# A\n### B\n",
       "tree": {
         "content": [],

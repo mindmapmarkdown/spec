@@ -183,9 +183,13 @@ sidecar*
 ([`spec.md` §1.4.2](../spec.md#142-meaning-in-the-document-presentation-in-the-sidecar)),
 and its test is blunt: delete every sidecar, and no tree may change.
 
-This is why nodes need **identity** — something that says "this is the same node
-as before", independent of its label, its position, and its content. A sidecar
-keys on identity. So does a diff, and so does a merge.
+A sidecar has to point at *something*, and so the obvious next question is what
+a node is called. The specification's answer is that **it deliberately does not
+say**: a name that a second tool could read would have to be written into the
+document, and nowhere to write it survives both the promise that a conforming
+document is ordinary Markdown and a round trip through a language model. So an
+application recognises its own nodes however it likes, and a sidecar it owns is
+its own; see [RFC 0016](../rfcs/0016-remove-node-identity.md).
 
 ## The repository, in that picture
 

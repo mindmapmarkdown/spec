@@ -18,8 +18,8 @@ read the specification, implement it, or argue with it, this page is the map.
 > [`spec.md`](spec.md) contains **Chapters 1 and 2** — scope, conformance and
 > terminology, then the rules that decide which tree a document denotes and
 > which document a tree denotes. That is enough to build a reader and a writer
-> against. **Identity and the operations that depend on it are not written**,
-> and there is no version number and no release. Requirements will change.
+> against. **Diff, merge, and subtree exchange are not written**, and there is
+> no version number and no release. Requirements will change.
 >
 > The useful thing to do with a draft this early is disagree with it. See
 > [participating](#participating).
@@ -34,8 +34,6 @@ tree** — nothing beyond it:
   Markdown document.
 - **Round-trip conditions** — when composing the two preserves information, and
   what "information" covers.
-- **Node identity** — how a node is told apart from its label, its content, and
-  its position, so it is still the same node after a round-trip.
 - **Conformance** — what a document and an implementation each have to satisfy.
 
 ## What is not specified
@@ -64,8 +62,7 @@ disagree, that section wins.
 |---|---|---|---|
 | **L0** | Read | A conforming document is ordinary Markdown. Its hierarchy survives in tools that have never heard of this specification | Every existing Markdown tool, unmodified. Zero effort, and that is a requirement rather than a happy accident |
 | **L1** | Structure | *The same shape.* Lifts any conforming document to the prescribed tree and projects any tree back to canonical form; the two are mutually inverse | An implementation that wants structural stability |
-| **L2** | Identity | *The same nodes.* Node identity survives reformatting, relabelling, and reordering | An implementation with sidecars, comments, or anything else that points at a node |
-| **L3** | Round-trip | Structural diff and merge between trees, and operating on a subtree without the rest of the document | Collaborative editing; handing one branch of a large document to a tool or a model and getting it back |
+| **L2** | Round-trip | Structural diff and merge between trees, and operating on a subtree without the rest of the document | Collaborative editing; handing one branch of a large document to a tool or a model and getting it back |
 
 Levels are cumulative, and an implementation states the highest level it claims.
 
@@ -93,9 +90,11 @@ mechanism, more than the prose, that made CommonMark usable.
 
 **L0 and L1 can now be implemented.** Chapter 2 says which tree a document
 denotes and which document a tree denotes, so a reader and a writer can be built
-and checked. L2 and L3 cannot: identity is not specified, and whether it belongs
-in this specification at all is
-[an open question](rfcs/0004-canonical-hierarchy.md).
+and checked. L2 cannot: diff, merge, and subtree exchange all have to decide
+which node in one tree corresponds to which in another, and the rules for making
+that decision are not written. There is no node identity to key it on, and
+[RFC 0016](rfcs/0016-remove-node-identity.md) records why the specification does
+not define one.
 
 Where to start:
 
