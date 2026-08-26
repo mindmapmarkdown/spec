@@ -768,6 +768,8 @@ table MUST be written as a table, a code block as a fenced block, a block quote 
 a block quote. Content MUST NOT be folded into the node's label, and MUST NOT be
 joined into a single line.
 
+**P-10.** A node's `content` MUST be written before any of its children.
+
 *(Informative)* P-5 is doing more work than it appears to. The worst ambiguity in
 CommonMark for this specification is that four spaces of indentation may mean an
 indented code block or a continuation of a list item, and the reading depends on
@@ -801,6 +803,33 @@ stays a block of its own rather than joining the label:
    "content":[{"block":"paragraph","source":"Run the installer."}],
    "children":[]},
   {"kind":"item","label":"Verify","content":[],"children":[]}]}
+````
+
+P-10 states what L-3 already implies, because the failure it prevents is silent.
+L-3 attaches a block to the *nearest node preceding it in document order*, so
+content written after a child would lift back attached to that child instead —
+a different tree, from output that is a perfectly ordinary Markdown document.
+Both orderings satisfy every other rule in this section, which is why the
+requirement has to be stated rather than derived.
+
+A node with both content and children projects in that order, and lifts back
+unchanged:
+
+````example
+# Install
+
+Node.js 20 or later.
+
+## Requirements
+
+- git
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Install",
+   "content":[{"block":"paragraph","source":"Node.js 20 or later."}],
+   "children":[
+     {"kind":"section","label":"Requirements","content":[],"children":[
+       {"kind":"item","label":"git","content":[],"children":[]}]}]}]}
 ````
 
 ### 2.6 The tree encoding used by examples
