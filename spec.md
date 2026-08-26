@@ -16,8 +16,8 @@ states are still expected to change.
 
 Chapters 1 and 2 exist. Together they are enough to build a reader and a writer:
 Chapter 1 fixes the vocabulary and the conformance levels, and Chapter 2 says
-which tree a document denotes and which document a tree denotes. Identity, and
-the operations that depend on it, are not written.
+which tree a document denotes and which document a tree denotes. The operations
+of §1.2.4 L2 — diff, merge, and subtree exchange — are not written.
 
 Where the text below points to a chapter that does not exist, it is naming the
 place a rule will go rather than citing one. Do not implement against a forward
@@ -44,10 +44,7 @@ and a hierarchical tree, consisting of:
 3. **Round-trip conditions** — the circumstances under which composing the two
    in either order preserves information, and precisely what "information"
    covers.
-4. **Node identity** — how a node is distinguished from its label, its content,
-   and its position, so that the same node can be recognised after a round-trip
-   and across revisions of the document.
-5. **Conformance** — what a document and an implementation each have to satisfy,
+4. **Conformance** — what a document and an implementation each have to satisfy,
    and how that is tested.
 
 The correspondence is between a document and a **tree**. It is not a
@@ -72,7 +69,8 @@ free to do any of them, and doing so does not affect conformance.
 | Positioning, colour, collapse state, zoom | Presentation, which belongs in a sidecar (§1.4.2) |
 | File names, directory layout, transport, sync | A document need not be a file |
 | Markdown grammar | Defined by CommonMark; this specification is layered on it and does not modify it (§1.5.1) |
-| Content of a sidecar | This specification defines only how an external artifact *refers* to a node — by identity — not what it stores against it |
+| Node identity | A tree that carried identity could not be lifted deterministically, because a document that does not state one gives an implementation nothing to derive it from. Recognising a node across revisions is left to applications; see [RFC 0016](rfcs/0016-remove-node-identity.md) |
+| Content of a sidecar | This specification defines neither what a sidecar stores nor how it addresses what it stores |
 
 HTML deserves a specific note, because it is the usual way a view reaches a
 reader. HTML is a container that carries a view; it is not a format this
@@ -165,8 +163,7 @@ level it claims, and MUST NOT claim a level it does not satisfy in full.
 |---|---|---|
 | **L0** | Read | A conforming document is usable by software that knows nothing about this specification |
 | **L1** | Structure | Lifts any conforming document to the prescribed tree, and projects any tree to canonical form |
-| **L2** | Identity | Preserves node identity across lift and projection |
-| **L3** | Round-trip | Diffs and merges trees, and operates on a subtree without the rest of the document |
+| **L2** | Round-trip | Diffs and merges trees, and operates on a subtree without the rest of the document |
 
 **L0 — Read.** L0 places its requirement on documents, not on software. A
 conforming document MUST be a valid CommonMark document (§1.2.3), and MUST NOT
@@ -191,20 +188,7 @@ conforming document that is *not* canonical, only the tree survives; the bytes d
 not, and are not required to. Beyond the tree, an L1 implementation is not
 required to preserve anything about a document.
 
-**L2 — Identity.** An L2 implementation MUST additionally assign, read, and
-preserve node identity (§1.3). Lifting a document and projecting the result MUST
-preserve the identity of every node present in the input — including where the
-document was not canonical, and the projection therefore differs from it byte
-for byte. An L2 implementation MUST NOT change a node's identity in response to
-a change in that node's label, content, or position alone.
-
-*(Informative)* Identity is what raises the L1 guarantee from *the same shape* to
-*the same nodes*. At L1, a reformatted document round-trips to an equal tree. At
-L2 it round-trips to a tree whose nodes can still be matched against the ones a
-sidecar, a reviewer, or an earlier revision already knew about — which is the
-precondition for everything L3 does.
-
-**L3 — Round-trip.** An L3 implementation MUST additionally
+**L2 — Round-trip.** An L2 implementation MUST additionally
 
 - compute a structural difference between two trees, expressed as operations on
   nodes rather than on lines of text, and
@@ -213,9 +197,14 @@ precondition for everything L3 does.
 - lift and project a proper subtree without access to the document that contains
   it.
 
-L3 is what makes concurrent editing and partial exchange possible: a tool, or a
+L2 is what makes concurrent editing and partial exchange possible: a tool, or a
 model, can be handed one branch of a large document, work on it, and have the
 result reinserted without the rest of the document ever being transmitted.
+
+*(Informative)* Each of the three requires deciding which node in one tree
+corresponds to which in another. This specification defines no identity to key
+that decision on (§1.1.2), so it is a judgement over kind, label, position, and
+content — and the rules for making it are not yet written.
 
 The tests that decide each level are the conformance suite, generated from the
 normative examples in this document; see §1.4.3.
@@ -270,22 +259,14 @@ Markdown. A *tree round-trip* takes a tree, projects it to Markdown, and lifts
 the result. What each is required to preserve is fixed by the conformance level
 (§1.2.4), and the two are not the same requirement: at L1 a tree round-trip
 returns an equal tree, while a document round-trip returns equal bytes for
-canonical documents only; at L2 a document round-trip additionally preserves the
-identity of every node, canonical or not.
-
-**identity** — A property of a node by which it is recognised as the same node
-across round-trips and across revisions of a document, independent of its label,
-its content, and its position. Two nodes with identical labels are not thereby
-the same node, and a node whose label is rewritten is still the same node.
-Identity is what a sidecar, a diff, and a merge all key on; how it is
-represented and where it is stored is defined in a later chapter *(not yet
-written)*.
+canonical documents only.
 
 **sidecar** — An artifact stored outside a document that associates data with
-that document's nodes by identity. Presentation state — position, colour,
-collapse, zoom, view kind — belongs in a sidecar. The meaning of a document MUST
-NOT depend on any sidecar, and a document MUST lift to the same tree whether or
-not a sidecar is present.
+that document's nodes. How a sidecar addresses a node is not defined by this
+specification (§1.1.2). Presentation state — position, colour, collapse, zoom,
+view kind — belongs in a sidecar. The meaning of a document MUST NOT depend on
+any sidecar, and a document MUST lift to the same tree whether or not a sidecar
+is present.
 
 **conforming document** — Defined in §1.2.3.
 
@@ -382,8 +363,8 @@ structure, which is exactly the role §1.4.2 assigns to a sidecar.
 
 It is therefore complementary rather than overlapping. A conforming document
 could carry the meaning while a JSON Canvas file carries the layout, provided
-the two are keyed on node identity. Whether this specification defines such a
-binding is an open question for a later chapter.
+the two can be bound to the same nodes. This specification defines neither such
+a binding nor what one would key on (§1.1.2).
 
 #### 1.5.4 markmap
 
@@ -743,8 +724,8 @@ the encoding what a link is, and then what a reference link is, an autolink, an
 image, a link with a title attribute — CommonMark's inline grammar, arriving one
 construct at a time through a door §1.1.2 closed on purpose.
 
-Identity is not encoded. Whether this specification should define identity at all
-is an open question; see [`rfcs/0004-canonical-hierarchy.md`](rfcs/0004-canonical-hierarchy.md).
+Identity is not encoded, and this specification does not define it; see §1.1.2
+and [RFC 0016](rfcs/0016-remove-node-identity.md).
 
 The examples in this chapter are extracted into `examples/examples.json` by
 `tools/extract-examples.mjs`, and that file is the conformance suite for lift.
