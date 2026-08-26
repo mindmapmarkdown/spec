@@ -549,6 +549,103 @@ Some prose.
   {"kind":"section","label":"A","content":[],"children":[]}]}
 ````
 
+A setext heading produces a node exactly as an ATX heading does (L-1), and its
+label is the text alone. Canonical form writes every heading as ATX (P-6), so
+this is a conforming document that is not a canonical one:
+
+````example
+Install
+=======
+
+Requirements
+------------
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Install","content":[],"children":[
+    {"kind":"section","label":"Requirements","content":[],"children":[]}]}]}
+````
+
+Every other block is content too, and a section with a quotation and a code
+block beneath it has one node rather than three:
+
+````example
+# Install
+
+> Requires Node 20.
+
+```bash
+npm i
+```
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Install",
+   "content":[
+     {"block":"block_quote","source":"> Requires Node 20."},
+     {"block":"code_block","source":"```bash\nnpm i\n```"}],
+   "children":[]}]}
+````
+
+A table has no block type of its own — CommonMark defines none — so it is
+recorded as the paragraph it parses to, with its source intact. That is what
+lets P-9 write it back as a table instead of folding it onto one line:
+
+````example
+# Platforms
+
+| Platform | Status |
+|---|---|
+| Linux | ok |
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Platforms",
+   "content":[
+     {"block":"paragraph",
+      "source":"| Platform | Status |\n|---|---|\n| Linux | ok |"}],
+   "children":[]}]}
+````
+
+A hard line break lifts to the same tree whichever way it is spelled (L-9).
+Written with trailing spaces, shown here as `␣` because they would not otherwise
+survive an editor:
+
+````example
+# Note
+first line␣␣
+second line
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Note",
+   "content":[{"block":"paragraph","source":"first line\\\nsecond line"}],
+   "children":[]}]}
+````
+
+and written with a backslash, which is the form the tree keeps:
+
+````example
+# Note
+first line\
+second line
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Note",
+   "content":[{"block":"paragraph","source":"first line\\\nsecond line"}],
+   "children":[]}]}
+````
+
+A label is inline source rather than rendered text, and lift never resolves what
+that source points at (E-4, L-8). The link below is the whole label, brackets and
+URL included, and no request is made for it:
+
+````example
+# Links
+- [How to install](https://example.com/)
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Links","content":[],"children":[
+    {"kind":"item","label":"[How to install](https://example.com/)",
+     "content":[],"children":[]}]}]}
+````
+
 ### 2.3 Depth, and heading levels
 
 **L-5.** A section's depth is determined by **nesting, not by heading level**. A
@@ -584,6 +681,36 @@ not canonical:
 
 Projecting that tree yields `# A` / `## B`, which lifts to the same tree. The
 round-trip is stable at the second pass, and idempotent thereafter.
+
+A heading at or below the level of the open section closes it, so the next
+section becomes a sibling rather than a child:
+
+````example
+# A
+## B
+# C
+.
+{"content":[],"children":[
+  {"kind":"section","label":"A","content":[],"children":[
+    {"kind":"section","label":"B","content":[],"children":[]}]},
+  {"kind":"section","label":"C","content":[],"children":[]}]}
+````
+
+An item's depth is its nesting within the list, counted from the node that
+contains the list rather than from the document (L-7):
+
+````example
+# Menu
+- Drinks
+  - Tea
+    - Green
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Menu","content":[],"children":[
+    {"kind":"item","label":"Drinks","content":[],"children":[
+      {"kind":"item","label":"Tea","content":[],"children":[
+        {"kind":"item","label":"Green","content":[],"children":[]}]}]}]}]}
+````
 
 ### 2.4 Well-formed trees
 
@@ -659,6 +786,23 @@ still looks like a valid Markdown document — but a table folded onto one line
 lifts back as a paragraph, so the tree has changed and mutual inversion has failed
 silently.
 
+An item carrying block content makes the list loose (P-7), and that content
+stays a block of its own rather than joining the label:
+
+````example
+- Setup
+
+  Run the installer.
+
+- Verify
+.
+{"content":[],"children":[
+  {"kind":"item","label":"Setup",
+   "content":[{"block":"paragraph","source":"Run the installer."}],
+   "children":[]},
+  {"kind":"item","label":"Verify","content":[],"children":[]}]}
+````
+
 ### 2.6 The tree encoding used by examples
 
 A tree is an abstract structure. It has no format, and this specification blesses
@@ -723,6 +867,35 @@ hang the address off an icon, but splitting it in the *tree* would mean teaching
 the encoding what a link is, and then what a reference link is, an autolink, an
 image, a link with a title attribute — CommonMark's inline grammar, arriving one
 construct at a time through a door §1.1.2 closed on purpose.
+
+Inline markup is carried through untouched (E-4):
+
+````example
+# Guide
+## **Fast** start
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Guide","content":[],"children":[
+    {"kind":"section","label":"**Fast** start","content":[],"children":[]}]}]}
+````
+
+and no Unicode normalisation is applied, in either direction (E-7). The label
+below is `caf`, then `e`, then a combining acute accent — three code points, not
+the two that the precomposed spelling would give, though the two render alike:
+
+````example
+# café
+.
+{"content":[],"children":[
+  {"kind":"section","label":"café","content":[],"children":[]}]}
+````
+
+*(Informative)* Two characters in an example’s Markdown input stand for
+whitespace that cannot be written literally and be relied on to survive an
+editor: `→` (U+2192) is a tab, and `␣` (U+2423) is a space. They are a
+convention of this document rather than of the suite — `examples/examples.json`
+carries the real characters. CommonMark’s own specification uses the first for
+the same reason.
 
 Identity is not encoded, and this specification does not define it; see §1.1.2
 and [RFC 0016](rfcs/0016-remove-node-identity.md).

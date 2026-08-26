@@ -26,11 +26,21 @@
 // line consisting of exactly `.` separates input from expected output; a later
 // one is ordinary content.
 //
-// In the Markdown input, a right-arrow (→, U+2192) stands for a tab. A literal
-// tab there is invisible, significant to the parser, and easily destroyed by an
-// editor, which is why CommonMark adopted the same convention. The expected
-// tree needs no such convention and gets none: it is JSON, where a tab is
-// written `\t` and a literal one would not parse.
+// In the Markdown input, two characters stand for whitespace that is
+// significant to the parser but invisible on the page, and therefore easily
+// destroyed by an editor that trims trailing space or retabs a file:
+//
+//     →   U+2192 RIGHTWARDS ARROW   a tab
+//     ␣   U+2423 OPEN BOX           a space
+//
+// CommonMark adopted the first for the same reason. The second is needed
+// because L-9 turns on a hard line break spelled as trailing spaces, which
+// cannot be written literally here and be relied on to survive an editor.
+//
+// Both are authoring conventions for spec.md rather than part of the suite:
+// the generated JSON carries the real characters. The expected tree needs no
+// such convention and gets none — it is JSON, where a tab is written `\t`
+// and a literal one would not parse.
 //
 // Licensed under Apache-2.0 (see LICENSE, `tools/**`).
 
@@ -51,6 +61,7 @@ const NOTICE =
 const FENCE_OPEN = /^(`{3,})[ \t]*(\S.*?)?[ \t]*$/
 const HEADING = /^#{1,6}[ \t]+(?:([\d]+(?:\.[\d]+)*)\.?[ \t]+)?(.*?)[ \t]*$/
 const TAB = /→/g
+const SPACE = /␣/g
 
 class ExtractionError extends Error {
   constructor(line, message) {
@@ -158,7 +169,7 @@ export function extract(text) {
       heading,
       start_line: startLine,
       end_line: endLine,
-      markdown: input.length ? input.join('\n').replace(TAB, '\t') + '\n' : '',
+      markdown: input.length ? input.join('\n').replace(TAB, '\t').replace(SPACE, ' ') + '\n' : '',
       tree,
     })
 
