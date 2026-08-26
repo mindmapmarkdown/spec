@@ -137,7 +137,7 @@ reads it.
 and MUST NOT appear anywhere else in a tree. A tree violating this is not
 well-formed, and S-3 applies to it.
 
-**P-10.** A `front_matter` block MUST be written first, beginning at the first
+**P-11.** A `front_matter` block MUST be written first, beginning at the first
 line of the document, followed by a single blank line before whatever comes next.
 
 **E-5 amendment.** `block` is the CommonMark block type name, **or a block type
@@ -227,11 +227,6 @@ does, minus the parser.
 
 ## Unresolved questions
 
-**§2.5 never states that a node's content is written before its children.** It is
-implied by L-3 and by mutual inversion, and every example behaves that way, but
-no P-rule says it. P-10 closes the hole for front matter specifically rather than
-relying on it. The general gap is real and belongs to its own change.
-
 **What an implementation should do with a `---` fence that is not at line 1.**
 Nothing, under L-10 as written — it is a thematic break or a setext underline as
 CommonMark says. Whether a fence after a byte-order mark or a leading comment
@@ -240,6 +235,24 @@ should count is not addressed, and no corpus evidence was found for it.
 **Whether `front_matter` should have been an opaque block type in general**,
 rather than one name for one construct, so that later additions do not each need
 an E-5 amendment. Named here as the shape of a future question, not proposed.
+
+## Amendments during the comment period
+
+**2026-08-26 — this RFC's projection rule is renumbered P-11.**
+
+As first written, it was P-10, and it carried an unresolved question: §2.5 never
+said where a node's `content` goes relative to its `children`, so two different
+documents satisfied every projection rule and only one of them lifted back to the
+tree it came from.
+
+That gap was filed as [#23](https://github.com/mindmapmarkdown/spec/issues/23)
+and closed by [#25](https://github.com/mindmapmarkdown/spec/pull/25), which added
+**P-10 — a node's `content` MUST be written before any of its children.** The
+label was taken, so this RFC's rule becomes **P-11**.
+
+The rule itself is unchanged, and it does not become redundant. P-10 says
+*before the children*; P-11 says *the first line of the document*, which is
+stronger and is the only position in which front matter is front matter at all.
 
 ## Decision and rationale
 
