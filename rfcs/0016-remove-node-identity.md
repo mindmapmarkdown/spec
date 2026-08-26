@@ -1,17 +1,18 @@
-# RFC 0000: Remove node identity from the specification
+# RFC 0016: Remove node identity from the specification
 
-**Translations** — [한국어](ko/0000-remove-node-identity.md). This English text is
+**Translations** — [한국어](ko/0016-remove-node-identity.md). This English text is
 the authoritative one; a translation is a reading aid and carries no normative
 force, and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-08-13 |
-| **Comment period ends** | 2026-08-27 |
-| **Discussion** | *(pull request link, filled in on opening)* |
+| **Comment period ends** | 2026-08-27 (closed) |
+| **Decided** | 2026-08-27 — Accepted, lazy consensus |
+| **Discussion** | <https://github.com/mindmapmarkdown/spec/pull/16> |
 | **Supersedes** | — |
 | **Superseded by** | — |
 
@@ -125,6 +126,52 @@ The ladder becomes:
 **R-5.** No change is needed to §1.4.2. Its text never mentions identity, and its
 requirement — that deleting every sidecar changes no tree — holds regardless of
 how a sidecar addresses nodes.
+
+The four clauses below were added at the close of the comment period, after
+grepping `spec.md` for every occurrence of the word rather than trusting the
+list. R-1 through R-5 removed the *definition* of identity and left four places
+that go on *using* it. R-6 is the one that matters: without it, this RFC would
+repair one contradiction and introduce another.
+
+**R-6.** §1.3, the term *round-trip* — its closing clause cites the level this
+RFC removes:
+
+> …at L1 a tree round-trip returns an equal tree, while a document round-trip
+> returns equal bytes for canonical documents only; **at L2 a document round-trip
+> additionally preserves the identity of every node, canonical or not.**
+
+The bold clause is removed, and the sentence ends at *canonical documents only.*
+Left in place it would describe an L2 that no longer exists, against a property
+no longer defined — a defect strictly worse than the one this RFC fixes, because
+it would be introduced deliberately.
+
+**R-7.** §1.3, the term *sidecar* — "associates data with that document's nodes
+**by identity**" loses the last two words, and gains a sentence recording where
+the question went:
+
+> **sidecar** — An artifact stored outside a document that associates data with
+> that document's nodes. How a sidecar addresses a node is not defined by this
+> specification (§1.1.2).
+
+This is the same edit R-2 makes to the §1.1.2 table, applied to the second copy
+of the phrase. Both were written from the same assumption and neither survives it.
+
+**R-8.** §0 *Status of this document* — "Identity, and the operations that depend
+on it, are not written" becomes "The operations of §1.2.4 L2 — diff, merge, and
+subtree exchange — are not written." The old sentence promises identity is
+coming; after this RFC it is not coming, and what remains unwritten is the
+chapter that specifies the surviving level.
+
+**R-9.** Two informative cross-references, neither of which changes a rule.
+
+- **§1.5.3 (JSON Canvas)** — "provided the two are keyed on node identity"
+  becomes "provided the two can be bound to the same nodes", and the sentence
+  after it now says the specification defines neither such a binding nor what one
+  would key on (§1.1.2).
+- **The closing note of Chapter 2** — "Whether this specification should define
+  identity at all is an open question; see `rfcs/0004-canonical-hierarchy.md`"
+  becomes a pointer to this RFC and to §1.1.2. The question is no longer open,
+  and 0004 was never where it was answered.
 
 *(Informative)* **The surviving level's requirements are untouched.** Read them
 again:
@@ -259,5 +306,76 @@ restrictive one applies if anyone reads it the other way.
 
 ## Decision and rationale
 
-<!-- Left empty until the comment period ends, per rfcs/0000-template.md and
-     GOVERNANCE.md §4. -->
+**Accepted on 2026-08-27 by lazy consensus**, the fourteen-day comment period
+having closed with no unresolved objection ([`GOVERNANCE.md`
+§4](../GOVERNANCE.md#4-decision-making)).
+
+As with RFC 0004, the record should not read stronger than it is. **No comment
+arrived from outside this project.** There were no reviews and no participants
+other than the maintainer; the single comment on the discussion was the
+maintainer's own amendment. The proposal was never tested by disagreement. What
+it was tested by is the same thing that produced it — reading the merged text
+against an example it could not express.
+
+### Why this outcome and not the other
+
+The genuine alternative was not *do nothing.* It was **drop `assign`, keep
+read-and-preserve**: say how identity is written when a document carries one,
+require nothing to carry it, and never manufacture a value. That fixes
+determinism and keeps the concept.
+
+It was rejected because of what it commits the specification to. Saying *how
+identity is written* means naming a carrier, and every candidate fails one of the
+two tests this project cannot waive. Visible carriers fail L0. Opaque carriers —
+realistically an HTML comment — survive L0 and do not survive the round trip this
+project exists for, because a language model does not edit a document but
+re-emits one. Front matter, raised during the comment period, fails on a third
+count that neither of the others does: it needs a side table whose entries name
+their node, and any such name is a position or a label, which §1.3 required
+identity to be independent of.
+
+**Specifying a carrier we would advise nobody to use is worse than specifying
+none.** That is the whole decision.
+
+### Why now rather than after another revision
+
+The cost of this change is one renumbering: L3 becomes L2, and a published level
+name moves. That cost is zero today and never zero again.
+
+| | |
+|---|---|
+| Chapter 2 merged | 2026-08-11, sixteen days ago |
+| Implementations that can claim above L1 | none — identity was never implementable |
+| Normative examples carrying an identity | none of the six |
+| Releases affected | none; the specification is Draft |
+
+Deferring would not have bought better information. It would have bought the
+same decision at a price.
+
+### What the comment period changed
+
+| Added | Because |
+|---|---|
+| **Front matter**, in Alternatives | It is the carrier anyone would propose next, and silence on it would read as not having thought of it. Rejected on three counts, the last decisive — it relocates the addressing problem rather than solving it |
+| **R-6 … R-9** | R-1 through R-5 removed the definition of identity and left four passages still using it. **R-6 is not tidying:** the *round-trip* term cites the removed level, so the RFC as first written would have repaired one contradiction and introduced another |
+| **Issue [#17](https://github.com/mindmapmarkdown/spec/issues/17)** | The parser run that rejected front matter also showed it lifting to a spurious `section` node under L-1 — a Chapter 2 question, filed separately rather than folded in |
+
+The first came from review. The second came from grepping the specification for
+the word instead of trusting the clause list — the same method that found the
+original contradiction, applied to the fix.
+
+### What acceptance does not settle
+
+Two questions leave this RFC open rather than answered, and both are recorded
+above: **how the surviving L2 matches nodes without a key**, which belongs to the
+chapter that specifies it, and **what a sidecar addresses**, which decides
+whether sidecars are ever portable between tools. Neither blocks the removal.
+Both are harder now than they would have been with a key, and saying so is part
+of the decision rather than a caveat on it.
+
+### Class
+
+**Normative**, as nominated. Nothing that conforms today stops conforming, which
+is the test §3 sets. The renumbering is the one fact that argues the other way,
+and it is recorded here so that a later reader can disagree with the call rather
+than have to reconstruct it.

@@ -1,4 +1,4 @@
-# RFC 0000: Canonical hierarchy — node kind and the heading/list boundary
+# RFC 0004: Canonical hierarchy — node kind and the heading/list boundary
 
 **Translations** — [한국어](ko/0004-canonical-hierarchy.md). This English text is
 the authoritative one; a translation is a reading aid and carries no normative
