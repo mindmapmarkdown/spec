@@ -11,7 +11,7 @@ normative force, and the decision recorded below is made against this file.
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-08-26 |
 | **Comment period ends** | 2026-09-09 |
-| **Discussion** | *(pull request link, filled in on opening)* |
+| **Discussion** | <https://github.com/mindmapmarkdown/spec/pull/22> |
 | **Supersedes** | — |
 | **Superseded by** | — |
 
