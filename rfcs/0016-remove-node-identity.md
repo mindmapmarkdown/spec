@@ -317,6 +317,28 @@ maintainer's own amendment. The proposal was never tested by disagreement. What
 it was tested by is the same thing that produced it — reading the merged text
 against an example it could not express.
 
+### Correction — the acceptance was recorded a day early
+
+**This decision was written and merged on 2026-08-26**, one day before the
+comment period this RFC states. The date was taken from the conversation in
+which the work was done rather than checked against a clock; the repository's
+own commit timestamps and the merge on the discussion both record 2026-08-26.
+
+Recorded rather than corrected away, because the two halves are not the same
+size.
+
+**What it changed: nothing.** There were no participants and no objection at any
+point in the period, so no comment could have arrived in the day that was
+skipped, and the outcome on either date is identical.
+
+**What it costs is the harder half.** [`GOVERNANCE.md`
+§5](../GOVERNANCE.md#5-phase-transitions) states the phase triggers as numbers
+for one stated reason — "no one, including the current maintainer, gets to decide
+later that the conditions have not been met." A project that writes that sentence
+has to hold itself to its own dates, and on its first decision under the rule it
+did not. The acceptance stands as of the close of the period on 2026-08-27; the
+process note is that it should not have been written before then.
+
 ### Why this outcome and not the other
 
 The genuine alternative was not *do nothing.* It was **drop `assign`, keep
