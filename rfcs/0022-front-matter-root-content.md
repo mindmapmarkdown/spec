@@ -1,6 +1,6 @@
-# RFC 0000: Front matter is root content
+# RFC 0022: Front matter is root content
 
-**Translations** — [한국어](ko/0000-front-matter-root-content.md). This English
+**Translations** — [한국어](ko/0022-front-matter-root-content.md). This English
 text is the authoritative one; a translation is a reading aid and carries no
 normative force, and the decision recorded below is made against this file.
 
@@ -14,6 +14,13 @@ normative force, and the decision recorded below is made against this file.
 | **Discussion** | <https://github.com/mindmapmarkdown/spec/pull/22> |
 | **Supersedes** | — |
 | **Superseded by** | — |
+
+> **⚠ Not decided.** This RFC was merged while its comment period was still
+> running, so that it could be read and cited from `main`. **A merged RFC in this
+> repository is not an accepted one** — the Status field above is, and it says
+> `Draft` until 2026-09-09. Comment on
+> [PR #22](https://github.com/mindmapmarkdown/spec/pull/22) or
+> [issue #17](https://github.com/mindmapmarkdown/spec/issues/17).
 
 ## Summary
 

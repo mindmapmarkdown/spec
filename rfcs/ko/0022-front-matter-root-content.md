@@ -1,6 +1,6 @@
-# RFC 0000: 문서 머리말은 뿌리의 content다
+# RFC 0022: 문서 머리말은 뿌리의 content다
 
-> **번역본이다.** 정본은 영문 [`rfcs/0000-front-matter-root-content.md`](../0000-front-matter-root-content.md)이며,
+> **번역본이다.** 정본은 영문 [`rfcs/0022-front-matter-root-content.md`](../0022-front-matter-root-content.md)이며,
 > 이 번역과 원문이 어긋나면 **원문이 이긴다**. 규범 효력을 갖는 것은 원문뿐이고,
 > [`GOVERNANCE.md`](../../GOVERNANCE.md) §4의 결정도 원문을 대상으로 이루어진다.
 > 어긋난 곳을 발견하면 그것은 이 파일의 결함이므로
@@ -18,6 +18,13 @@
 | **논의** | <https://github.com/mindmapmarkdown/spec/pull/22> |
 | **대체하는 RFC** | — |
 | **대체된 RFC** | — |
+
+> **⚠ 아직 결정되지 않았다.** 이 RFC는 코멘트 기간이 진행 중일 때 병합되었다.
+> `main`에서 읽고 인용할 수 있게 하기 위해서다. **이 저장소에서 병합된 RFC가 채택된
+> RFC를 뜻하지는 않는다** — 그것을 말하는 것은 위의 상태(Status) 칸이고, 2026-09-09
+> 까지는 `Draft`다. 의견은
+> [PR #22](https://github.com/mindmapmarkdown/spec/pull/22) 또는
+> [이슈 #17](https://github.com/mindmapmarkdown/spec/issues/17)에 남겨달라.
 
 ## 요약
 
