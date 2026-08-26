@@ -109,6 +109,24 @@ test('a right arrow stands for a tab in the Markdown input', () => {
   assert.equal(example.markdown, '-\ta\n')
 })
 
+test('an open box stands for a space in the Markdown input', () => {
+  const [example] = extract(
+    spec('```example', 'a␣␣', 'b', '.', '{}', '```')
+  )
+
+  // L-9 turns on a hard break spelled as trailing spaces; written literally
+  // here they would not survive an editor that trims them
+  assert.equal(example.markdown, 'a  \nb\n')
+})
+
+test('an open box in the expected tree is left alone, like a right arrow', () => {
+  const [example] = extract(
+    spec('```example', 'a', '.', '{"box":"␣"}', '```')
+  )
+
+  assert.deepEqual(example.tree, { box: '␣' })
+})
+
 test('the expected tree is JSON, so a tab there is written \\t and left alone', () => {
   const [example] = extract(
     spec('```example', 'a', '.', '{"label":"x\\ty","arrow":"→"}', '```')
