@@ -58,6 +58,28 @@ it afterwards makes it Breaking rather than Normative.
 | [#17](https://github.com/mindmapmarkdown/spec/issues/17) | Front matter lifts to a spurious `section` node. Proposed by RFC [0022](rfcs/0022-front-matter-root-content.md), **comment period ends 2026-09-09** |
 | [#19](https://github.com/mindmapmarkdown/spec/issues/19) | What `E-5`'s `block` names, and what a code block's `source` contains. The first half is Clarifying and waits on 0022, which amends the same sentence; the second is Normative and needs its own RFC |
 
+### Process notes
+
+Two changes above landed without the comment period [`GOVERNANCE.md`
+§3](GOVERNANCE.md#3-classes-of-change) sets for their class.
+
+| Change | Required | What happened |
+|---|---|---|
+| RFC [0016](rfcs/0016-remove-node-identity.md), Normative | 14 days, ending 2026-08-27 | Decision written and merged **2026-08-26**, one day early. Recorded in the RFC's own `Correction` section |
+| `P-10` ([#25](https://github.com/mindmapmarkdown/spec/pull/25)), Clarifying | 3-day comment period | Opened and merged the same day, **five minutes apart** |
+
+Neither could have changed anything. There were no participants and no objection
+at any point, so no comment could have arrived in the time that was skipped.
+
+**That is why nothing was lost. It is not a reason for the periods to be
+optional.** If silence makes a 3-day period pointless it makes a 14-day one
+pointless too, and a 14-day period on RFC
+[0022](rfcs/0022-front-matter-root-content.md) is currently the binding
+constraint on 0.1.0. A project whose case against OPML is that its process was
+never written down cannot leave its own departures from that process unwritten.
+
+From here the periods are observed as written.
+
 ---
 
 *This document is licensed under
