@@ -388,8 +388,8 @@
       "example": 15,
       "section": "2.5",
       "heading": "Canonical projection",
-      "start_line": 792,
-      "end_line": 804,
+      "start_line": 794,
+      "end_line": 806,
       "markdown": "- Setup\n\n  Run the installer.\n\n- Verify\n",
       "tree": {
         "content": [],
@@ -416,10 +416,48 @@
     },
     {
       "example": 16,
+      "section": "2.5",
+      "heading": "Canonical projection",
+      "start_line": 818,
+      "end_line": 833,
+      "markdown": "# Install\n\nNode.js 20 or later.\n\n## Requirements\n\n- git\n",
+      "tree": {
+        "content": [],
+        "children": [
+          {
+            "kind": "section",
+            "label": "Install",
+            "content": [
+              {
+                "block": "paragraph",
+                "source": "Node.js 20 or later."
+              }
+            ],
+            "children": [
+              {
+                "kind": "section",
+                "label": "Requirements",
+                "content": [],
+                "children": [
+                  {
+                    "kind": "item",
+                    "label": "git",
+                    "content": [],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "example": 17,
       "section": "2.6",
       "heading": "The tree encoding used by examples",
-      "start_line": 873,
-      "end_line": 880,
+      "start_line": 902,
+      "end_line": 909,
       "markdown": "# Guide\n## **Fast** start\n",
       "tree": {
         "content": [],
@@ -441,11 +479,11 @@
       }
     },
     {
-      "example": 17,
+      "example": 18,
       "section": "2.6",
       "heading": "The tree encoding used by examples",
-      "start_line": 886,
-      "end_line": 891,
+      "start_line": 915,
+      "end_line": 920,
       "markdown": "# café\n",
       "tree": {
         "content": [],
