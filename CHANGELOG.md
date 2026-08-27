@@ -60,13 +60,14 @@ it afterwards makes it Breaking rather than Normative.
 
 ### Process notes
 
-Two changes above landed without the comment period [`GOVERNANCE.md`
+Three changes above landed without the comment period [`GOVERNANCE.md`
 §3](GOVERNANCE.md#3-classes-of-change) sets for their class.
 
 | Change | Required | What happened |
 |---|---|---|
 | RFC [0016](rfcs/0016-remove-node-identity.md), Normative | 14 days, ending 2026-08-27 | Decision written and merged **2026-08-26**, one day early. Recorded in the RFC's own `Correction` section |
 | `P-10` ([#25](https://github.com/mindmapmarkdown/spec/pull/25)), Clarifying | 3-day comment period | Opened and merged the same day, **five minutes apart** |
+| Canonical examples ([#30](https://github.com/mindmapmarkdown/spec/pull/30)), Clarifying | 3 days, ending 2026-08-29 | Opened and merged **four minutes apart** |
 
 Neither could have changed anything. There were no participants and no objection
 at any point, so no comment could have arrived in the time that was skipped.
@@ -78,7 +79,26 @@ pointless too, and a 14-day period on RFC
 constraint on 0.1.0. A project whose case against OPML is that its process was
 never written down cannot leave its own departures from that process unwritten.
 
-From here the periods are observed as written.
+Three is a pattern rather than three accidents, and the cause is not
+carelessness. **A comment period had no mechanism.** The date lived in a pull
+request body, and the merge button does not read pull request bodies. Every one
+of these was merged within minutes of being told the checks were green — which
+is the correct response to *checks are green*, and the wrong one to *this change
+has a period*, and nothing distinguished the two.
+
+What changes is the mechanism, not the resolve:
+
+- **A pull request under a comment period says so in its title**, as
+  `[merge on YYYY-MM-DD]`, where it is read at the moment of merging rather than
+  four screens above it.
+- **Nothing else is signalled as ready.** A change with a period open is
+  described as waiting, never as ready to merge.
+
+The rule in §3 is unchanged. Amending it would need an RFC (§9) and would mean
+writing down that a period is optional in Phase 0 — which is the reasoning that
+would also excuse skipping the fourteen days on RFC
+[0022](rfcs/0022-front-matter-root-content.md), the one currently holding
+0.1.0.
 
 ---
 
