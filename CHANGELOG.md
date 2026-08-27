@@ -69,8 +69,9 @@ Three changes above landed without the comment period [`GOVERNANCE.md`
 | `P-10` ([#25](https://github.com/mindmapmarkdown/spec/pull/25)), Clarifying | 3-day comment period | Opened and merged the same day, **five minutes apart** |
 | Canonical examples ([#30](https://github.com/mindmapmarkdown/spec/pull/30)), Clarifying | 3 days, ending 2026-08-29 | Opened and merged **four minutes apart** |
 
-Neither could have changed anything. There were no participants and no objection
-at any point, so no comment could have arrived in the time that was skipped.
+None of them could have changed anything. There were no participants and no
+objection at any point, so no comment could have arrived in the time that was
+skipped.
 
 **That is why nothing was lost. It is not a reason for the periods to be
 optional.** If silence makes a 3-day period pointless it makes a 14-day one
