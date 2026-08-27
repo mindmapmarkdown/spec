@@ -429,6 +429,7 @@ Sections nest by heading level:
 
 ````example
 # Project
+
 ## Install
 .
 {"content":[],"children":[
@@ -455,6 +456,7 @@ A document may use both, with sections above items:
 
 ````example
 # Install
+
 - npm
 - pnpm
 .
@@ -529,6 +531,7 @@ A paragraph is content, not a node:
 
 ````example
 # Install
+
 Node.js 20 or later.
 .
 {"content":[],"children":[
@@ -610,6 +613,7 @@ survive an editor:
 
 ````example
 # Note
+
 first line␣␣
 second line
 .
@@ -623,6 +627,7 @@ and written with a backslash, which is the form the tree keeps:
 
 ````example
 # Note
+
 first line\
 second line
 .
@@ -638,6 +643,7 @@ URL included, and no request is made for it:
 
 ````example
 # Links
+
 - [How to install](https://example.com/)
 .
 {"content":[],"children":[
@@ -672,6 +678,7 @@ not canonical:
 
 ````example
 # A
+
 ### B
 .
 {"content":[],"children":[
@@ -687,7 +694,9 @@ section becomes a sibling rather than a child:
 
 ````example
 # A
+
 ## B
+
 # C
 .
 {"content":[],"children":[
@@ -701,6 +710,7 @@ contains the list rather than from the document (L-7):
 
 ````example
 # Menu
+
 - Drinks
   - Tea
     - Green
@@ -787,6 +797,26 @@ is easy to introduce and hard to notice. An implementation that models a node as
 still looks like a valid Markdown document — but a table folded onto one line
 lifts back as a paragraph, so the tree has changed and mutual inversion has failed
 silently.
+
+P-7's blank line is a requirement on **projection**, not on lift. A document that
+runs a heading straight into what follows it is conforming and lifts to the same
+tree as the canonical spelling — it simply is not that spelling, and comes back
+as one:
+
+````example
+# A
+## B
+.
+{"content":[],"children":[
+  {"kind":"section","label":"A","content":[],"children":[
+    {"kind":"section","label":"B","content":[],"children":[]}]}]}
+````
+
+*(Informative)* That shape is the most common in Markdown written by hand, so it
+is stated as its own example rather than left implicit. Every other example in
+this chapter deviates from canonical form **only in the way it is demonstrating**
+— a setext heading, a hard break spelled with spaces, a skipped level — which is
+what makes the ones that do not deviate usable as projection tests.
 
 An item carrying block content makes the list loose (P-7), and that content
 stays a block of its own rather than joining the label:
@@ -901,6 +931,7 @@ Inline markup is carried through untouched (E-4):
 
 ````example
 # Guide
+
 ## **Fast** start
 .
 {"content":[],"children":[
