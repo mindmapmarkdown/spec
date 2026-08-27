@@ -122,9 +122,24 @@ An implementation is expected to be a layer over an existing CommonMark parser.
 This specification defines no Markdown grammar and modifies none of CommonMark's
 parsing rules.
 
-The reference implementation, adapters, and conformance suite are planned as
-separate repositories in this organisation. None of them exist yet; when they
-do, they will be linked here.
+**[`mindmapmd`](https://github.com/mindmapmarkdown/mindmapmd)** is the
+reference implementation. It implements **L1** — lift and canonical projection,
+mutually inverse — and passes the whole suite: 19 of 19 examples lift to the
+prescribed tree, every tree round-trips, and byte identity holds on all 15
+examples that are canonical.
+
+It exists to answer one question. **Is this specification implementable?** Clone
+it and run `node --test test/*.test.js`, and the answer stops being a claim made
+here and becomes something checked on your own machine.
+
+It is **not** one of the two independent implementations
+[`VERSIONING.md`](VERSIONING.md) requires for 1.0 — it was written by the same
+person as the specification, which is exactly what that condition excludes. What
+it offers an independent implementer is a second opinion to check against where
+the text is ambiguous.
+
+Adapters and a standalone conformance suite are planned as separate repositories
+in this organisation and do not exist yet.
 
 ## Participating
 
