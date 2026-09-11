@@ -6,21 +6,16 @@ normative force, and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-08-26 |
-| **Comment period ends** | 2026-09-09 |
+| **Comment period ends** | 2026-09-09 (closed) |
+| **Decided** | 2026-09-11 — Accepted, lazy consensus |
 | **Discussion** | <https://github.com/mindmapmarkdown/spec/pull/22> |
 | **Supersedes** | — |
 | **Superseded by** | — |
 
-> **⚠ Not decided.** This RFC was merged while its comment period was still
-> running, so that it could be read and cited from `main`. **A merged RFC in this
-> repository is not an accepted one** — the Status field above is, and it says
-> `Draft` until 2026-09-09. Comment on
-> [PR #22](https://github.com/mindmapmarkdown/spec/pull/22) or
-> [issue #17](https://github.com/mindmapmarkdown/spec/issues/17).
 
 ## Summary
 
@@ -133,6 +128,22 @@ entry in the root's `content` (E-1), with `block` equal to `front_matter` and
 such later line has no front matter, and its first line is read as CommonMark
 reads it.
 
+**L-10 addendum — trailing whitespace.** Each line of the recorded source has
+trailing spaces and tabs removed.
+
+Without this, the rule collides with **P-8** — *no line may end in whitespace* —
+and the collision is not hypothetical: a key-value line with a stray space at the
+end is ordinary in hand-written front matter. Recorded verbatim, P-11 would write
+it back and the canonical document would violate P-8, which makes such a document
+**unprojectable**.
+
+This is the same conflict §2.2 already resolved for hard line breaks, and it is
+resolved the same way. Normalising at lift rather than at projection is what
+keeps mutual inversion intact: if the tree kept the spelling and projection
+changed it, the first round-trip would already produce a different tree. The cost
+is the same too — a document whose front matter carries trailing whitespace is
+conforming but not canonical, and its bytes settle on the first round-trip.
+
 **S-4.** A `front_matter` entry MUST be the first entry of the root's `content`,
 and MUST NOT appear anywhere else in a tree. A tree violating this is not
 well-formed, and S-3 applies to it.
@@ -141,8 +152,22 @@ well-formed, and S-3 applies to it.
 line of the document, followed by a single blank line before whatever comes next.
 
 **E-5 amendment.** `block` is the CommonMark block type name, **or a block type
-name this specification defines where CommonMark defines none.** There is exactly
-one such name, `front_matter`.
+name this specification defines for a construct CommonMark does not read as a
+single block.** There is exactly one such name, `front_matter`.
+
+*(Informative)* The wording matters, because §2.6 already contains a case that
+looks the same and is not. A table has no CommonMark block type either — but
+CommonMark reads it as **one** block, a paragraph, so the encoding uses that name
+and P-9 writes the source back intact. Front matter is different: CommonMark
+reads it as **two** blocks, a thematic break and a setext heading, and neither of
+them is the thing. Naming it is not filling a gap in CommonMark's vocabulary; it
+is recording that this specification reads those lines as one unit where
+CommonMark reads two.
+
+**L-3 cross-reference.** L-3 lists what becomes node content — paragraph, code
+block, block quote, table, HTML block, thematic break. Front matter joins that
+list by way of L-10, and L-3 gains a pointer so a reader scanning it for *what
+becomes content* does not have to already know about L-10.
 
 Two examples would be added to §2.2. The construct itself:
 
@@ -254,7 +279,92 @@ The rule itself is unchanged, and it does not become redundant. P-10 says
 *before the children*; P-11 says *the first line of the document*, which is
 stronger and is the only position in which front matter is front matter at all.
 
+**2026-09-11 — three clauses added at the close of the period.**
+
+Found the way RFC 0016's missing clauses were found: by reading `spec.md` for
+everything these rules touch, rather than trusting the list. One of the three is
+not tidying.
+
+| | |
+|---|---|
+| **L-10 addendum** | `P-11` writes the block verbatim; **P-8** forbids a line ending in whitespace. A front-matter line with a stray trailing space made the document **unprojectable** |
+| **E-5 wording** | *"where CommonMark defines none"* is not what is happening, and §2.6 has a case that proves it — a table also has no CommonMark type, and there the encoding uses `paragraph` rather than inventing a name |
+| **L-3 cross-reference** | L-3 enumerates what becomes content and would not have mentioned front matter |
+
+The proposal itself is unchanged. Nothing in Motivation or Alternatives moved.
+
 ## Decision and rationale
 
-<!-- Left empty until the comment period ends, per rfcs/0000-template.md and
-     GOVERNANCE.md §4. -->
+**Accepted on 2026-09-11 by lazy consensus**, the fourteen-day comment period
+having closed on 2026-09-09 with no unresolved objection ([`GOVERNANCE.md`
+§4](../GOVERNANCE.md#4-decision-making)).
+
+**This is the first decision in this project whose comment period was actually
+waited out.** RFC 0016 was written a day early and two Clarifying changes were
+merged within minutes of being opened; all three are recorded in
+[`CHANGELOG.md`](../CHANGELOG.md). The mechanism put in place after the third —
+the period in the pull request title, and nothing described as ready while one is
+open — is what made the difference. The period ran from 2026-08-26 to 2026-09-09
+and the decision was written after it.
+
+**No comment arrived from outside this project**, as with every decision here so
+far. The discussion carries none, and the three on issue #17 are the maintainer's
+own and predate the period. The proposal was never tested by disagreement. What
+it was tested by is a corpus — 8,441 files across seven repositories — and that
+is a different thing, worth less than a reviewer and more than an intuition.
+
+### Why this outcome and not the other
+
+The alternative that had to be beaten was **stripping the block**, because it is
+the obvious answer and the reference application already does it.
+
+It fails on Chapter 1. §1.2.4 L1 requires projecting the lift of a canonical
+document to return that document byte for byte, and a stripped block is not in
+the tree to be written back. **Every document carrying front matter would fail
+the round-trip it was conforming under.** An application may lose what it does
+not model; a specification whose central promise is a lossless round-trip may
+not.
+
+What replaced it costs nothing new. L-3 already sends pre-node blocks to the
+root, E-1 already gives the root a `content` member, and an example already tests
+it. The whole change is to stop the closing `---` from being read as a setext
+underline.
+
+### What the survey settled, and what it did not
+
+It settled *how often*. Front matter is near-universal in the content this
+specification is for — a published Obsidian vault at 95.6%, Hugo content at
+99.4% — and rare in repository-internal documentation. **The defect does not fire
+rarely; it fires in the common case.** That is what made *do nothing* untenable.
+
+It did not settle the AI round-trip, which is the use case this project was built
+for and has no public corpus. That limit is stated in Motivation rather than
+papered over.
+
+### What acceptance does not settle
+
+**How a `---` fence that is not at line 1 should be treated**, and whether a
+byte-order mark or a leading comment before it should count. L-10 says nothing,
+which means CommonMark's reading applies, and no corpus evidence was found either
+way.
+
+**Whether `front_matter` should have been a general opaque block type** rather
+than one name for one construct. The E-5 wording added today makes the question
+sharper rather than answering it: the name records that this specification reads
+two CommonMark blocks as one unit, and nothing says that will only ever happen
+once.
+
+### Class
+
+**Normative**, as nominated. No document that conforms today stops conforming —
+a document with front matter conforms before and after, and only the tree it
+lifts to changes. Nothing is released, so no implementation can have been built
+against the old reading.
+
+### What happens next
+
+The rules land in `spec.md` as a separate pull request, as RFC 0016's did, so
+that the decision and the edit it authorises stay separately reviewable. Issue
+[#17](https://github.com/mindmapmarkdown/spec/issues/17) closes with that edit,
+and issue [#19](https://github.com/mindmapmarkdown/spec/issues/19)'s Clarifying
+half — which was waiting on this RFC because both amend E-5 — can follow it.
