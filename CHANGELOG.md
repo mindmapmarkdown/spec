@@ -22,7 +22,7 @@ conforms. Everything below is the state `main` has reached on the way to 0.1.0.
   conformance ladder, terminology, and the design constraints the rest of the
   specification is held to.
 - **Chapter 2** — the rules that decide which tree a document denotes and which
-  document a tree denotes: 30 rules labelled `L-`, `S-`, `P-`, and `E-`.
+  document a tree denotes: 33 rules labelled `L-`, `S-`, `P-`, and `E-`.
 - **The tree encoding used by examples** (§2.6). Examples state an expected tree,
   and the notation they state it in has to be specified or two implementations
   read the same suite differently.
@@ -35,6 +35,14 @@ conforms. Everything below is the state `main` has reached on the way to 0.1.0.
 
 ### Changed
 
+- **Front matter is root content, not a node.** A document opening with a
+  `---`-fenced block lifted to a spurious `section` node, because CommonMark
+  reads the closing fence as a setext heading underline. `L-10` makes the run of
+  lines one opaque entry of the root's `content`, `S-4` fixes its position,
+  `P-11` writes it back, and `E-5` admits the one block type name this
+  specification defines. RFC [0022](rfcs/0022-front-matter-root-content.md),
+  accepted 2026-09-11; closes
+  [#17](https://github.com/mindmapmarkdown/spec/issues/17).
 - **Node identity is no longer defined**, and conformance level **L2 (Identity)
   is removed**; the level that was L3 becomes L2 with its requirements unchanged.
   Identity as merged could not be assigned deterministically, which made every
@@ -43,10 +51,11 @@ conforms. Everything below is the state `main` has reached on the way to 0.1.0.
 - **The heading/list distinction is part of the tree**, not a spelling of it:
   every node carries a `kind`, either `section` or `item`. RFC
   [0004](rfcs/0004-canonical-hierarchy.md), accepted 2026-08-10.
-- **Example coverage** raised from 6 rules to 26 of 29 — 18 examples. Every
-  expected tree is checked against an independent CommonMark parse. `S-1`, `S-2`,
-  and `S-3` remain untested and cannot be tested in this format: they constrain
-  trees, and lift cannot produce a tree that violates them.
+- **Example coverage** raised from 6 rules to 26 of 29 — 18 examples at the
+  time, 21 now. Every expected tree is checked against an independent CommonMark
+  parse. `S-1`, `S-2`, `S-3`, and `S-4` remain untested and cannot be tested in
+  this format: they constrain trees, and lift cannot produce a tree that violates
+  them.
 
 ### Open before 0.1.0
 
@@ -55,8 +64,8 @@ it afterwards makes it Breaking rather than Normative.
 
 | | |
 |---|---|
-| [#17](https://github.com/mindmapmarkdown/spec/issues/17) | Front matter lifts to a spurious `section` node. Proposed by RFC [0022](rfcs/0022-front-matter-root-content.md), **comment period ends 2026-09-09** |
-| [#19](https://github.com/mindmapmarkdown/spec/issues/19) | What `E-5`'s `block` names, and what a code block's `source` contains. The first half is Clarifying and waits on 0022, which amends the same sentence; the second is Normative and needs its own RFC |
+| [#19](https://github.com/mindmapmarkdown/spec/issues/19) | What a code block's `source` contains. Normative, and needs its own RFC. The other half of the issue — what `E-5`'s `block` names — was Clarifying and waited on 0022, which amends the same sentence; 0022 settled it |
+| [#35](https://github.com/mindmapmarkdown/spec/issues/35) | `L-10` swallows a document that opens with a thematic break and carries a later one. Found while applying 0022; a guard is Normative and needs its own RFC |
 
 ### Process notes
 
@@ -68,6 +77,13 @@ Three changes above landed without the comment period [`GOVERNANCE.md`
 | RFC [0016](rfcs/0016-remove-node-identity.md), Normative | 14 days, ending 2026-08-27 | Decision written and merged **2026-08-26**, one day early. Recorded in the RFC's own `Correction` section |
 | `P-10` ([#25](https://github.com/mindmapmarkdown/spec/pull/25)), Clarifying | 3-day comment period | Opened and merged the same day, **five minutes apart** |
 | Canonical examples ([#30](https://github.com/mindmapmarkdown/spec/pull/30)), Clarifying | 3 days, ending 2026-08-29 | Opened and merged **four minutes apart** |
+
+After the third, the fix was a mechanism rather than a fourth promise: the
+comment period goes in the pull request **title**, and a change whose period is
+open is not called ready
+([#31](https://github.com/mindmapmarkdown/spec/pull/31)). RFC
+[0022](rfcs/0022-front-matter-root-content.md) is the first decision here whose
+period ran in full — 2026-08-26 to 2026-09-09, decided 2026-09-11.
 
 None of them could have changed anything. There were no participants and no
 objection at any point, so no comment could have arrived in the time that was
