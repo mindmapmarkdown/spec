@@ -75,7 +75,7 @@ of claim and are not interchangeable.
 | Path | Contents | |
 |---|---|---|
 | [`spec.md`](spec.md) | The specification, with its normative examples written inline | Chapters 1–2 |
-| [`examples/examples.json`](examples/examples.json) | Conformance test cases, **generated** from the examples in `spec.md` and never hand-edited | 18 examples |
+| [`examples/examples.json`](examples/examples.json) | Conformance test cases, **generated** from the examples in `spec.md` and never hand-edited | 21 examples |
 | [`rfcs/`](rfcs/) | Proposals for normative change, including rejected ones | |
 | [`docs/`](docs/) | Informative material — an [overview](docs/overview.md) of how the pieces fit together, a [glossary](docs/glossary.md), and a guide to [reading a worked example](docs/reading-examples.md) | |
 | [`tools/`](tools/) | The generator that extracts `examples.json`, the link checker, and their tests | |
@@ -124,8 +124,8 @@ parsing rules.
 
 **[`mindmapmd`](https://github.com/mindmapmarkdown/mindmapmd)** is the
 reference implementation. It implements **L1** — lift and canonical projection,
-mutually inverse — and passes the whole suite: 19 of 19 examples lift to the
-prescribed tree, every tree round-trips, and byte identity holds on all 15
+mutually inverse — and passes the whole suite: 21 of 21 examples lift to the
+prescribed tree, every tree round-trips, and byte identity holds on all 17
 examples that are canonical.
 
 It exists to answer one question. **Is this specification implementable?** Clone

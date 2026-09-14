@@ -480,7 +480,8 @@ node of kind `item`.
 **L-3.** Every block that is not a heading or a list item — paragraph, fenced or
 indented code block, block quote, table, HTML block, thematic break — is **node
 content**, and attaches to the nearest node preceding it in document order.
-Content appearing before any node attaches to the root.
+Content appearing before any node attaches to the root. A document's front
+matter is node content as well, and attaches to the root; L-10 says how.
 
 **L-4.** The root node is synthetic. It has no label, no kind, and no
 corresponding text in the document. A document whose entire content sits under a
@@ -494,6 +495,15 @@ tree.
 **L-9.** A hard line break is one construct however it is spelled — two or more
 trailing spaces, or a trailing backslash. Lift MUST produce the same tree for
 both spellings, and MUST record the break in `source` in the backslash form.
+
+**L-10.** If a document's first line consists of exactly three hyphen-minus
+characters, optionally followed by spaces or tabs, and some later line consists
+of the same, then the lines from the first through the **first** such later line
+are **front matter**. Front matter produces no node. It is recorded as a single
+entry in the root's `content` (E-1), with `block` equal to `front_matter` and
+`source` that run of lines verbatim, both fences included and each line's
+trailing spaces and tabs removed. A document with no such later line has no
+front matter, and its first line is read as CommonMark reads it.
 
 *(Informative)* L-1 is what keeps a prose document from exploding. A README with
 forty paragraphs and six headings has six nodes, not forty-six. The test for
@@ -526,6 +536,35 @@ tree kept the spelling and projection changed it, the first round-trip would
 already produce a different tree. The backslash form is the one canonical form
 keeps because the other is invisible: a break whose meaning is carried by
 trailing spaces is silently destroyed by editors that trim them.
+
+L-10 exists because front matter is not CommonMark, and CommonMark's reading of
+it is not harmless. The opening `---` has nothing before it and is a thematic
+break; the closing `---` follows a paragraph, and a line of hyphens after a
+paragraph is a **setext heading underline**. The fence meant to close the block
+instead promotes the block's contents to a heading, which L-1 then turns into a
+node that is nowhere in the document. Recording the run of lines as one opaque
+block is what stops that, and it is the least this specification can do and still
+satisfy §1.2.4 L1: a rule that discarded the block would leave projection nothing
+to write back, and every document carrying front matter would fail the round-trip
+it was conforming under.
+
+Removing trailing whitespace at lift resolves the same collision L-9 resolves,
+for the same reason. P-9 writes a recorded source back unchanged and P-8 forbids
+a line ending in whitespace, so a front-matter line with a stray trailing space —
+ordinary in hand-written metadata — would otherwise make the document
+unprojectable. The cost is the same as L-9's: such a document is conforming but
+not canonical, and its bytes settle on the first round-trip.
+
+**Nothing in L-10 parses the block.** This specification does not know what YAML
+is, does not require the contents to be valid anything, and says nothing about
+what a key means. The block is opaque text occupying a known position, which is
+all that is needed to stop it becoming a node and the most that can be said
+without acquiring a metadata format this specification would then have to
+maintain (§1.1.2). Nor does L-10 weaken L0: front matter expresses no
+parent-child relationship, so the rule L0 states is not engaged. A plain renderer
+does show the block as a heading where a conforming implementation shows no node
+— that divergence belongs to front matter itself, and exists whatever this
+specification says about it.
 
 A paragraph is content, not a node:
 
@@ -566,6 +605,35 @@ Requirements
 {"content":[],"children":[
   {"kind":"section","label":"Install","content":[],"children":[
     {"kind":"section","label":"Requirements","content":[],"children":[]}]}]}
+````
+
+That setext reading is what front matter runs into, and L-10 takes the whole
+block out of its way. The block produces no node; it is one entry of the root's
+content, both fences included:
+
+````example
+---
+title: Deploy
+---
+
+# Preparation
+.
+{"content":[{"block":"front_matter","source":"---\ntitle: Deploy\n---"}],
+ "children":[
+   {"kind":"section","label":"Preparation","content":[],"children":[]}]}
+````
+
+L-10 needs a closing fence, and this is the case it must not swallow. With no
+later line of three hyphens, the first line is read as CommonMark reads it — an
+ordinary thematic break, which L-3 attaches to the root:
+
+````example
+---
+
+# A
+.
+{"content":[{"block":"thematic_break","source":"---"}],
+ "children":[{"kind":"section","label":"A","content":[],"children":[]}]}
 ````
 
 Every other block is content too, and a section with a quotation and a code
@@ -728,17 +796,26 @@ contains the list rather than from the document (L-7):
 
 **S-2.** A `section` MUST NOT be at a depth greater than 6.
 
-A tree satisfying S-1 and S-2 is **well-formed**. Lift cannot produce a tree that
-is not well-formed; a tree constructed programmatically can be.
+**S-4.** A `front_matter` entry MUST be the first entry of the root's `content`,
+and MUST NOT appear anywhere else in a tree.
+
+A tree satisfying S-1, S-2, and S-4 is **well-formed**. Lift cannot produce a
+tree that is not well-formed; a tree constructed programmatically can be.
 
 **S-3.** An implementation MUST reject a tree that is not well-formed, and MUST
 NOT project it by coercing the offending nodes to `item`.
 
-*(Informative)* Both constraints follow from L0 (§1.2.4) rather than from taste.
+*(Informative)* S-1 and S-2 follow from L0 (§1.2.4) rather than from taste.
 A heading nested inside a list item is legal CommonMark, but renders as a
 document-level heading and is read as one by every outline extractor — the
 hierarchy does not survive in an unmodified renderer, which L0 forbids. And ATX
 headings stop at level 6; `#######` renders as literal text.
+
+S-4 has a different source. Front matter is defined by its position — the first
+line of the document (L-10) — so a `front_matter` entry anywhere else encodes a
+tree no document lifts to, and P-11 would have to write it somewhere it could not
+be read back from. The constraint states in the tree what the rule already says
+about the text.
 
 S-3 is not severity for its own sake. §1.2.4 L1 requires lift and canonical
 projection to be mutually inverse. Silent coercion would produce a document that
@@ -779,6 +856,9 @@ a block quote. Content MUST NOT be folded into the node's label, and MUST NOT be
 joined into a single line.
 
 **P-10.** A node's `content` MUST be written before any of its children.
+
+**P-11.** A `front_matter` block MUST be written first, beginning at the first
+line of the document, followed by a single blank line before whatever comes next.
 
 *(Informative)* P-5 is doing more work than it appears to. The worst ambiguity in
 CommonMark for this specification is that four spaces of indentation may mean an
@@ -891,9 +971,20 @@ source, with leading and trailing whitespace removed. Inline markup MUST NOT be
 interpreted: the heading `## **Fast** start` has the label `**Fast** start`.
 
 **E-5.** `content` MUST be an array, in document order, of objects with exactly
-two members: `block`, the CommonMark block type name, and `source`, that block's
-Markdown source verbatim — internal line breaks included, with no trailing line
+two members: `block`, the CommonMark block type name — or a block type name this
+specification defines for a construct CommonMark does not read as a single block,
+of which there is exactly one, `front_matter` (L-10) — and `source`, that block's
+Markdown source verbatim, internal line breaks included, with no trailing line
 feed.
+
+*(Informative)* That wording is narrower than it may look, and §2.2 already
+contains a case that resembles it and is not the same. A table has no CommonMark
+block type either — but CommonMark reads a table as **one** block, a paragraph,
+so the encoding uses that name and P-9 writes the source back intact. Front
+matter is different: CommonMark reads it as **two** blocks, a thematic break and
+a setext heading, and neither of them is the thing. Naming it is not filling a
+gap in CommonMark's vocabulary; it is recording that this specification reads
+those lines as one unit where CommonMark reads two.
 
 **E-6.** `children` MUST be an array of node objects, in document order.
 
