@@ -62,10 +62,23 @@ conforms. Everything below is the state `main` has reached on the way to 0.1.0.
 A release cannot be cut while a Normative question is undecided, because deciding
 it afterwards makes it Breaking rather than Normative.
 
-| | |
+| Question | Proposal | Comment period ends |
+|---|---|---|
+| [#35](https://github.com/mindmapmarkdown/spec/issues/35) — `L-10` swallows a document that opens with a thematic break and carries a later one | RFC 0037 ([#37](https://github.com/mindmapmarkdown/spec/pull/37)) — keep `L-10`, pin the reading with an example | 2026-09-28 |
+| [#19](https://github.com/mindmapmarkdown/spec/issues/19) — what a code block's `source` contains. The other half of the issue, what `E-5`'s `block` names, was Clarifying and was settled by 0022 | RFC 0038 ([#38](https://github.com/mindmapmarkdown/spec/pull/38)) — list-item indentation is not source; every code block recorded in one fenced form | 2026-09-28 |
+| Whether an ordered list's numbers are part of the tree — left open by RFC [0004](rfcs/0004-canonical-hierarchy.md), and **missing from this list until 2026-09-15** | RFC 0039 ([#39](https://github.com/mindmapmarkdown/spec/pull/39)) — ordered items record their ordinal and delimiter | 2026-09-29 |
+
+The latest of these periods ends 2026-09-29; 0.1.0 cannot be cut before the
+decisions are written and the rules they authorise have landed.
+
+### Deferred past 0.1.0
+
+The rule above has one recorded exception. It is written down so that releasing
+over it is a decision rather than an omission.
+
+| Question | Decision |
 |---|---|
-| [#19](https://github.com/mindmapmarkdown/spec/issues/19) | What a code block's `source` contains. Normative, and needs its own RFC. The other half of the issue — what `E-5`'s `block` names — was Clarifying and waited on 0022, which amends the same sentence; 0022 settled it |
-| [#35](https://github.com/mindmapmarkdown/spec/issues/35) | `L-10` swallows a document that opens with a thematic break and carries a later one. Found while applying 0022; a guard is Normative and needs its own RFC |
+| [#40](https://github.com/mindmapmarkdown/spec/issues/40) — canonical projection drops every link reference definition, so a reference-style link stops being a link after one round-trip | **Deferred past 0.1.0 by maintainer decision, 2026-09-15.** 0.1.0 does not preserve link reference definitions. The issue has several credible designs, each with a cost, and choosing one in the time left before 0.1.0 would mean choosing without a comment period able to test it. Resolving it later changes what a tree contains: after 0.1.0 that is a Breaking change, which before 1.0 is a MINOR version ([`VERSIONING.md` §3](VERSIONING.md#3-before-10)) |
 
 ### Process notes
 
@@ -92,8 +105,8 @@ skipped.
 **That is why nothing was lost. It is not a reason for the periods to be
 optional.** If silence makes a 3-day period pointless it makes a 14-day one
 pointless too, and a 14-day period on RFC
-[0022](rfcs/0022-front-matter-root-content.md) is currently the binding
-constraint on 0.1.0. A project whose case against OPML is that its process was
+[0022](rfcs/0022-front-matter-root-content.md) was, when this was written, the
+binding constraint on 0.1.0. A project whose case against OPML is that its process was
 never written down cannot leave its own departures from that process unwritten.
 
 Three is a pattern rather than three accidents, and the cause is not
@@ -114,7 +127,7 @@ What changes is the mechanism, not the resolve:
 The rule in §3 is unchanged. Amending it would need an RFC (§9) and would mean
 writing down that a period is optional in Phase 0 — which is the reasoning that
 would also excuse skipping the fourteen days on RFC
-[0022](rfcs/0022-front-matter-root-content.md), the one currently holding
+[0022](rfcs/0022-front-matter-root-content.md), which was then the one holding
 0.1.0.
 
 ---
