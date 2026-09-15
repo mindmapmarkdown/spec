@@ -37,6 +37,14 @@ tree S-7 rejects. What changes is which trees built by hand — by an editor, an
 importer, a converter — an implementation accepts. A prototype passes the suite
 unchanged, and fifteen further tests.
 
+*Note added 2026-09-16.* One tree lift does produce has no canonical spelling
+under P-7 as written — an item with a label whose first child has an empty label
+([#45](https://github.com/mindmapmarkdown/spec/issues/45)) — so S-7 as proposed
+here would reject it. That is a defect in the projection rules, not a tree S-7
+should refuse, and RFC 0046
+([#46](https://github.com/mindmapmarkdown/spec/pull/46)) fixes it in P-7. This
+note changes nothing this RFC proposes.
+
 ## Motivation
 
 ### What goes wrong today
