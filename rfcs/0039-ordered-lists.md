@@ -451,8 +451,8 @@ it is recorded nowhere. Two consequences, both found while preparing this RFC:
   reference-style link such as `[the guide][g]` stops being a link after one
   round-trip. That is a loss of content in any document, ordered lists or not.
 
-The second is not introduced by this RFC and is larger than it; it is filed as its
-own issue. The first is resolved by whatever resolves the second.
+The second is not introduced by this RFC and is larger than it; it is filed as
+issue [#40](https://github.com/mindmapmarkdown/spec/issues/40). The first is resolved by whatever resolves the second.
 
 **Multi-line content in an ordered item** keeps the item's indentation on its later
 lines — the defect RFC 0038 Part 1 fixes. A three- or four-space marker makes it
