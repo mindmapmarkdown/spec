@@ -68,6 +68,7 @@ it afterwards makes it Breaking rather than Normative.
 | [#19](https://github.com/mindmapmarkdown/spec/issues/19) — what a code block's `source` contains. The other half of the issue, what `E-5`'s `block` names, was Clarifying and was settled by 0022 | RFC 0038 ([#38](https://github.com/mindmapmarkdown/spec/pull/38)) — list-item indentation is not source; every code block recorded in one fenced form | 2026-09-28 |
 | Whether an ordered list's numbers are part of the tree — left open by RFC [0004](rfcs/0004-canonical-hierarchy.md), and **missing from this list until 2026-09-15** | RFC 0039 ([#39](https://github.com/mindmapmarkdown/spec/pull/39)) — ordered items record their ordinal and delimiter | 2026-09-29 |
 | [#42](https://github.com/mindmapmarkdown/spec/issues/42) — a well-formed tree can project to a document that lifts to a different tree: nothing constrains a label or a content entry's `source` | RFC 0043 ([#43](https://github.com/mindmapmarkdown/spec/pull/43)) — `S-7`: lifting a tree's canonical projection must yield that tree | 2026-09-30 |
+| [#45](https://github.com/mindmapmarkdown/spec/issues/45) — an item with a label whose first child has an empty label has no canonical projection, so a tree lift produces cannot be written back | RFC 0046 ([#46](https://github.com/mindmapmarkdown/spec/pull/46)) — one blank line between the label and the nested list in that position | 2026-09-30 |
 
 The latest of these periods ends 2026-09-30; 0.1.0 cannot be cut before the
 decisions are written and the rules they authorise have landed.
