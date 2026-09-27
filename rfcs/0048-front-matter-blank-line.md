@@ -64,7 +64,25 @@ Yada yada some more content.
 …
 ```
 
-That is not one file. It is a rule the author applies to every note.
+That is not one file. It is a rule the author applies to every note. On the
+issue itself he reported a second shape, found while looking for examples:
+
+```
+---
+
+---
+
+---
+
+…content
+```
+
+> I presume that's an artefact of me creating a YAML block there at some point,
+> never using it, then *also* creating a visible `<hr>`, then having my content.
+
+— and confirmed that Obsidian does not add an invisible YAML block of its own.
+Today that file's first two rules are read as front matter; under this proposal
+they are three thematic breaks, which is what they are.
 
 ### What the specification does with it
 
@@ -159,8 +177,8 @@ title: A note
 ### How it is tested
 
 Two examples above enter the suite. A prototype is `mindmapmarkdown/mindmapmd`
-branch `rfc/front-matter-blank-line` at `f5573ae`: 102 tests pass — the 91 on
-`main` unchanged, and 11 for this rule, covering the reported shape, blank lines
+branch `rfc/front-matter-blank-line`: 103 tests pass — the 91 on
+`main` unchanged, and 12 for this rule, covering both reported shapes, blank lines
 made of spaces and tabs, the front matter Jekyll, Hugo and Obsidian write, an
 indented first key, a commented-out first key, the empty block, and L1 both ways
 for each shape.
