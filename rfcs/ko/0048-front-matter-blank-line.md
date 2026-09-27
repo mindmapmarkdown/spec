@@ -84,7 +84,7 @@ Yada yada some more content.
 
 ### 0037 의 반론이 닿지 않는 이유
 
-RFC [0037](0037-front-matter-opening-thematic-break.md)은 어떤 가드를 넣어도 가짜
+RFC [0037](https://github.com/mindmapmarkdown/spec/pull/37)은 어떤 가드를 넣어도 가짜
 노드가 되살아난다고 했다. front matter 규칙을 걷어내면 CommonMark 가 닫는 `---`를
 **setext 헤딩 밑줄**로 읽어 위의 글이 제목이 된다는 것이다. 닫는 울타리가 문단 줄
 바로 다음에 올 때는 맞는 말이다.

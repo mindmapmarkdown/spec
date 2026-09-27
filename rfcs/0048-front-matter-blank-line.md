@@ -82,7 +82,7 @@ no node, and prose the author wrote as prose recorded as front matter.
 
 ### Why 0037's objection does not reach this
 
-RFC [0037](0037-front-matter-opening-thematic-break.md) argued that any guard
+RFC [0037](https://github.com/mindmapmarkdown/spec/pull/37) argued that any guard
 brings back a spurious node: strip the front-matter rule and CommonMark reads the
 closing `---` as a **setext heading underline**, turning the text above it into a
 heading. That is true when the closing fence follows a paragraph line directly.
