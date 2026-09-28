@@ -6,7 +6,7 @@ force, and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-09-14 |
@@ -385,4 +385,51 @@ answered by RFC 0022's amendment and is not reopened.
 
 ## Decision and rationale
 
-<!-- LEAVE THIS EMPTY UNTIL THE COMMENT PERIOD HAS ENDED. -->
+**Accepted**, 2026-09-28, by lazy consensus. The comment period ran in full, from
+2026-09-14 to 2026-09-28, with no comment on the pull request and no objection
+raised anywhere.
+
+### Why this outcome
+
+Each of the three parts answers a failure that was run, not imagined, against the
+reference implementation, and each is a case the suite could not have caught:
+
+- **Part 1.** A two-line paragraph under a list item does not survive the round
+  trip today, because the second line keeps the item's indentation and projection
+  adds it again. No example in the suite has a multi-line block inside a list
+  item.
+- **Part 2.** A code block's recorded source depended on how it was spelled. One
+  spelling — a fence indented two spaces — passes the tree test while **changing
+  the code**, which is the failure a suite of trees cannot see.
+- **Part 3.** `P-8` forbade whitespace that is part of code, and `P-5` required a
+  fence that one info string cannot use.
+
+The alternatives are recorded above. The one worth restating is *record the
+source exactly as written and fix projection instead*: it keeps `E-5` simple and
+moves the problem into `P-4`, where the same indentation has to be removed and
+added back for every block type. Part 1 removes it once, where the tree is built,
+and every later rule sees a block that does not carry its container's columns.
+
+Nothing is released, so no implementation can have claimed conformance to a
+version and no document stops conforming: lift accepts everything it accepted
+before. That is what keeps this Normative rather than Breaking
+([`GOVERNANCE.md` §3](../GOVERNANCE.md#3-classes-of-change)).
+
+### What lands, and where
+
+- `spec.md`: `E-5` amended (Part 1), `L-11` added (Part 2), `P-5` and `P-8`
+  amended (Part 3), and the four examples above written inline; the suite is
+  regenerated from them. As with RFC 0016 and RFC 0022, that edit comes as its own
+  pull request, so the decision and the text it authorises stay separately
+  reviewable.
+- `mindmapmd`: the prototype branch becomes a pull request against `main`.
+- `CHANGELOG.md`: this question leaves *Open before 0.1.0*.
+- Issue [#19](https://github.com/mindmapmarkdown/spec/issues/19) closes with the
+  `spec.md` edit. Its Clarifying half was already settled by RFC 0022.
+
+### Interaction with the other open proposals
+
+- RFC 0039 (ordered lists) records that multi-line content in an ordered item
+  depends on this decision. With Part 1 accepted, that case is no longer pending.
+- RFC 0043 (`S-7`) and RFC 0046 (an empty first child) are unaffected: both are
+  about labels and spelling, not about what a content entry's `source` contains.
