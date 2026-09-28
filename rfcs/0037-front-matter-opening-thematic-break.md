@@ -6,14 +6,14 @@ no normative force, and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Rejected |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-09-14 |
 | **Comment period ends** | 2026-09-28 |
 | **Discussion** | <https://github.com/mindmapmarkdown/spec/pull/37> |
 | **Supersedes** | — |
-| **Superseded by** | — |
+| **Superseded by** | 0048 |
 
 ## Summary
 
@@ -196,4 +196,78 @@ fewer documents. Neither has been observed in the corpus.
 
 ## Decision and rationale
 
-<!-- LEAVE THIS EMPTY UNTIL THE COMMENT PERIOD HAS ENDED. -->
+**Rejected**, 2026-09-28, by maintainer decision — not by lazy consensus. The
+comment period ran in full, from 2026-09-14 to 2026-09-28, and what arrived in it
+was not silence.
+
+### What arrived
+
+This RFC rested on one claim: that a document opening with a thematic break and
+carrying a later one is a shape nobody writes. Issue
+[#35](https://github.com/mindmapmarkdown/spec/issues/35) went looking for
+counter-examples — on the Obsidian forum, the Hugo forum, r/ObsidianMD and
+markmap's discussions. One answer settles it. Johnny 'Decimal' Noble writes every
+note that way, and posted two shapes:
+
+```
+---
+
+Yada yada some content that is not frontmatter.
+
+---
+
+Yada yada some more content.
+```
+
+```
+---
+
+---
+
+---
+
+…content
+```
+
+He also confirmed that Obsidian does not add an invisible YAML block of its own,
+so a file that opens on a blank line was written that way by a person.
+
+Under `L-10` as it stands, the first file's opening prose is recorded as front
+matter and stops being content; in the second, two of the three rules are.
+
+### Why the rest of this RFC does not survive it either
+
+The argument here was not only that the shape was rare. It was that **no guard
+can help**: remove the rule and CommonMark reads the closing `---` as a setext
+heading underline, so a spurious node comes back. The table in *Why no rule is
+proposed here* is correct for a closing fence that directly follows a paragraph
+line.
+
+Both reported shapes have a **blank line** there. Checked with commonmark.js
+0.31, the first parses as `thematic_break, paragraph, thematic_break, paragraph`
+and the second as three thematic breaks and a paragraph. No heading appears, and
+the guard costs nothing for exactly the documents that prompted the issue. The
+argument that closed the question does not reach the evidence that reopened it.
+
+### What replaces it
+
+RFC 0048 ([#48](https://github.com/mindmapmarkdown/spec/pull/48)): `L-10` gains
+one condition — the line after the opening fence must not be blank. Front matter
+as Jekyll, Hugo and Obsidian write it opens on its first key and is unaffected.
+Its comment period runs to 2026-10-11, which moves 0.1.0 past its 2026-10-05
+target.
+
+### What would have to be different for this to be reconsidered
+
+If the guard turns out to cost more than it saves — a corpus of real front matter
+that opens on a blank line, which Jekyll and gray-matter accept and 0048 would
+not — then leaving `L-10` alone becomes the better of two imperfect rules, and
+this RFC's reasoning is where to start. #35 stays open until 0048 is decided.
+
+### For the record
+
+This is the first decision here changed by a report from outside the project. The
+process it exercised — an issue that asks for data, a comment period long enough
+for the data to arrive, and an RFC that can be rejected in public with its
+reasoning intact — is the one this specification argues for. It worked in the
+direction that costs the maintainer a release date.
