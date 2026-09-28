@@ -64,14 +64,16 @@ it afterwards makes it Breaking rather than Normative.
 
 | Question | Proposal | Comment period ends |
 |---|---|---|
-| [#35](https://github.com/mindmapmarkdown/spec/issues/35) — `L-10` swallows a document that opens with a thematic break and carries a later one | RFC 0037 ([#37](https://github.com/mindmapmarkdown/spec/pull/37)) — keep `L-10`, pin the reading with an example | 2026-09-28 |
-| [#19](https://github.com/mindmapmarkdown/spec/issues/19) — what a code block's `source` contains. The other half of the issue, what `E-5`'s `block` names, was Clarifying and was settled by 0022 | RFC 0038 ([#38](https://github.com/mindmapmarkdown/spec/pull/38)) — list-item indentation is not source; every code block recorded in one fenced form | 2026-09-28 |
+| [#35](https://github.com/mindmapmarkdown/spec/issues/35) — `L-10` swallows a document that opens with a thematic break and carries a later one. RFC [0037](rfcs/0037-front-matter-opening-thematic-break.md) proposed keeping `L-10` and was **rejected 2026-09-28**: a reader reported writing every note that way | RFC 0048 ([#48](https://github.com/mindmapmarkdown/spec/pull/48)) — front matter does not open on a blank line | 2026-10-11 |
+| [#19](https://github.com/mindmapmarkdown/spec/issues/19) — what a code block's `source` contains. The other half of the issue, what `E-5`'s `block` names, was Clarifying and was settled by 0022 | RFC [0038](rfcs/0038-content-block-source.md) — list-item indentation is not source; every code block recorded in one fenced form | **Accepted 2026-09-28.** The rules land in `spec.md` as their own pull request |
 | Whether an ordered list's numbers are part of the tree — left open by RFC [0004](rfcs/0004-canonical-hierarchy.md), and **missing from this list until 2026-09-15** | RFC 0039 ([#39](https://github.com/mindmapmarkdown/spec/pull/39)) — ordered items record their ordinal and delimiter | 2026-09-29 |
 | [#42](https://github.com/mindmapmarkdown/spec/issues/42) — a well-formed tree can project to a document that lifts to a different tree: nothing constrains a label or a content entry's `source` | RFC 0043 ([#43](https://github.com/mindmapmarkdown/spec/pull/43)) — `S-7`: lifting a tree's canonical projection must yield that tree | 2026-09-30 |
 | [#45](https://github.com/mindmapmarkdown/spec/issues/45) — an item with a label whose first child has an empty label has no canonical projection, so a tree lift produces cannot be written back | RFC 0046 ([#46](https://github.com/mindmapmarkdown/spec/pull/46)) — one blank line between the label and the nested list in that position | 2026-09-30 |
 
-The latest of these periods ends 2026-09-30; 0.1.0 cannot be cut before the
-decisions are written and the rules they authorise have landed.
+The latest of these periods ends 2026-10-11, moved there on 2026-09-28 when #35
+turned out to have a real corpus behind it. 0.1.0 cannot be cut before the
+decisions are written and the rules they authorise have landed, so the 2026-10-05
+target in the roadmap moves with it.
 
 ### Deferred past 0.1.0
 
