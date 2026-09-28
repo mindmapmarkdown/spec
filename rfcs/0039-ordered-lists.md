@@ -6,7 +6,7 @@ and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-09-15 |
@@ -468,4 +468,73 @@ tree, is not addressed.
 
 ## Decision and rationale
 
-<!-- LEAVE THIS EMPTY UNTIL THE COMMENT PERIOD HAS ENDED. -->
+**Accepted**, 2026-09-29, by lazy consensus. The comment period ran in full, from
+2026-09-15 to 2026-09-29, with no comment on the pull request and no objection
+raised anywhere.
+
+### Why this outcome
+
+Numbers are content, not spelling. The case that decides it is the date line:
+`- 2026. 1. 15. 10:00` lifts, under the current rules, to three nested empty items
+and the text `2026. 1. 15.` is **nowhere in the tree**. A specification whose
+promise is that content survives cannot drop it. Recording the ordinal and the
+delimiter keeps it, and keeps a numbered procedure numbered.
+
+The alternatives are recorded above. The one worth restating is *put the marker in
+the label*: it keeps the tree shape unchanged and makes every consumer parse
+markers out of labels again, which is the work this specification exists to do
+once.
+
+No example in the suite contains an ordered list, so nothing already written
+changes. `kind` keeps its two values; bullet items are untouched.
+
+### What this decision makes blocking — issue #40
+
+Preparing this RFC turned up a case it records under *Unresolved questions*, and
+the decision has to say plainly what it now means.
+
+A link reference definition produces no block in CommonMark's document tree, so
+`L-3` has nothing to attach and projection drops it — issue
+[#40](https://github.com/mindmapmarkdown/spec/issues/40), **deferred past 0.1.0 on
+2026-09-15**. With ordered lists recorded, that deferral no longer holds. This
+document is conforming:
+
+```
+1. a
+
+[x]: https://example.com
+
+1. b
+```
+
+Checked against the prototype: it lifts to a restart — two items, each with
+ordinal 1 — and the definition that separated them is not in the tree, so `S-5`
+rejects the result. A conforming document now lifts to a tree that `S-3` requires
+an implementation to **refuse to project**. Before this RFC the same document lost
+the definition and nothing else; after it, the document cannot be round-tripped at
+all.
+
+That is a different kind of defect from the one #40 was deferred for, and it is
+this RFC that creates it. **#40 therefore has to be decided before 0.1.0**, and the
+deferral recorded in `CHANGELOG.md` is withdrawn. The decision on how to record
+link reference definitions is taken in its own RFC; this one does not prejudge it.
+
+### What lands, and where
+
+- `spec.md`: `L-12`, `S-5`, `S-6`, the amendments to `P-3`, `P-4`, `E-2` and
+  `E-8`, `P-12`, `E-9`, and the eight examples above, written inline; the suite is
+  regenerated from them. As with RFC 0016, 0022 and 0038, that edit comes as its
+  own pull request.
+- `mindmapmd`: the prototype is rebuilt on current `main` — it predates RFC 0038
+  and the three fixes that have landed since — and comes as a pull request.
+- `CHANGELOG.md`: this question leaves *Open before 0.1.0*, and #40 enters it.
+
+### The unresolved questions, after today
+
+- **Multi-line content in an ordered item** — resolved by RFC 0038, accepted
+  2026-09-28. The prototype's pending case can be enabled when it is rebuilt.
+- **Link reference definitions** — now blocking; see above.
+- **An empty label with content** — unchanged and not introduced here; it is true
+  of bullet items today.
+- **Task list items** — still RFC 0004's open question, and still not addressed.
+  Nothing is undefined: `- [ ] x` has the label `[ ] x`, as it always has.
