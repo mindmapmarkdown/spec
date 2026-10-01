@@ -505,6 +505,27 @@ entry in the root's `content` (E-1), with `block` equal to `front_matter` and
 trailing spaces and tabs removed. A document with no such later line has no
 front matter, and its first line is read as CommonMark reads it.
 
+**L-11.** A code block — fenced or indented — MUST be recorded with `block` equal
+to `code_block` and `source` made of:
+
+1. an opening line: the **fence** immediately followed by the **info string**;
+2. one line for each line of the **content**;
+3. a closing line: the fence alone.
+
+The **content** is the code block's content as CommonMark defines it — the text a
+CommonMark renderer places inside the code element, with the indentation
+CommonMark removes already removed, including an indented block's four columns, an
+indented fence's indentation, and a list item's. Its final line feed does not
+produce an additional line. Empty content produces no lines.
+
+The **info string** is, for a fenced block, the rest of the opening fence line as
+written, with leading and trailing whitespace removed; for an indented block,
+empty.
+
+The **fence** is backtick characters, or tilde characters if the info string
+contains a backtick. Its length is three, or one more than the longest run of that
+character anywhere in the content, whichever is greater.
+
 *(Informative)* L-1 is what keeps a prose document from exploding. A README with
 forty paragraphs and six headings has six nodes, not forty-six. The test for
 whether something should be a node is whether Markdown gives it a hierarchy of
@@ -528,14 +549,15 @@ product behaviour layered on the tree, and L-8 is what stops it from quietly
 becoming part of what the document means.
 
 L-9 resolves a conflict between three rules that would otherwise have no
-consistent reading: E-5 records a block's source verbatim, P-9 writes that source
-back, and P-8 forbids a line ending in whitespace. A paragraph carrying a
-two-space hard break satisfies the first two and violates the third. Normalising
-at lift rather than at projection is what keeps mutual inversion intact — if the
-tree kept the spelling and projection changed it, the first round-trip would
-already produce a different tree. The backslash form is the one canonical form
-keeps because the other is invisible: a break whose meaning is carried by
-trailing spaces is silently destroyed by editors that trim them.
+consistent reading: E-5 records a block's source as the document has it, P-9
+writes that source back, and P-8 forbids a line ending in whitespace. A
+paragraph carrying a two-space hard break satisfies the first two and violates
+the third. Normalising at lift rather than at projection is what keeps mutual
+inversion intact — if the tree kept the spelling and projection changed it, the
+first round-trip would already produce a different tree. The backslash form is
+the one canonical form keeps because the other is invisible: a break whose
+meaning is carried by trailing spaces is silently destroyed by editors that trim
+them.
 
 L-10 exists because front matter is not CommonMark, and CommonMark's reading of
 it is not harmless. The opening `---` has nothing before it and is a thematic
@@ -565,6 +587,26 @@ parent-child relationship, so the rule L0 states is not engaged. A plain rendere
 does show the block as a heading where a conforming implementation shows no node
 — that divergence belongs to front matter itself, and exists whatever this
 specification says about it.
+
+L-11 does for a code block what L-9 does for a hard break: it records what the
+construct means rather than how it was spelled. CommonMark already defines a code
+block's content independently of whether the block was fenced or indented, and a
+conforming renderer emits the same code element for either; L-11 records that
+content and discards the rest — the fence character, its length, how far it was
+indented, the item it sat in. Without it, two documents holding identical code
+lift to different trees, and one spelling — a fence indented two spaces —
+survives the round-trip while the code inside it changes, which is a failure no
+suite of trees can see.
+
+The exception P-8 makes is the mirror image. L-9 and L-10 both resolve their
+collision with P-8 by removing whitespace at lift, and for a paragraph or a
+front-matter line that costs nothing a reader can see. In a code block the
+trailing spaces **are** the code — a patch that changes whitespace, a Markdown
+sample demonstrating a hard break, a language where it is syntax — so removing
+them is the silent change to content L-11 exists to prevent. The cost is that a
+canonical document may carry trailing whitespace, and an editor that trims on
+save will change that document; the same editor changes the code in any Markdown
+file, and what this specification can do is not be the thing that changes it.
 
 A paragraph is content, not a node:
 
@@ -653,6 +695,74 @@ npm i
    "content":[
      {"block":"block_quote","source":"> Requires Node 20."},
      {"block":"code_block","source":"```bash\nnpm i\n```"}],
+   "children":[]}]}
+````
+
+An indented code block is recorded fenced, so its source does not depend on how
+it was written (L-11). Canonical form writes it fenced (P-5), so this document
+is conforming and not canonical:
+
+````example
+# Build
+
+    make all
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Build",
+   "content":[{"block":"code_block","source":"```\nmake all\n```"}],
+   "children":[]}]}
+````
+
+A tilde fence is recorded with backticks, for the same reason:
+
+````example
+# Run
+
+~~~py
+print(1)
+~~~
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Run",
+   "content":[{"block":"code_block","source":"```py\nprint(1)\n```"}],
+   "children":[]}]}
+````
+
+A block inside a list item carries none of the item's indentation (E-5), on any of
+its lines:
+
+````example
+- Install
+
+  Run this
+  from the root:
+
+  ```sh
+  npm i
+  ```
+.
+{"content":[],"children":[
+  {"kind":"item","label":"Install",
+   "content":[
+     {"block":"paragraph","source":"Run this\nfrom the root:"},
+     {"block":"code_block","source":"```sh\nnpm i\n```"}],
+   "children":[]}]}
+````
+
+Trailing whitespace inside a code block is content, and a canonical document keeps
+it (P-8). Shown here as `␣`:
+
+````example
+# Patch
+
+```diff
+-old␣␣
++new
+```
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Patch",
+   "content":[{"block":"code_block","source":"```diff\n-old  \n+new\n```"}],
    "children":[]}]}
 ````
 
@@ -835,8 +945,9 @@ with Chapter 1.
 **P-4.** Each list nesting level MUST be indented by exactly two spaces relative
 to its parent item's marker.
 
-**P-5.** Code blocks MUST be fenced with backticks. Indented code blocks MUST NOT
-appear in a canonical document.
+**P-5.** Code blocks MUST be fenced — with backticks, or with tildes when the
+info string contains a backtick. Indented code blocks MUST NOT appear in a
+canonical document.
 
 **P-6.** Headings MUST be ATX. Setext headings MUST NOT appear in a canonical
 document.
@@ -846,8 +957,8 @@ each block of node content from the next. A list MUST be tight — no blank line
 between items — unless an item carries block content, in which case the list MUST
 be loose.
 
-**P-8.** No line may end in whitespace, and the document MUST end with exactly
-one line feed.
+**P-8.** No line may end in whitespace, **except a content line of a code block**,
+and the document MUST end with exactly one line feed.
 
 **P-9.** Each entry in a node's `content` MUST be written as the Markdown block it
 records, in the recorded order, retaining that block's own line structure. A
@@ -974,8 +1085,12 @@ interpreted: the heading `## **Fast** start` has the label `**Fast** start`.
 two members: `block`, the CommonMark block type name — or a block type name this
 specification defines for a construct CommonMark does not read as a single block,
 of which there is exactly one, `front_matter` (L-10) — and `source`, that block's
-Markdown source verbatim, internal line breaks included, with no trailing line
-feed.
+Markdown source, internal line breaks included, with no trailing line feed, and
+with no line keeping more leading whitespace than the block's first line gave up.
+The first line begins at the column where the block begins; from each later line,
+up to that many columns of leading whitespace are removed, a tab advancing to the
+next multiple of four as CommonMark counts it. L-9, L-10, and L-11 further
+normalise particular blocks.
 
 *(Informative)* That wording is narrower than it may look, and §2.2 already
 contains a case that resembles it and is not the same. A table has no CommonMark
@@ -1004,10 +1119,11 @@ ambiguity in the one notation whose entire purpose is to remove ambiguity. The
 verbosity is the cheaper of the two costs, and it is paid by a generated file
 rather than by an author.
 
-E-4 and E-5 carry source through verbatim so that the encoding is lossless
-without the suite having to model Markdown's inline or block semantics. A label
-reduced to plain text would drop emphasis and links, which would make round-trip
-untestable at exactly the point where it matters.
+E-4 and E-5 carry source through as written — normalised only where L-9, L-10
+and L-11 say so — so that the encoding is lossless without the suite having to
+model Markdown's inline or block semantics. A label reduced to plain text would
+drop emphasis and links, which would make round-trip untestable at exactly the
+point where it matters.
 
 Links are the case where this is asked most often, so it is worth stating
 outright: a node written `- [How to install](https://example.com/)` has that
