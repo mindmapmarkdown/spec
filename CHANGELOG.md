@@ -68,14 +68,18 @@ it afterwards makes it Breaking rather than Normative.
 | [#19](https://github.com/mindmapmarkdown/spec/issues/19) — what a code block's `source` contains. The other half of the issue, what `E-5`'s `block` names, was Clarifying and was settled by 0022 | RFC [0038](rfcs/0038-content-block-source.md) — list-item indentation is not source; every code block recorded in one fenced form | **Accepted 2026-09-28.** The rules land in `spec.md` as their own pull request |
 | Whether an ordered list's numbers are part of the tree — left open by RFC [0004](rfcs/0004-canonical-hierarchy.md), and **missing from this list until 2026-09-15** | RFC [0039](rfcs/0039-ordered-lists.md) — ordered items record their ordinal and delimiter | **Accepted 2026-09-29.** The rules land in `spec.md` as their own pull request |
 | [#40](https://github.com/mindmapmarkdown/spec/issues/40) — projection drops every link reference definition. **Deferred on 2026-09-15; the deferral was withdrawn on 2026-09-29**, because RFC 0039 turns the loss into an ill-formed tree: ordered lists separated by a definition lift to a restart with nothing between them, which `S-5` rejects and `S-3` requires refusing to project | RFC 0051 ([#51](https://github.com/mindmapmarkdown/spec/pull/51)) — a definition is node content, recorded opaquely | 2026-10-13 |
-| [#42](https://github.com/mindmapmarkdown/spec/issues/42) — a well-formed tree can project to a document that lifts to a different tree: nothing constrains a label or a content entry's `source` | RFC 0043 ([#43](https://github.com/mindmapmarkdown/spec/pull/43)) — `S-7`: lifting a tree's canonical projection must yield that tree | 2026-09-30 |
-| [#45](https://github.com/mindmapmarkdown/spec/issues/45) — an item with a label whose first child has an empty label has no canonical projection, so a tree lift produces cannot be written back | RFC 0046 ([#46](https://github.com/mindmapmarkdown/spec/pull/46)) — one blank line between the label and the nested list in that position | 2026-09-30 |
+| [#42](https://github.com/mindmapmarkdown/spec/issues/42) — a well-formed tree can project to a document that lifts to a different tree: nothing constrains a label or a content entry's `source` | RFC [0043](rfcs/0043-well-formed-round-trip.md) — `S-7`: lifting a tree's canonical projection must yield that tree | **Accepted 2026-10-01.** Lands with 0046 and 0051: until those close, lift still produces trees `S-7` rejects |
+| [#45](https://github.com/mindmapmarkdown/spec/issues/45) — an item with a label whose first child has an empty label has no canonical projection, so a tree lift produces cannot be written back | RFC [0046](rfcs/0046-empty-first-child.md) — one blank line between the label and the nested list in that position | **Accepted 2026-10-01.** Lands with 0043 and 0051 |
 
-The latest of these periods is the one on #40, which ends 2026-10-13. It opened
-on 2026-09-29, the day accepting RFC 0039 withdrew that deferral. 0.1.0 cannot be
-cut before the decisions are written and the rules they authorise have landed, so
-the release follows that date rather than the 2026-10-05 the roadmap first
-carried.
+Four of the six are decided. The two still open are RFC 0048, to 2026-10-11, and
+RFC 0051, to 2026-10-13; the release follows the later of them rather than the
+2026-10-05 the roadmap first carried.
+
+**The accepted rules do not all land at once.** RFC 0038 can be written into
+`spec.md` on its own. RFC 0039, 0043 and 0046 land together with 0051, because
+`S-5` and `S-7` are both false while link reference definitions are dropped: a
+conforming document lifts to a tree they reject. A specification that states a
+rule it breaks is worse than one that waits a fortnight.
 
 ### Deferred past 0.1.0
 
