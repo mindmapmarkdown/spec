@@ -6,7 +6,7 @@ and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-09-16 |
@@ -201,4 +201,36 @@ None blocks acceptance.
 
 ## Decision and rationale
 
-<!-- LEAVE THIS EMPTY UNTIL THE COMMENT PERIOD HAS ENDED. -->
+**Accepted**, 2026-10-01, by lazy consensus. The comment period ran in full, from
+2026-09-16 to 2026-09-30, with no comment on the pull request and no objection
+raised anywhere.
+
+### Why this outcome
+
+The tree this fixes is one lift produces from a conforming document, and no
+spelling `P-7` allowed could write it back: a bare `-` under a label is a setext
+heading underline, and CommonMark lets no empty item of any other marker interrupt
+a paragraph. A blank line is the only spelling that works, and it costs one line in
+exactly the position where nothing else can be written.
+
+The shape is not exotic. `- Meeting` followed by `  - 2026. 1. 15. 10:00` lifts
+to it, because CommonMark reads the date as nested ordered lists — the same
+document that motivated RFC [0039](0039-ordered-lists.md).
+
+### What lands, and where
+
+- `spec.md`: the sentence added to `P-7`, the informative note after `P-11`, and
+  the example — which is canonical under the amended rule, so the suite tests it
+  both ways.
+- `mindmapmd`: the prototype is rebuilt on current `main` — it was built on the
+  empty-label fix, which has since merged — and comes as a pull request.
+- `CHANGELOG.md`: this question leaves *Open before 0.1.0*.
+
+### Sequence
+
+`S-7` (RFC [0043](https://github.com/mindmapmarkdown/spec/pull/43), accepted today) says lift
+cannot produce a tree that is not well-formed. This tree was one of two cases
+where it did; the other is link reference definitions
+([#40](https://github.com/mindmapmarkdown/spec/issues/40), RFC 0051, period to
+2026-10-13). The two rules land together with 0051, so that `spec.md` never
+states `S-7` while a hole in it is open.
