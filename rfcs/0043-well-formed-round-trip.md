@@ -6,7 +6,7 @@ force, and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-09-16 |
@@ -309,4 +309,60 @@ None blocks acceptance.
 
 ## Decision and rationale
 
-<!-- LEAVE THIS EMPTY UNTIL THE COMMENT PERIOD HAS ENDED. -->
+**Accepted**, 2026-10-01, by lazy consensus. The comment period ran in full, from
+2026-09-16 to 2026-09-30, with no comment on the pull request and no objection
+raised anywhere. The decision is written a day after the period closed; the delay
+is the maintainer's and changed nothing.
+
+### Why this outcome
+
+§2.4 was meant to turn away trees that cannot survive projection, and checked only
+shape. The gap was not theoretical: an editor that lets someone type a node called
+`1. Install` builds a tree whose projection denotes a different tree, and an
+importer that strips backslash escapes builds one too — that is how this was found.
+
+The rule is stated over the round trip rather than as a list of forbidden labels
+because such a list would be a second, partial grammar of CommonMark, and would be
+wrong the first time the two disagreed. The informative table stays what it is —
+guidance, where a gap costs nothing.
+
+### What `S-7` requires before it can be true
+
+`S-7` says a tree is well-formed only if its canonical projection lifts back to
+it, and §2.4 says lift cannot produce a tree that is not well-formed. Two cases
+where lift did exactly that were found while this period ran, and both are
+answered:
+
+- **An item with a label whose first child has an empty label**
+  ([#45](https://github.com/mindmapmarkdown/spec/issues/45)) — RFC
+  [0046](https://github.com/mindmapmarkdown/spec/pull/46), accepted 2026-10-01.
+- **Link reference definitions** ([#40](https://github.com/mindmapmarkdown/spec/issues/40)) —
+  dropped by projection, which after RFC [0039](0039-ordered-lists.md) makes a
+  conforming document lift to a tree `S-5` rejects, and therefore one `S-7`
+  rejects. RFC 0051 ([#51](https://github.com/mindmapmarkdown/spec/pull/51))
+  answers it; its period ends 2026-10-13.
+
+**`S-7` therefore lands with 0046 and 0051, not before.** Writing it into
+`spec.md` while either hole is open would state a rule the specification itself
+breaks.
+
+### What lands, and where
+
+- `spec.md`: `S-7` in §2.4 with the definition of well-formed amended, the
+  informative note, and the three phrases in §1.2.4 that narrow L1 to well-formed
+  trees. No example: the suite is a list of documents and cannot express a rejected
+  tree, which §1.4.3 asks for and which this cannot give — the same gap `S-1`
+  through `S-4` already have, recorded in *Unresolved questions*.
+- `mindmapmd`: the prototype is rebuilt on current `main` and comes as a pull
+  request. The lift bug it exposed — `## Title \#` lifting to the label
+  `Title \` — was fixed on 2026-09-28 (mindmapmd#3), so the false rejection it
+  caused is gone.
+- `CHANGELOG.md`: this question leaves *Open before 0.1.0*.
+
+### The unresolved questions, after today
+
+Unchanged and still not blocking: what an item's label is when its first block is
+not a paragraph; whether a multi-line label should keep list-item indentation; and
+a way for the suite to state a rejected tree. The fourth — numbering alongside RFC
+0039 — is settled: 0039 was accepted on 2026-09-29, so the definition reads S-1,
+S-2, S-4, S-5, S-6, and S-7.
