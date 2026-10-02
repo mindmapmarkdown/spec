@@ -154,8 +154,12 @@ So there is a choice, and it is not a technical one:
 - **Hold the tag until the family is closed.** Honest, and open-ended: the
   search space is CommonMark's, and each shape found so far has cost a fortnight.
 
-Nothing is decided here. The release date in this document assumes the second,
-and the first would bring it back to 2026-10-16.
+Nothing is decided here, and **neither option moves the date much.** RFC 0057 and
+RFC 0058 both run to 2026-10-16 whichever way this goes, because each fixes
+documents that lose their meaning with or without `S-7`; the rules land on
+2026-10-17 and the tag follows on 2026-10-18. What the first option buys is not
+time but **certainty** — it stops the tag depending on a search that has turned
+up a new shape on every day it has been run.
 
 ### Deferred past 0.1.0
 
