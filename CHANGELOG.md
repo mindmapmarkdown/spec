@@ -83,15 +83,16 @@ it afterwards makes it Breaking rather than Normative.
 | [#45](https://github.com/mindmapmarkdown/spec/issues/45) — an item with a label whose first child has an empty label has no canonical projection, so a tree lift produces cannot be written back | RFC [0046](rfcs/0046-empty-first-child.md) — one blank line between the label and the nested list in that position | **Accepted 2026-10-01.** Lands with 0051, 0057 and 0058 |
 | [#55](https://github.com/mindmapmarkdown/spec/issues/55) — a multi-line label below the top level keeps the indentation of the item holding it, and `P-4` adds it again, so the document does not survive the round trip. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 1** — a label's later lines lose what the first line gave up, and `P-1` writes them back at the node's content column | 2026-10-16 |
 | [#59](https://github.com/mindmapmarkdown/spec/issues/59) — a recorded `source` or `label` whose line ends in whitespace has **no** canonical projection: `P-9` writes it back and `P-8` forbids the result. One stray space at the end of a paragraph is enough. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 2** — no line of a recorded string ends in whitespace, except a code block's content | 2026-10-16 |
-| [#56](https://github.com/mindmapmarkdown/spec/issues/56) — a link reference definition can leave a paragraph whose first line is a paragraph only because it cannot interrupt one; after the blank line `P-7` puts in front of it, that line opens a list. Invisible before RFC 0051. Found 2026-10-02 | RFC 0058 ([#58](https://github.com/mindmapmarkdown/spec/pull/58)) — such a paragraph is written on the line below the definition, with no blank line | 2026-10-16 |
+| [#56](https://github.com/mindmapmarkdown/spec/issues/56) — a content entry whose `source`, written where `P-9` writes it, is read back as a different construct. **Two arrangements.** First: a definition leaves a paragraph whose first line is a paragraph only because it cannot interrupt one, and after `P-7`'s blank line that line opens a list. Second, found later the same day: a paragraph whose source is *exactly* a definition — `[y]: /y` then `---` — becomes a definition when written with a blank line after it | RFC 0058 ([#58](https://github.com/mindmapmarkdown/spec/pull/58)) answers the **first**. The second has **no proposal**, and no spelling has been found for it. It is all 298 failures the 0.1.0 configuration still has | 2026-10-16 for the first; the second is not open |
 | [#64](https://github.com/mindmapmarkdown/spec/issues/64) — a section's `label` can contain a line break and an ATX heading cannot carry one, so a setext heading spanning two lines has no canonical projection. Found 2026-10-02 | RFC 0067 ([#67](https://github.com/mindmapmarkdown/spec/pull/67)) — **Part 1**: a soft line break in a label is one space, because a soft break in a heading renders as one. **Part 2**: `S-8`, a section's label may not contain a line feed, which after Part 1 only a hard break can do | 2026-10-16 |
-| [#61](https://github.com/mindmapmarkdown/spec/issues/61) — an empty-labelled item whose content is a definition loses its children: `P-7`'s blank line before the content, plus the blank line before the child, leaves two in a row once the definition is read out, and two blank lines end the item. Found 2026-10-02 | **None.** A sentence was written into RFC 0058 and withdrawn the same day — it fixed 27 documents and broke 81, because a second content block then lands inside the item and becomes its label. It belongs with the label question below | **Not open** |
+| [#61](https://github.com/mindmapmarkdown/spec/issues/61) — an empty-labelled item whose content is a definition loses its children: `P-7`'s blank line before the content, plus the blank line before the child, leaves two in a row once the definition is read out, and two blank lines end the item. Found 2026-10-02 | RFC 0069 ([#69](https://github.com/mindmapmarkdown/spec/pull/69)) — the first `content` entry follows the marker directly when the label is empty **and** there are children. The same sentence without the second condition was written into RFC 0058 and withdrawn the same day: it fixed 27 documents and broke 81 | 2026-10-16 |
 
-Two of the seven remaining are decided. Four are open with periods — RFC 0048 to
-2026-10-11, RFC 0051 to 2026-10-13, and RFC 0057 Parts 1 and 2, RFC 0058 and RFC
-0067 to 2026-10-16 — and one has no proposal, [#61](https://github.com/mindmapmarkdown/spec/issues/61), which is
-why `S-7`'s landing is deferred. The release follows the last period rather than
-the 2026-10-05 the roadmap first carried.
+Two of the seven remaining are decided, and five are open with periods — RFC
+0048 to 2026-10-11, RFC 0051 to 2026-10-13, and RFC 0057 Parts 1 and 2, RFC 0058,
+RFC 0067 and RFC 0069 to 2026-10-16. **Every question found this week now has a
+proposal except one**: the second arrangement of #56, which is why `S-7`'s
+landing is deferred. The release follows the last period rather than the
+2026-10-05 the roadmap first carried.
 
 **The accepted rules do not all land at once.** RFC 0038 landed on its own and
 has left this table; see *Changed* above. RFC 0039 and 0046 land together with
@@ -182,8 +183,13 @@ Why, in the order the reasons matter:
 1. **§2.4 would state a claim the specification breaks.** `S-7` comes with "lift
    cannot produce a tree that is not well-formed", and four documents that do
    exactly that were found on 2026-10-02 after the decision said there were two.
-   Three have proposals; [#61](https://github.com/mindmapmarkdown/spec/issues/61) does not, and the one sentence
-   written for it fixed 27 documents and broke 81.
+   **Updated the same evening:** #61 was answered by RFC 0069
+   ([#69](https://github.com/mindmapmarkdown/spec/pull/69)) — the sentence that failed earlier in the day, with the
+   second condition it was missing — and the claim is still false, of the second
+   arrangement of [#56](https://github.com/mindmapmarkdown/spec/issues/56). A paragraph whose source is exactly a
+   link reference definition becomes one when it is written with a blank line
+   after it, and no spelling has been found that avoids it. It is all 298
+   failures the 0.1.0 configuration still has.
 2. **The remaining question is a different one.** #61 is the open question RFC
    0043 named and did not answer — what an item's label is when its first block
    is not a paragraph — reached from another direction. `S-7` cannot be made true
