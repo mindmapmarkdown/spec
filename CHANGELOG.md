@@ -80,34 +80,37 @@ it afterwards makes it Breaking rather than Normative.
 | [#35](https://github.com/mindmapmarkdown/spec/issues/35) — `L-10` swallows a document that opens with a thematic break and carries a later one. RFC [0037](rfcs/0037-front-matter-opening-thematic-break.md) proposed keeping `L-10` and was **rejected 2026-09-28**: a reader reported writing every note that way | RFC 0048 ([#48](https://github.com/mindmapmarkdown/spec/pull/48)) — front matter does not open on a blank line | 2026-10-11 |
 | Whether an ordered list's numbers are part of the tree — left open by RFC [0004](rfcs/0004-canonical-hierarchy.md), and **missing from this list until 2026-09-15** | RFC [0039](rfcs/0039-ordered-lists.md) — ordered items record their ordinal and delimiter | **Accepted 2026-09-29.** The rules land in `spec.md` as their own pull request |
 | [#40](https://github.com/mindmapmarkdown/spec/issues/40) — projection drops every link reference definition. **Deferred on 2026-09-15; the deferral was withdrawn on 2026-09-29**, because RFC 0039 turns the loss into an ill-formed tree: ordered lists separated by a definition lift to a restart with nothing between them, which `S-5` rejects and `S-3` requires refusing to project | RFC 0051 ([#51](https://github.com/mindmapmarkdown/spec/pull/51)) — a definition is node content, recorded opaquely | 2026-10-13 |
-| [#42](https://github.com/mindmapmarkdown/spec/issues/42) — a well-formed tree can project to a document that lifts to a different tree: nothing constrains a label or a content entry's `source` | RFC [0043](rfcs/0043-well-formed-round-trip.md) — `S-7`: lifting a tree's canonical projection must yield that tree | **Accepted 2026-10-01.** Lands with 0046 and 0051: until those close, lift still produces trees `S-7` rejects |
-| [#45](https://github.com/mindmapmarkdown/spec/issues/45) — an item with a label whose first child has an empty label has no canonical projection, so a tree lift produces cannot be written back | RFC [0046](rfcs/0046-empty-first-child.md) — one blank line between the label and the nested list in that position | **Accepted 2026-10-01.** Lands with 0043, 0051, 0057 and 0058 |
+| [#45](https://github.com/mindmapmarkdown/spec/issues/45) — an item with a label whose first child has an empty label has no canonical projection, so a tree lift produces cannot be written back | RFC [0046](rfcs/0046-empty-first-child.md) — one blank line between the label and the nested list in that position | **Accepted 2026-10-01.** Lands with 0051, 0057 and 0058 |
 | [#55](https://github.com/mindmapmarkdown/spec/issues/55) — a multi-line label below the top level keeps the indentation of the item holding it, and `P-4` adds it again, so the document does not survive the round trip. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 1** — a label's later lines lose what the first line gave up, and `P-1` writes them back at the node's content column | 2026-10-16 |
 | [#59](https://github.com/mindmapmarkdown/spec/issues/59) — a recorded `source` or `label` whose line ends in whitespace has **no** canonical projection: `P-9` writes it back and `P-8` forbids the result. One stray space at the end of a paragraph is enough. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 2** — no line of a recorded string ends in whitespace, except a code block's content | 2026-10-16 |
 | [#56](https://github.com/mindmapmarkdown/spec/issues/56) — a link reference definition can leave a paragraph whose first line is a paragraph only because it cannot interrupt one; after the blank line `P-7` puts in front of it, that line opens a list. Invisible before RFC 0051. Found 2026-10-02 | RFC 0058 ([#58](https://github.com/mindmapmarkdown/spec/pull/58)) — such a paragraph is written on the line below the definition, with no blank line | 2026-10-16 |
 | [#64](https://github.com/mindmapmarkdown/spec/issues/64) — a section's `label` can contain a line break and an ATX heading cannot carry one, so a setext heading spanning two lines has no canonical projection. `P-6` cannot simply be relaxed: setext covers levels 1 and 2 and leaves depth 3 unanswered. Found 2026-10-02 | **None.** Four options are recorded on the issue with no recommendation. It was split out of RFC 0057, whose `P-1` sentence said the wrong thing about sections for part of one day | **Not open** |
 | [#61](https://github.com/mindmapmarkdown/spec/issues/61) — an empty-labelled item whose content is a definition loses its children: `P-7`'s blank line before the content, plus the blank line before the child, leaves two in a row once the definition is read out, and two blank lines end the item. Found 2026-10-02 | **None.** A sentence was written into RFC 0058 and withdrawn the same day — it fixed 27 documents and broke 81, because a second content block then lands inside the item and becomes its label. It belongs with the label question below | **Not open** |
 
-Three of the eight remaining are decided. The five still open are RFC 0048 to
-2026-10-11, RFC 0051 to 2026-10-13, and RFC 0057 Parts 1 and 2 and RFC 0058 to
-2026-10-16; the release follows the last of them rather than the 2026-10-05 the
-roadmap first carried.
+Two of the seven remaining are decided. Three are open with periods — RFC 0048
+to 2026-10-11, RFC 0051 to 2026-10-13, and RFC 0057 Parts 1 and 2 and RFC 0058
+to 2026-10-16 — and two have no proposal yet,
+[#61](https://github.com/mindmapmarkdown/spec/issues/61) and [#64](https://github.com/mindmapmarkdown/spec/issues/64). The release follows the last period
+rather than the 2026-10-05 the roadmap first carried, and #64 needs an RFC of its
+own, because a tree with no canonical projection breaks §1.3 whatever else is
+decided.
 
 **The accepted rules do not all land at once.** RFC 0038 landed on its own and
-has left this table; see *Changed* above. RFC 0039, 0043 and 0046 land together
-with 0051, 0057 and 0058, because until those close lift still produces trees
-§2.4 rejects: with 0039 accepted, a conforming document whose ordered lists are
+has left this table; see *Changed* above. RFC 0039 and 0046 land together with
+0051, 0057 and 0058, because until 0051 closes lift still produces a tree §2.4
+rejects: with 0039 accepted, a conforming document whose ordered lists are
 separated by a link reference definition lifts to a restart with nothing between
-them, which `S-5` rejects — and `S-7` cannot be stated at all while §2.4's claim
-that lift never produces an ill-formed tree is false of a document someone can
-write. A specification that states a rule it breaks is worse than one that waits
-a fortnight.
+them, which `S-5` rejects. A specification that states a rule it breaks is worse
+than one that waits a fortnight.
+
+**`S-7` is no longer in that list.** Its landing was deferred past 0.1.0 on
+2026-10-02; see *Deferred past 0.1.0* below.
 
 **The 2026-10-01 wording of that paragraph said `S-5` and `S-7` were "both false"
 while definitions are dropped.** That was imprecise: `S-5` is the rule a dropped
-definition violates, and `S-7` is blocked because the definition of well-formed
-that contains it would then be false of a tree lift produces. The sequencing it
-described is unchanged.
+definition violates, and `S-7` was blocked because the definition of well-formed
+that contains it would then be false of a tree lift produces. The sequencing for
+0039 is unchanged.
 
 ### Found on 2026-10-02 — four more holes under `S-7`, and how
 
@@ -131,7 +134,7 @@ silently lost its meaning before `S-7` existed to name the loss. What changes is
 the confidence of "both are answered" — a rule stated over a round trip has a
 search space, and the honest way to count its holes is to search it.
 
-### The tail, and a decision that has to be made before the tag
+### The tail, and the decision taken on it
 
 With the four fixes above in place the sweep goes from 900 failures to **27**,
 and all 27 are [#61](https://github.com/mindmapmarkdown/spec/issues/61). Run against `main` rather than against the
@@ -151,35 +154,69 @@ RFC 0043 named and did not answer** — what an item's label is when its first
 block is not a paragraph. #61 is that question reached from another direction,
 and a rule about where blank lines go cannot settle it.
 
-So there is a choice, and it is not a technical one:
+That exchange forced a choice, and on **2026-10-02 the maintainer took it:
+`S-7`'s landing is deferred past 0.1.0.** See *Deferred past 0.1.0* below. The
+rule stands — RFC 0043 is accepted and is not reopened — and what is deferred is
+writing it into `spec.md`.
 
-- **Defer `S-7` past 0.1.0.** Every other rule found this week fixes a document
-  that silently loses its meaning, and each lands on its own evidence. `S-7` is
-  the rule that *finds* such documents, and it cannot be stated while §2.4's
-  claim is false of a document someone can write. Deferring it ships 0.1.0 with
-  the fixes and keeps the sweep as 0.2.0's agenda, where the label question is
-  answered first and `S-7` lands on top of it.
-- **Hold the tag until the family is closed.** Honest, and open-ended: the
-  search space is CommonMark's, and each shape found so far has cost a fortnight.
-  **#64 is the argument against this option**, because it is not an
-  `S-7` hole at all — a well-formed tree with no canonical projection, like #45
-  and #59 — and it blocks the release whichever way `S-7` goes.
+The alternative was to hold the tag until the family is closed. It was rejected
+because the family's size is not known: the sweep has turned up a new shape on
+every day it has been run, and **#64 shows the family is not even `S-7`'s** — a
+well-formed tree with no canonical projection, like #45 and #59, which blocks the
+release whichever way `S-7` goes. A release date that depends on an unfinished
+search is not a date.
 
-Nothing is decided here, and **neither option moves the date much.** RFC 0057 and
-RFC 0058 both run to 2026-10-16 whichever way this goes, because each fixes
-documents that lose their meaning with or without `S-7`; the rules land on
-2026-10-17 and the tag follows on 2026-10-18. What the first option buys is not
-time but **certainty** — it stops the tag depending on a search that has turned
-up a new shape on every day it has been run.
+Neither option moved the date much. RFC 0057 and RFC 0058 run to 2026-10-16
+either way, because each fixes documents that lose their meaning with or without
+`S-7`; the rules land on 2026-10-17 and the tag follows on 2026-10-18. What the
+deferral buys is not time but **certainty**.
 
 ### Deferred past 0.1.0
 
-Nothing. #40 was deferred here on 2026-09-15 — the issue had several credible
-designs, each with a cost, and choosing one in the time left would have meant
-choosing without a comment period able to test it. **The deferral was withdrawn on
+**`S-7` — RFC [0043](rfcs/0043-well-formed-round-trip.md)'s rule. Deferred
+2026-10-02.** The RFC is accepted and stays accepted; what is deferred is writing
+the rule into `spec.md`, which moves it to 0.2.0.
+
+Why, in the order the reasons matter:
+
+1. **§2.4 would state a claim the specification breaks.** `S-7` comes with "lift
+   cannot produce a tree that is not well-formed", and four documents that do
+   exactly that were found on 2026-10-02 after the decision said there were two.
+   Three have proposals; [#61](https://github.com/mindmapmarkdown/spec/issues/61) does not, and the one sentence
+   written for it fixed 27 documents and broke 81.
+2. **The remaining question is a different one.** #61 is the open question RFC
+   0043 named and did not answer — what an item's label is when its first block
+   is not a paragraph — reached from another direction. `S-7` cannot be made true
+   by rules about blank lines; it needs that question answered first, and that is
+   a design problem, not a fortnight's drafting.
+3. **The date would depend on a search.** `tools/sweep.mjs` has found a new shape
+   on every day it has been run. Holding a release until a search stops finding
+   things is not a schedule.
+
+**What is not deferred.** Every rule the sweep's findings produced lands in
+0.1.0, because each fixes a document that silently loses its meaning whether or
+not `S-7` exists to name the loss: RFC 0039, 0046, 0048, 0051, 0057 and 0058.
+`S-7` is the rule that *finds* such documents; it is not what fixes them.
+
+**What this costs.** §2.4 stays as it is: a tree can be well-formed by shape and
+still project to a document that lifts to something else. An L2 implementation
+diffing trees can therefore still be surprised, and the specification has no
+sentence to point at. That is the state 0.1.0 ships in, said plainly rather than
+left to be discovered.
+
+**What has to happen before it lands in 0.2.0.** #61 answered, the label question
+behind it answered, and `tools/sweep.mjs` reporting zero over a run large enough
+to mean something — stated as a condition now, so that the next person does not
+have to argue for it.
+
+---
+
+#40 was deferred here on 2026-09-15 — the issue had several credible designs,
+each with a cost, and choosing one in the time left would have meant choosing
+without a comment period able to test it. **The deferral was withdrawn on
 2026-09-29**, when accepting RFC 0039 made the same defect produce a tree no
-implementation may project. Releasing over that is not a decision anyone can write
-down as acceptable, so it moves into the table above.
+implementation may project. Releasing over that is not a decision anyone can
+write down as acceptable, so it moved into the table above.
 
 ### Process notes
 
