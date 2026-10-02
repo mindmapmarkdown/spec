@@ -85,6 +85,7 @@ it afterwards makes it Breaking rather than Normative.
 | [#55](https://github.com/mindmapmarkdown/spec/issues/55) — a multi-line label below the top level keeps the indentation of the item holding it, and `P-4` adds it again, so the document does not survive the round trip. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 1** — a label's later lines lose what the first line gave up, and `P-1` writes them back at the node's content column | 2026-10-16 |
 | [#59](https://github.com/mindmapmarkdown/spec/issues/59) — a recorded `source` or `label` whose line ends in whitespace has **no** canonical projection: `P-9` writes it back and `P-8` forbids the result. One stray space at the end of a paragraph is enough. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 2** — no line of a recorded string ends in whitespace, except a code block's content | 2026-10-16 |
 | [#56](https://github.com/mindmapmarkdown/spec/issues/56) — a link reference definition can leave a paragraph whose first line is a paragraph only because it cannot interrupt one; after the blank line `P-7` puts in front of it, that line opens a list. Invisible before RFC 0051. Found 2026-10-02 | RFC 0058 ([#58](https://github.com/mindmapmarkdown/spec/pull/58)) — such a paragraph is written on the line below the definition, with no blank line | 2026-10-16 |
+| [#61](https://github.com/mindmapmarkdown/spec/issues/61) — an empty-labelled item whose content is a definition loses its children: `P-7`'s blank line before the content, plus the blank line before the child, leaves two in a row once the definition is read out, and two blank lines end the item. Found 2026-10-02 | **None.** A sentence was written into RFC 0058 and withdrawn the same day — it fixed 27 documents and broke 81, because a second content block then lands inside the item and becomes its label. It belongs with the label question below | **Not open** |
 
 Three of the eight remaining are decided. The five still open are RFC 0048 to
 2026-10-11, RFC 0051 to 2026-10-13, and RFC 0057 Parts 1 and 2 and RFC 0058 to
@@ -128,6 +129,33 @@ said two holes blocked `S-7` and both were answered. It now carries a
 silently lost its meaning before `S-7` existed to name the loss. What changes is
 the confidence of "both are answered" — a rule stated over a round trip has a
 search space, and the honest way to count its holes is to search it.
+
+### The tail, and a decision that has to be made before the tag
+
+With the four fixes above in place the sweep goes from 900 failures to **27**,
+and all 27 are [#61](https://github.com/mindmapmarkdown/spec/issues/61). A sentence answering it was written and
+withdrawn the same day: writing an empty-labelled item's first content entry
+below the marker fixed those 27 and broke 81 others, because a second content
+block then lands inside the item and becomes its **label**.
+
+That exchange names the real blocker. **`S-7` keeps running into the one question
+RFC 0043 named and did not answer** — what an item's label is when its first
+block is not a paragraph. #61 is that question reached from another direction,
+and a rule about where blank lines go cannot settle it.
+
+So there is a choice, and it is not a technical one:
+
+- **Defer `S-7` past 0.1.0.** Every other rule found this week fixes a document
+  that silently loses its meaning, and each lands on its own evidence. `S-7` is
+  the rule that *finds* such documents, and it cannot be stated while §2.4's
+  claim is false of a document someone can write. Deferring it ships 0.1.0 with
+  the fixes and keeps the sweep as 0.2.0's agenda, where the label question is
+  answered first and `S-7` lands on top of it.
+- **Hold the tag until the family is closed.** Honest, and open-ended: the
+  search space is CommonMark's, and each shape found so far has cost a fortnight.
+
+Nothing is decided here. The release date in this document assumes the second,
+and the first would bring it back to 2026-10-16.
 
 ### Deferred past 0.1.0
 
