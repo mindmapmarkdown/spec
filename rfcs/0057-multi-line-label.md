@@ -188,8 +188,8 @@ one line**, and no column exists to write a second one at — so a section whose
 label carries a line break has no canonical projection at all. A setext heading
 spanning two lines produces exactly that tree, and relaxing `P-6` to allow setext
 would cover levels 1 and 2 and leave depth 3 unanswered. That is
-[#64](https://github.com/mindmapmarkdown/spec/issues/64), a different question with a different shape, and this RFC
-does not answer it.
+[#64](https://github.com/mindmapmarkdown/spec/issues/64), a different question with a
+different shape, and this RFC does not answer it.
 
 ### Part 2 · `E-4` and `E-5`, amended
 
@@ -323,7 +323,8 @@ example RFC 0038 already put in §2.2, repeated here only to show the pair.
 | A label whose continuation line is blank | Cannot happen: a blank line ends the paragraph the label comes from |
 | A hard break spelled with trailing spaces | `L-9` records it in the backslash form first; indentation is applied to what `L-9` produced |
 | A continuation line that reads as a block | Cannot arise from indentation: a line that would open a block inside a list item is not a continuation. The one way a block-looking line becomes a label or a paragraph's first line is [#56](https://github.com/mindmapmarkdown/spec/issues/56), which this RFC does not address |
-| A setext heading's label | The underline is already removed before this rule applies, so there is nothing left to re-indent |
+| A setext heading's label, on one line | The underline is already removed before this rule applies, so there is nothing left to re-indent |
+| A setext heading's label spanning two lines | Part 1 does not reach it, and nothing can write it back. [#64](https://github.com/mindmapmarkdown/spec/issues/64) |
 
 Bounds: the columns removed from a line are bounded by the label's starting
 column, which is bounded by list nesting. One linear pass.
