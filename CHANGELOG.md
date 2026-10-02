@@ -81,18 +81,53 @@ it afterwards makes it Breaking rather than Normative.
 | Whether an ordered list's numbers are part of the tree — left open by RFC [0004](rfcs/0004-canonical-hierarchy.md), and **missing from this list until 2026-09-15** | RFC [0039](rfcs/0039-ordered-lists.md) — ordered items record their ordinal and delimiter | **Accepted 2026-09-29.** The rules land in `spec.md` as their own pull request |
 | [#40](https://github.com/mindmapmarkdown/spec/issues/40) — projection drops every link reference definition. **Deferred on 2026-09-15; the deferral was withdrawn on 2026-09-29**, because RFC 0039 turns the loss into an ill-formed tree: ordered lists separated by a definition lift to a restart with nothing between them, which `S-5` rejects and `S-3` requires refusing to project | RFC 0051 ([#51](https://github.com/mindmapmarkdown/spec/pull/51)) — a definition is node content, recorded opaquely | 2026-10-13 |
 | [#42](https://github.com/mindmapmarkdown/spec/issues/42) — a well-formed tree can project to a document that lifts to a different tree: nothing constrains a label or a content entry's `source` | RFC [0043](rfcs/0043-well-formed-round-trip.md) — `S-7`: lifting a tree's canonical projection must yield that tree | **Accepted 2026-10-01.** Lands with 0046 and 0051: until those close, lift still produces trees `S-7` rejects |
-| [#45](https://github.com/mindmapmarkdown/spec/issues/45) — an item with a label whose first child has an empty label has no canonical projection, so a tree lift produces cannot be written back | RFC [0046](rfcs/0046-empty-first-child.md) — one blank line between the label and the nested list in that position | **Accepted 2026-10-01.** Lands with 0043 and 0051 |
+| [#45](https://github.com/mindmapmarkdown/spec/issues/45) — an item with a label whose first child has an empty label has no canonical projection, so a tree lift produces cannot be written back | RFC [0046](rfcs/0046-empty-first-child.md) — one blank line between the label and the nested list in that position | **Accepted 2026-10-01.** Lands with 0043, 0051, 0057 and 0058 |
+| [#55](https://github.com/mindmapmarkdown/spec/issues/55) — a multi-line label below the top level keeps the indentation of the item holding it, and `P-4` adds it again, so the document does not survive the round trip. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 1** — a label's later lines lose what the first line gave up, and `P-1` writes them back at the node's content column | 2026-10-16 |
+| [#59](https://github.com/mindmapmarkdown/spec/issues/59) — a recorded `source` or `label` whose line ends in whitespace has **no** canonical projection: `P-9` writes it back and `P-8` forbids the result. One stray space at the end of a paragraph is enough. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 2** — no line of a recorded string ends in whitespace, except a code block's content | 2026-10-16 |
+| [#56](https://github.com/mindmapmarkdown/spec/issues/56) — a link reference definition can leave a paragraph whose first line is a paragraph only because it cannot interrupt one; after the blank line `P-7` puts in front of it, that line opens a list. Invisible before RFC 0051. Found 2026-10-02 | RFC 0058 ([#58](https://github.com/mindmapmarkdown/spec/pull/58)) — such a paragraph is written on the line below the definition, with no blank line | 2026-10-16 |
 
-Three of the five remaining are decided. The two still open are RFC 0048, to
-2026-10-11, and RFC 0051, to 2026-10-13; the release follows the later of them
-rather than the 2026-10-05 the roadmap first carried.
+Three of the eight remaining are decided. The five still open are RFC 0048 to
+2026-10-11, RFC 0051 to 2026-10-13, and RFC 0057 Parts 1 and 2 and RFC 0058 to
+2026-10-16; the release follows the last of them rather than the 2026-10-05 the
+roadmap first carried.
 
 **The accepted rules do not all land at once.** RFC 0038 landed on its own and
 has left this table; see *Changed* above. RFC 0039, 0043 and 0046 land together
-with 0051, because `S-5` and `S-7` are both false while link reference
-definitions are dropped: a conforming document lifts to a tree they reject. A
-specification that states a rule it breaks is worse than one that waits a
-fortnight.
+with 0051, 0057 and 0058, because until those close lift still produces trees
+§2.4 rejects: with 0039 accepted, a conforming document whose ordered lists are
+separated by a link reference definition lifts to a restart with nothing between
+them, which `S-5` rejects — and `S-7` cannot be stated at all while §2.4's claim
+that lift never produces an ill-formed tree is false of a document someone can
+write. A specification that states a rule it breaks is worse than one that waits
+a fortnight.
+
+**The 2026-10-01 wording of that paragraph said `S-5` and `S-7` were "both false"
+while definitions are dropped.** That was imprecise: `S-5` is the rule a dropped
+definition violates, and `S-7` is blocked because the definition of well-formed
+that contains it would then be false of a tree lift produces. The sequencing it
+described is unchanged.
+
+### Found on 2026-10-02 — four more holes under `S-7`, and how
+
+A sweep over 40,000 generated documents, run against the reference
+implementation with every accepted and proposed rule merged together, checking
+each document's tree round trip and each tree against `S-7`. **Nine hundred
+failed.**
+
+| Cause | Count | Where it went |
+|---|---|---|
+| A block's starting column was taken from the parser, which reports the column of the paragraph a definition was removed from | 595 | **Not a specification gap.** Fixed in [mindmapmd#8](https://github.com/mindmapmarkdown/mindmapmd/pull/8) |
+| A multi-line label below the top level | 305 | [#55](https://github.com/mindmapmarkdown/spec/issues/55), RFC 0057 Part 1 |
+| A paragraph whose source reads as a list | 270 of the remainder after the first two were fixed or isolated | [#56](https://github.com/mindmapmarkdown/spec/issues/56), RFC 0058 |
+| A recorded line ending in whitespace — `S-7` does **not** catch this one, because the tree round trip passes; the tree simply has no canonical projection | not in the 900 | [#59](https://github.com/mindmapmarkdown/spec/issues/59), RFC 0057 Part 2 |
+
+RFC [0043](rfcs/0043-well-formed-round-trip.md)'s decision, written 2026-10-01,
+said two holes blocked `S-7` and both were answered. It now carries a
+**Correction** recording that there were four. Nothing in its reasoning changes:
+`S-7` is the rule that finds these, and each one it found is a document that
+silently lost its meaning before `S-7` existed to name the loss. What changes is
+the confidence of "both are answered" — a rule stated over a round trip has a
+search space, and the honest way to count its holes is to search it.
 
 ### Deferred past 0.1.0
 

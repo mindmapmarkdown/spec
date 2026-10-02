@@ -346,6 +346,53 @@ answered:
 `spec.md` while either hole is open would state a rule the specification itself
 breaks.
 
+#### Correction, 2026-10-02 — there were four, not two
+
+**The sentence above undercounted.** Two more cases where lift produces a tree
+`S-7` rejects were found on 2026-10-02, the day after this decision was written,
+by a sweep over 40,000 generated documents run against the reference
+implementation with every accepted and proposed rule merged together. Nine
+hundred of them failed. The decision stands; the list in it does not.
+
+- **A multi-line label below the top level**
+  ([#55](https://github.com/mindmapmarkdown/spec/issues/55)) — 305 of the
+  failures. `E-4` records a label "exactly as it appears in the source", so a
+  label that runs onto a second line keeps the indentation of the item holding
+  it; `P-4` adds that indentation again. RFC 0057
+  ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) Part 1 answers it; its
+  period ends 2026-10-16.
+- **A paragraph whose source reads as a list**
+  ([#56](https://github.com/mindmapmarkdown/spec/issues/56)) — the remaining 270.
+  A link reference definition can leave a paragraph whose first line is a
+  paragraph only because it cannot interrupt one; after the blank line `P-7` puts
+  in front of it, that line opens a list. RFC 0058
+  ([#58](https://github.com/mindmapmarkdown/spec/pull/58)) answers it; its period
+  ends 2026-10-16. **It was invisible until RFC 0051**, which is why it is not in
+  the list above: without 0051 the definition is dropped and this defect hides
+  behind that one.
+
+The other 595 failures were not a specification gap but an implementation bug in
+how a block's starting column was measured, fixed in
+[mindmapmd#8](https://github.com/mindmapmarkdown/mindmapmd/pull/8).
+
+**`S-7` lands with 0046, 0051, 0057 Part 1 and 0058.** The release date follows
+2026-10-16 rather than 2026-10-13.
+
+**What this says about the decision.** Nothing in the reasoning changes: `S-7` is
+the rule that finds these, and each one it found is a document that silently
+lost its meaning before `S-7` existed to name the loss. What changes is the
+confidence of the sentence "both are answered". A rule stated over a round trip
+has a search space, and the honest way to count its holes is to search it — which
+is what was done the next day, and should have been done before the list was
+written.
+
+A fifth defect was found in the same sweep's wake and is **not** in this list,
+because `S-7` does not catch it: a recorded string whose line ends in whitespace
+has no canonical projection at all, since `P-9` writes it back and `P-8` forbids
+the result ([#59](https://github.com/mindmapmarkdown/spec/issues/59), RFC 0057
+Part 2). The tree round trip passes, so it is #45's shape rather than this RFC's.
+It blocks the release, not `S-7`.
+
 ### What lands, and where
 
 - `spec.md`: `S-7` in §2.4 with the definition of well-formed amended, the
