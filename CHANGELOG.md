@@ -84,16 +84,14 @@ it afterwards makes it Breaking rather than Normative.
 | [#55](https://github.com/mindmapmarkdown/spec/issues/55) — a multi-line label below the top level keeps the indentation of the item holding it, and `P-4` adds it again, so the document does not survive the round trip. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 1** — a label's later lines lose what the first line gave up, and `P-1` writes them back at the node's content column | 2026-10-16 |
 | [#59](https://github.com/mindmapmarkdown/spec/issues/59) — a recorded `source` or `label` whose line ends in whitespace has **no** canonical projection: `P-9` writes it back and `P-8` forbids the result. One stray space at the end of a paragraph is enough. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 2** — no line of a recorded string ends in whitespace, except a code block's content | 2026-10-16 |
 | [#56](https://github.com/mindmapmarkdown/spec/issues/56) — a link reference definition can leave a paragraph whose first line is a paragraph only because it cannot interrupt one; after the blank line `P-7` puts in front of it, that line opens a list. Invisible before RFC 0051. Found 2026-10-02 | RFC 0058 ([#58](https://github.com/mindmapmarkdown/spec/pull/58)) — such a paragraph is written on the line below the definition, with no blank line | 2026-10-16 |
-| [#64](https://github.com/mindmapmarkdown/spec/issues/64) — a section's `label` can contain a line break and an ATX heading cannot carry one, so a setext heading spanning two lines has no canonical projection. `P-6` cannot simply be relaxed: setext covers levels 1 and 2 and leaves depth 3 unanswered. Found 2026-10-02 | **None.** Four options are recorded on the issue with no recommendation. It was split out of RFC 0057, whose `P-1` sentence said the wrong thing about sections for part of one day | **Not open** |
+| [#64](https://github.com/mindmapmarkdown/spec/issues/64) — a section's `label` can contain a line break and an ATX heading cannot carry one, so a setext heading spanning two lines has no canonical projection. Found 2026-10-02 | RFC 0067 ([#67](https://github.com/mindmapmarkdown/spec/pull/67)) — **Part 1**: a soft line break in a label is one space, because a soft break in a heading renders as one. **Part 2**: `S-8`, a section's label may not contain a line feed, which after Part 1 only a hard break can do | 2026-10-16 |
 | [#61](https://github.com/mindmapmarkdown/spec/issues/61) — an empty-labelled item whose content is a definition loses its children: `P-7`'s blank line before the content, plus the blank line before the child, leaves two in a row once the definition is read out, and two blank lines end the item. Found 2026-10-02 | **None.** A sentence was written into RFC 0058 and withdrawn the same day — it fixed 27 documents and broke 81, because a second content block then lands inside the item and becomes its label. It belongs with the label question below | **Not open** |
 
-Two of the seven remaining are decided. Three are open with periods — RFC 0048
-to 2026-10-11, RFC 0051 to 2026-10-13, and RFC 0057 Parts 1 and 2 and RFC 0058
-to 2026-10-16 — and two have no proposal yet,
-[#61](https://github.com/mindmapmarkdown/spec/issues/61) and [#64](https://github.com/mindmapmarkdown/spec/issues/64). The release follows the last period
-rather than the 2026-10-05 the roadmap first carried, and #64 needs an RFC of its
-own, because a tree with no canonical projection breaks §1.3 whatever else is
-decided.
+Two of the seven remaining are decided. Four are open with periods — RFC 0048 to
+2026-10-11, RFC 0051 to 2026-10-13, and RFC 0057 Parts 1 and 2, RFC 0058 and RFC
+0067 to 2026-10-16 — and one has no proposal, [#61](https://github.com/mindmapmarkdown/spec/issues/61), which is
+why `S-7`'s landing is deferred. The release follows the last period rather than
+the 2026-10-05 the roadmap first carried.
 
 **The accepted rules do not all land at once.** RFC 0038 landed on its own and
 has left this table; see *Changed* above. RFC 0039 and 0046 land together with
@@ -121,7 +119,7 @@ failed.**
 
 | Cause | Count | Where it went |
 |---|---|---|
-| A block's starting column was taken from the parser, which reports the column of the paragraph a definition was removed from | 595 | **Not a specification gap.** Fixed in [mindmapmd#8](https://github.com/mindmapmarkdown/mindmapmd/pull/8) |
+| A block's starting column was taken from the parser, which reports the column of the paragraph a definition was removed from | 595 | **Not a specification gap.** Fixed in [mindmapmd#8](https://github.com/mindmapmarkdown/mindmapmd/pull/8), and again in [#10](https://github.com/mindmapmarkdown/mindmapmd/pull/10) for the opposite error — an *indented* definition made the reported column too large, and `␣␣[x]: /x` then `abcd` recorded the source `cd`, two characters silently dropped |
 | A multi-line label below the top level | 305 | [#55](https://github.com/mindmapmarkdown/spec/issues/55), RFC 0057 Part 1 |
 | A paragraph whose source reads as a list | 270 of the remainder after the first two were fixed or isolated | [#56](https://github.com/mindmapmarkdown/spec/issues/56), RFC 0058 |
 | A recorded line ending in whitespace — `S-7` does **not** catch this one, because the tree round trip passes; the tree simply has no canonical projection | not in the 900 | [#59](https://github.com/mindmapmarkdown/spec/issues/59), RFC 0057 Part 2 |
@@ -163,7 +161,9 @@ The alternative was to hold the tag until the family is closed. It was rejected
 because the family's size is not known: the sweep has turned up a new shape on
 every day it has been run, and **#64 shows the family is not even `S-7`'s** — a
 well-formed tree with no canonical projection, like #45 and #59, which blocks the
-release whichever way `S-7` goes. A release date that depends on an unfinished
+release whichever way `S-7` goes — and it is now answered by RFC 0067, which
+records a soft line break in a label as a space because that is what a renderer
+shows, and refuses the hard-break remainder with `S-8`. A release date that depends on an unfinished
 search is not a date.
 
 Neither option moved the date much. RFC 0057 and RFC 0058 run to 2026-10-16
