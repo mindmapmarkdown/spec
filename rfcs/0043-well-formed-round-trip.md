@@ -393,6 +393,42 @@ the result ([#59](https://github.com/mindmapmarkdown/spec/issues/59), RFC 0057
 Part 2). The tree round trip passes, so it is #45's shape rather than this RFC's.
 It blocks the release, not `S-7`.
 
+#### Landing deferred past 0.1.0, 2026-10-02
+
+**This RFC stays accepted. `S-7`'s landing in `spec.md` is deferred to 0.2.0.**
+
+The Correction above counts four documents that lift to trees `S-7` rejects where
+this decision said two. Three have proposals. The fourth,
+[#61](https://github.com/mindmapmarkdown/spec/issues/61), does not: the one sentence written for it fixed 27
+documents and broke 81, because the fix pushes a second content block inside the
+item where it becomes the item's label.
+
+That is the question this RFC named under *Unresolved questions* and did not
+answer — what an item's label is when its first block is not a paragraph — and
+`S-7` cannot be made true by rules about where blank lines go. It needs that
+question answered, which is a design problem rather than a fortnight's drafting.
+
+The third reason is the one that decided it. `tools/sweep.mjs` in the reference
+implementation has found a new shape on **every day it has been run**, and
+[#64](https://github.com/mindmapmarkdown/spec/issues/64) — found the same way — is not an `S-7` hole at all but a
+well-formed tree with no canonical projection. **The family is larger than this
+rule**, and a release date that waits for a search to stop finding things is not
+a date.
+
+What is not deferred: every rule the search produced. RFC 0039, 0046, 0048, 0051,
+0057 and 0058 all land in 0.1.0, because each fixes a document that silently
+loses its meaning whether or not `S-7` exists to name the loss. `S-7` is the rule
+that *finds* such documents; it is not what fixes them.
+
+What it costs, said plainly: §2.4 ships as it is, so a tree can be well-formed by
+shape and still project to a document that lifts to something else, and this
+specification has no sentence to point at when it does.
+
+What has to be true before it lands: #61 answered, the label question behind it
+answered, and the sweep reporting zero over a run large enough to mean something.
+Recorded here as a condition so that the next person does not have to argue for
+it.
+
 ### What lands, and where
 
 - `spec.md`: `S-7` in §2.4 with the definition of well-formed amended, the
@@ -404,7 +440,8 @@ It blocks the release, not `S-7`.
   request. The lift bug it exposed — `## Title \#` lifting to the label
   `Title \` — was fixed on 2026-09-28 (mindmapmd#3), so the false rejection it
   caused is gone.
-- `CHANGELOG.md`: this question leaves *Open before 0.1.0*.
+- `CHANGELOG.md`: this question leaves *Open before 0.1.0*. **As of 2026-10-02 it
+  is in *Deferred past 0.1.0* instead**, for the reasons above.
 
 ### The unresolved questions, after today
 
