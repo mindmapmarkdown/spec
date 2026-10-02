@@ -171,15 +171,25 @@ later lines, when a setext heading has one, lose at most that.
 
 A second sentence:
 
-> When a `label` contains a line break, each line after the first MUST be written
-> indented to the node's content column: for an `item`, the width of its marker
-> plus one; for a `section`, column 1.
+> When an `item`'s `label` contains a line break, each line after the first MUST be
+> written indented to that item's content column — the width of its marker plus
+> one.
 
 Both halves are needed. Amending `E-4` alone would have projection write a
 continuation line at column 1 inside a list, where CommonMark reads it as a lazy
 continuation of whatever list encloses the item — a different tree again. `P-4`
 already indents an item's *content* this way; this says a label's continuation
 lines are indented the same, which is what makes them part of the same label.
+
+**It says nothing about a section**, and the first published version of this
+sentence did: it said "for a `section`, column 1". That was wrong, and the
+sentence is narrowed. A section's marker is an ATX heading, **an ATX heading is
+one line**, and no column exists to write a second one at — so a section whose
+label carries a line break has no canonical projection at all. A setext heading
+spanning two lines produces exactly that tree, and relaxing `P-6` to allow setext
+would cover levels 1 and 2 and leave depth 3 unanswered. That is
+[#64](https://github.com/mindmapmarkdown/spec/issues/64), a different question with a different shape, and this RFC
+does not answer it.
 
 ### Part 2 · `E-4` and `E-5`, amended
 
@@ -390,6 +400,12 @@ agrees with CommonMark.
 of both parts here: it is about what a line means, not about how far it is
 indented or how it ends. Part 2 does reach one of that RFC's documents — the
 trailing space in `1.␣` — and RFC 0058 says so.
+
+**A section's label with a line break** ([#64](https://github.com/mindmapmarkdown/spec/issues/64)). Split out of
+Part 1 on the day this RFC was opened, after a generated-document sweep found it.
+Part 1's rule is right for items, where a content column exists and the round
+trip works; it has nothing to say about a construct whose marker's line cannot be
+continued. Not blocking this RFC, and blocking the release.
 
 **Separability.** Parts 1 and 2 are independent. Each fixes documents the other
 does not, the prototype implements them separately, and the decision may accept
