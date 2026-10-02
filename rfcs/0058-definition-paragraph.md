@@ -263,6 +263,19 @@ example's tree and this rule applies to it unchanged. **The two RFCs are
 independent**: neither needs the other to be correct, and both are needed before
 `S-7` can land.
 
+**An empty-labelled item whose content is a definition**
+([#61](https://github.com/mindmapmarkdown/spec/issues/61)) loses its children:
+`P-7`’s blank line before the content, plus the blank line before the child,
+leaves two in a row once the definition is read out again, and two blank lines
+end the item. A second sentence answering it was written into this RFC on
+2026-10-02 and **withdrawn the same day**: writing the first content entry below
+the marker fixed those 27 documents and broke 81 others, because when a second
+content block follows the definition that block is written inside the item and
+becomes its label. That is the open question RFC 0043 named — what an item’s
+label is when its first block is not a paragraph — reached from another
+direction, and a rule about blank lines cannot settle it. #61 stays open and
+belongs with that question.
+
 **Whether `P-7` is the right home.** `P-9` governs how a recorded string is
 written and could carry it instead. `P-7` is chosen because it is the rule that
 puts the blank line there.
