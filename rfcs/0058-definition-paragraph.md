@@ -1,4 +1,4 @@
-# RFC 0058: Where a definition's blank lines go
+# RFC 0058: A paragraph after a definition keeps its line
 
 **Translations** — [한국어](ko/0058-definition-paragraph.md). This English text is
 the authoritative one; a translation is a reading aid and carries no normative
@@ -23,15 +23,9 @@ in, so the paragraph left behind can begin with a line that is a paragraph only
 after which the same line opens a list — the paragraph stops being content and
 becomes a node ([#56](https://github.com/mindmapmarkdown/spec/issues/56)).
 
-A second arrangement fails for the same reason read the other way. An
-empty-labelled item whose content is a definition and which has a child loses
-that child: the blank line `P-7` puts before the content, plus the blank line
-before the child, leaves **two** blank lines after the bare marker once the
-definition is read out again, and two blank lines end a list item
-([#61](https://github.com/mindmapmarkdown/spec/issues/61)).
-
-This RFC adds two sentences to `P-7`. **The tree does not change and no document
-stops conforming.**
+This RFC adds one sentence to `P-7`: a paragraph directly after a
+`link_reference_definition` entry is written on the line below it, with no blank
+line. **The tree does not change and no document stops conforming.**
 
 ## Motivation
 
@@ -107,33 +101,14 @@ says so; a gap in it cannot be left open and called a release.
 
 ### `P-7`, amended
 
-Two sentences are added:
+A sentence is added:
 
 > A `paragraph` entry that directly follows a `link_reference_definition` entry
 > in the same node's `content` MUST be written on the line immediately below it,
 > with no blank line between them.
 
-> When a node's `label` is empty, its first `content` entry MUST be written on the
-> line immediately below the marker, with no blank line between them.
-
 That is the whole change. No `L-`, `S-` or `E-` rule moves, and the tree is
 untouched.
-
-The second sentence is the **mirror of RFC [0046](0046-empty-first-child.md)**,
-which amended the same rule for the opposite arrangement: a non-empty label whose
-first child's label is empty needs a blank line, and an empty label whose first
-content entry follows needs none. Both exist because a list item's boundaries are
-drawn by blank lines, and both say where this specification may not put one.
-
-Only a definition reaches the second sentence today. A node's label is its first
-inline content, so any ordinary first block becomes the label rather than
-content; a definition is the one block CommonMark does not report, and therefore
-the one thing that can be an empty-labelled item's first content entry. The
-sentence is written over `content` rather than over definitions because that is
-the reason it holds, and because what an item's label is when its first block is
-a code block or a block quote is a question this specification has not answered
-(RFC [0043](0043-well-formed-round-trip.md), *Unresolved questions*) — when it
-does, this sentence should already be right.
 
 **The rule does not ask what the paragraph's first line says.** It could have
 been written to drop the blank line only where the line would otherwise open a
@@ -188,23 +163,6 @@ See [the guide][x].
    "children":[]}]}
 ````
 
-An empty label's first content entry follows the bare marker. A blank line there
-would leave two in a row once the definition is read out, and two blank lines end
-the item — the child below would come back as a sibling:
-
-````example
--
-  [x]: /x
-
-  - b
-.
-{"content":[],"children":[
-  {"kind":"item","label":"",
-   "content":[{"block":"link_reference_definition","source":"[x]: /x"}],
-   "children":[
-     {"kind":"item","label":"b","content":[],"children":[]}]}]}
-````
-
 A block that can interrupt a paragraph is a block of its own, and P-7 is
 unchanged for it:
 
@@ -223,7 +181,7 @@ unchanged for it:
 ````
 `````
 
-All four are canonical.
+All three are canonical.
 
 ### Round-trip consequence
 
@@ -244,8 +202,6 @@ All four are canonical.
 | Adjacent definitions | Already one entry under RFC 0051; the paragraph joins that one entry's lines |
 | A definition as the last content entry, followed by children | Unaffected: the next thing is a node, and `P-10` already separates content from children |
 | A definition inside a list item | `P-4` indents both lines, and the pair stays together |
-| An empty-labelled item with content and no child | Already survived, because there was only one blank line to leave behind; it is written the new way too, so one spelling covers both |
-| An empty-labelled item whose first content entry is not a definition | Cannot arise: any other first block becomes the label |
 | A `block_quote`, `code_block` or table after a definition | Unaffected — each can interrupt a paragraph, so each is a block of its own and keeps its blank line |
 | A definition after a paragraph | Unaffected; the rule is one-directional |
 
@@ -256,14 +212,9 @@ is parsed.
 
 The three examples above, once they are in `spec.md`. And a prototype on
 [`rfc/definition-paragraph`](https://github.com/mindmapmarkdown/mindmapmd/tree/rfc/definition-paragraph),
-branched from the RFC 0051 prototype: fourteen cases, each checking the tree
-round trip, byte stability, and whether the document is canonical. 153 tests, 152
-pass, 1 todo — the empty-first-child case RFC 0046 closes.
-
-Both sentences were found the same way and the second one is why the first is not
-enough: a sweep over 40,000 generated documents, re-run after the earlier causes
-were fixed, took the failures from 900 to 27 — and all 27 were the second
-arrangement.
+branched from the RFC 0051 prototype: eleven cases, each checking the tree round
+trip, byte stability, and whether the document is canonical. 150 tests, 149 pass,
+1 todo — the empty-first-child case RFC 0046 closes.
 
 ## Alternatives
 
