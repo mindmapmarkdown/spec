@@ -85,6 +85,7 @@ it afterwards makes it Breaking rather than Normative.
 | [#55](https://github.com/mindmapmarkdown/spec/issues/55) — a multi-line label below the top level keeps the indentation of the item holding it, and `P-4` adds it again, so the document does not survive the round trip. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 1** — a label's later lines lose what the first line gave up, and `P-1` writes them back at the node's content column | 2026-10-16 |
 | [#59](https://github.com/mindmapmarkdown/spec/issues/59) — a recorded `source` or `label` whose line ends in whitespace has **no** canonical projection: `P-9` writes it back and `P-8` forbids the result. One stray space at the end of a paragraph is enough. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 2** — no line of a recorded string ends in whitespace, except a code block's content | 2026-10-16 |
 | [#56](https://github.com/mindmapmarkdown/spec/issues/56) — a link reference definition can leave a paragraph whose first line is a paragraph only because it cannot interrupt one; after the blank line `P-7` puts in front of it, that line opens a list. Invisible before RFC 0051. Found 2026-10-02 | RFC 0058 ([#58](https://github.com/mindmapmarkdown/spec/pull/58)) — such a paragraph is written on the line below the definition, with no blank line | 2026-10-16 |
+| [#64](https://github.com/mindmapmarkdown/spec/issues/64) — a section's `label` can contain a line break and an ATX heading cannot carry one, so a setext heading spanning two lines has no canonical projection. `P-6` cannot simply be relaxed: setext covers levels 1 and 2 and leaves depth 3 unanswered. Found 2026-10-02 | **None.** Four options are recorded on the issue with no recommendation. It was split out of RFC 0057, whose `P-1` sentence said the wrong thing about sections for part of one day | **Not open** |
 | [#61](https://github.com/mindmapmarkdown/spec/issues/61) — an empty-labelled item whose content is a definition loses its children: `P-7`'s blank line before the content, plus the blank line before the child, leaves two in a row once the definition is read out, and two blank lines end the item. Found 2026-10-02 | **None.** A sentence was written into RFC 0058 and withdrawn the same day — it fixed 27 documents and broke 81, because a second content block then lands inside the item and becomes its label. It belongs with the label question below | **Not open** |
 
 Three of the eight remaining are decided. The five still open are RFC 0048 to
@@ -133,7 +134,14 @@ search space, and the honest way to count its holes is to search it.
 ### The tail, and a decision that has to be made before the tag
 
 With the four fixes above in place the sweep goes from 900 failures to **27**,
-and all 27 are [#61](https://github.com/mindmapmarkdown/spec/issues/61). A sentence answering it was written and
+and all 27 are [#61](https://github.com/mindmapmarkdown/spec/issues/61). Run against `main` rather than against the
+open proposals, it reports 1,036 failures of 40,000 — #55 and
+[#64](https://github.com/mindmapmarkdown/spec/issues/64) — and #64 is the one that showed a sentence written into
+RFC 0057 that morning to be wrong, before its comment period had run a day. The
+sweep is now
+[`tools/sweep.mjs`](https://github.com/mindmapmarkdown/mindmapmd/blob/main/tools/sweep.mjs)
+in the reference implementation, so the next person can run it rather than
+rebuild it. A sentence answering it was written and
 withdrawn the same day: writing an empty-labelled item's first content entry
 below the marker fixed those 27 and broke 81 others, because a second content
 block then lands inside the item and becomes its **label**.
@@ -153,6 +161,9 @@ So there is a choice, and it is not a technical one:
   answered first and `S-7` lands on top of it.
 - **Hold the tag until the family is closed.** Honest, and open-ended: the
   search space is CommonMark's, and each shape found so far has cost a fortnight.
+  **#64 is the argument against this option**, because it is not an
+  `S-7` hole at all — a well-formed tree with no canonical projection, like #45
+  and #59 — and it blocks the release whichever way `S-7` goes.
 
 Nothing is decided here, and **neither option moves the date much.** RFC 0057 and
 RFC 0058 both run to 2026-10-16 whichever way this goes, because each fixes
