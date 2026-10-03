@@ -83,15 +83,15 @@ it afterwards makes it Breaking rather than Normative.
 | [#45](https://github.com/mindmapmarkdown/spec/issues/45) — an item with a label whose first child has an empty label has no canonical projection, so a tree lift produces cannot be written back | RFC [0046](rfcs/0046-empty-first-child.md) — one blank line between the label and the nested list in that position | **Accepted 2026-10-01.** Lands with 0051, 0057 and 0058 |
 | [#55](https://github.com/mindmapmarkdown/spec/issues/55) — a multi-line label below the top level keeps the indentation of the item holding it, and `P-4` adds it again, so the document does not survive the round trip. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 1** — a label's later lines lose what the first line gave up, and `P-1` writes them back at the node's content column | 2026-10-16 |
 | [#59](https://github.com/mindmapmarkdown/spec/issues/59) — a recorded `source` or `label` whose line ends in whitespace has **no** canonical projection: `P-9` writes it back and `P-8` forbids the result. One stray space at the end of a paragraph is enough. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 2** — no line of a recorded string ends in whitespace, except a code block's content | 2026-10-16 |
-| [#56](https://github.com/mindmapmarkdown/spec/issues/56) — a content entry whose `source`, written where `P-9` writes it, is read back as a different construct. **Two arrangements.** First: a definition leaves a paragraph whose first line is a paragraph only because it cannot interrupt one, and after `P-7`'s blank line that line opens a list. Second, found later the same day: a paragraph whose source is *exactly* a definition — `[y]: /y` then `---` — becomes a definition when written with a blank line after it | RFC 0058 ([#58](https://github.com/mindmapmarkdown/spec/pull/58)) answers the **first**. The second has **no proposal**, and no spelling has been found for it. It is all 298 failures the 0.1.0 configuration still has | 2026-10-16 for the first; the second is not open |
+| [#56](https://github.com/mindmapmarkdown/spec/issues/56) — a content entry whose `source`, written where `P-9` writes it, is read back as a different construct. **Two arrangements.** First: a definition leaves a paragraph whose first line is a paragraph only because it cannot interrupt one, and after `P-7`'s blank line that line opens a list. Second, found later the same day: a paragraph whose source is *exactly* a definition — `[y]: /y` then `---` — becomes a definition when written with a blank line after it | RFC 0058 ([#58](https://github.com/mindmapmarkdown/spec/pull/58)) answers the **first**. The second was **not a specification question at all** — commonmark.js leaves an empty paragraph behind, covering the definition's own line, and lift recorded an entry for it. Fixed in [mindmapmd#11](https://github.com/mindmapmarkdown/mindmapmd/pull/11) | 2026-10-16 for the first; the second needs nothing |
 | [#64](https://github.com/mindmapmarkdown/spec/issues/64) — a section's `label` can contain a line break and an ATX heading cannot carry one, so a setext heading spanning two lines has no canonical projection. Found 2026-10-02 | RFC 0067 ([#67](https://github.com/mindmapmarkdown/spec/pull/67)) — **Part 1**: a soft line break in a label is one space, because a soft break in a heading renders as one. **Part 2**: `S-8`, a section's label may not contain a line feed, which after Part 1 only a hard break can do | 2026-10-16 |
+| [#71](https://github.com/mindmapmarkdown/spec/issues/71) — what an item's `label` is when its first block is not a paragraph. RFC 0043 named it and did not answer it. `-` then `␣␣---` took the label `---`, and `- ---` is itself a thematic break, so that tree had no canonical projection; `-` then `␣␣> q` lifted to a node *named* `> q`. Found 2026-10-03 | RFC 0072 ([#72](https://github.com/mindmapmarkdown/spec/pull/72)) — **Part 1**: only a paragraph can be a label, and any other first block is content. **Part 2**: `P-4` may not indent to four columns when the item begins with a blank line, where CommonMark reads four as code | 2026-10-17 |
 | [#61](https://github.com/mindmapmarkdown/spec/issues/61) — an empty-labelled item whose content is a definition loses its children: `P-7`'s blank line before the content, plus the blank line before the child, leaves two in a row once the definition is read out, and two blank lines end the item. Found 2026-10-02 | RFC 0069 ([#69](https://github.com/mindmapmarkdown/spec/pull/69)) — the first `content` entry follows the marker directly when the label is empty **and** there are children. The same sentence without the second condition was written into RFC 0058 and withdrawn the same day: it fixed 27 documents and broke 81 | 2026-10-16 |
 
-Two of the seven remaining are decided, and five are open with periods — RFC
-0048 to 2026-10-11, RFC 0051 to 2026-10-13, and RFC 0057 Parts 1 and 2, RFC 0058,
-RFC 0067 and RFC 0069 to 2026-10-16. **Every question found this week now has a
-proposal except one**: the second arrangement of #56, which is why `S-7`'s
-landing is deferred. The release follows the last period rather than the
+Two of the eight remaining are decided, and six are open with periods — RFC 0048
+to 2026-10-11, RFC 0051 to 2026-10-13, RFC 0057 Parts 1 and 2, RFC 0058 and RFC
+0069 to 2026-10-16, and RFC 0072 to 2026-10-17. **Every question found this week
+now has a proposal.** The release follows the last period rather than the
 2026-10-05 the roadmap first carried.
 
 **The accepted rules do not all land at once.** RFC 0038 landed on its own and
@@ -132,6 +132,27 @@ said two holes blocked `S-7` and both were answered. It now carries a
 silently lost its meaning before `S-7` existed to name the loss. What changes is
 the confidence of "both are answered" — a rule stated over a round trip has a
 search space, and the honest way to count its holes is to search it.
+
+### Found on 2026-10-03 — the sweep had a blind spot
+
+Two of the four fixes above were implementation bugs rather than gaps, and so was
+the second arrangement of #56: commonmark.js leaves an **empty paragraph** behind
+when a definition consumes a whole paragraph and the next line closes it, and
+lift recorded a content entry for it whose `source` was the definition
+([mindmapmd#11](https://github.com/mindmapmarkdown/mindmapmd/pull/11)).
+
+Diagnosing that exposed something worse. **The sweep reported zero over 240,000
+documents in a configuration where two defects were still live**, because its
+generator could not put a construct inside a list item: every fragment that could
+be a list item's first block existed only at column 0. A sweep that cannot reach
+a known failure overstates what its zero means, and that zero was the most
+load-bearing number in the week's work ([mindmapmd#12](https://github.com/mindmapmarkdown/mindmapmd/pull/12)).
+
+With the generator fixed, the configuration where every open proposal lands
+reported **136 ill-formed documents in 40,000** where it had reported none. All
+136 are [#71](https://github.com/mindmapmarkdown/spec/issues/71) — the question RFC 0043 named and did not answer —
+and RFC 0072 takes them to zero, and to zero over 300,000 documents across five
+seeds.
 
 ### The tail, and the decision taken on it
 
@@ -214,6 +235,15 @@ left to be discovered.
 behind it answered, and `tools/sweep.mjs` reporting zero over a run large enough
 to mean something — stated as a condition now, so that the next person does not
 have to argue for it.
+
+**Update, 2026-10-03: all three are now in hand, and none is decided.** #61 is
+answered by RFC 0069, the label question by RFC [0072](https://github.com/mindmapmarkdown/spec/pull/72)
+([#71](https://github.com/mindmapmarkdown/spec/issues/71)), and with both prototyped the sweep reports zero over
+300,000 documents across five seeds with `S-7` active. The deferral stands
+because a proposal is not a decision: RFC 0072's period ends 2026-10-17, and
+**whether to withdraw this deferral is a question for that date**, not for this
+entry. If it is withdrawn, `S-7` lands with everything else on 2026-10-18 and
+0.1.0 carries it after all.
 
 ---
 
