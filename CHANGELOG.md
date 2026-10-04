@@ -208,7 +208,7 @@ either way, because each fixes documents that lose their meaning with or without
 `S-7`; the rules land on 2026-10-17 and the tag follows on 2026-10-18. What the
 deferral buys is not time but **certainty**.
 
-### Where the rules came from, 2026-10-02
+### Where the rules came from
 
 Both external contributions this project has had are on the same question, and
 both changed it.
@@ -218,9 +218,10 @@ files that open with `---` as a rule, a reader answered that he writes every
 note that way. RFC 0037 had proposed keeping `L-10` on the grounds that the
 shape was hypothetical, and was **rejected** on 2026-09-28 because it is not.
 
-The second was a **citation**, from João Vitor Andrade on markmap discussion
-[#363](https://github.com/markmap/markmap/discussions/363), and it is the more useful of the two. Pandoc's manual
-([§8.10.2](https://pandoc.org/demo/example33/8.10-metadata-blocks.html)) says:
+The second was a **citation**, from [@Vituartzz](https://github.com/markmap/markmap/discussions/363) on markmap discussion
+[#363](https://github.com/markmap/markmap/discussions/363) on 2026-10-01, and it is the more useful of the two. Pandoc's
+manual ([§8.10.2](https://pandoc.org/demo/example33/8.10-metadata-blocks.html))
+says:
 
 > A YAML metadata block is a valid YAML object, delimited by a line of three
 > hyphens (`---`) at the top and a line of three hyphens (`---`) or three dots
