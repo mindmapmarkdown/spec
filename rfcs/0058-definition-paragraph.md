@@ -10,10 +10,16 @@ force, and the decision recorded below is made against this file.
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-10-02 |
-| **Comment period ends** | 2026-10-16 |
+| **Comment period ends** | 2026-10-19 |
 | **Discussion** | <https://github.com/mindmapmarkdown/spec/pull/58> |
 | **Supersedes** | — |
 | **Superseded by** | — |
+
+> **Revised on 2026-10-05, and the comment period restarts with it** — it ran
+> from 2026-10-02 and now ends 2026-10-19. The rule proposed on 2026-10-02 kept
+> the paragraph adjacent to the definition; adjacency turns out not to be enough,
+> and the rule now also indents the line. What changed and why is in *Detailed
+> design*; the original wording is quoted there rather than deleted.
 
 ## Summary
 
@@ -25,7 +31,9 @@ becomes a node ([#56](https://github.com/mindmapmarkdown/spec/issues/56)).
 
 This RFC adds one sentence to `P-7`: a paragraph directly after a
 `link_reference_definition` entry is written on the line below it, with no blank
-line. **The tree does not change and no document stops conforming.**
+line, and its first line is indented four columns — the fewest at which no
+CommonMark block begins, so the line can only be the continuation line it was.
+**The tree does not change and no document stops conforming.**
 
 ## Motivation
 
@@ -105,10 +113,67 @@ A sentence is added:
 
 > A `paragraph` entry that directly follows a `link_reference_definition` entry
 > in the same node's `content` MUST be written on the line immediately below it,
-> with no blank line between them.
+> with no blank line between them, and its first line MUST be indented four
+> columns beyond the node's content column.
 
 That is the whole change. No `L-`, `S-` or `E-` rule moves, and the tree is
 untouched.
+
+#### Revised, 2026-10-05 — adjacency is not enough
+
+The sentence proposed on 2026-10-02 ended at the blank line:
+
+> A `paragraph` entry that directly follows a `link_reference_definition` entry
+> in the same node's `content` MUST be written on the line immediately below it,
+> with no blank line between them.
+
+It is not sufficient, and the reason is the one this RFC is about, applied once
+more. **A definition ends the paragraph it was taken out of.** So the line below
+it does not continue anything — it starts a block of its own, unless it cannot:
+
+| Below the definition | What the line does at column 0 |
+|---|---|
+| `- a` | opens a list; a bullet list **can** interrupt a paragraph |
+| `=` | underlines a setext heading, and swallows the definition's line into it |
+| `***` | opens a thematic break |
+
+`1.` and `2. a` — the two documents in *Motivation* — are safe at column 0,
+because an empty ordered item and a list that does not start at 1 cannot
+interrupt a paragraph. That is what made them the examples, and it is why the
+narrower failure was the one found first.
+
+**Four columns is the fewest at which no CommonMark block begins.** Every block
+opener accepts at most three columns of indentation; the one construct that wants
+four is an indented code block, and an indented code block cannot interrupt a
+paragraph. A line four columns in is therefore a lazy continuation line — which
+is the only thing it can be, and the thing it was in the document CommonMark
+read.
+
+**Only the first line.** A later line of a paragraph opens no block however it is
+spelled, and four columns there would be four columns `E-5` has to remove without
+`P-4` having added them. So `[x]: /x`, then `para`, then `more` is written with
+`para` indented and `more` at the content column.
+
+The rule is still unconditional: it does not ask what the line says, only what
+the two `block` names are. The cost of that is below, in *Round-trip
+consequence*.
+
+#### What the revision was measured against
+
+`tools/sweep.mjs`, 40,000 generated documents per seed, `S-7` active, on the full
+0.1.0 configuration **with RFC [0079](https://github.com/mindmapmarkdown/spec/pull/79)** —
+which is where this family becomes visible at all, because `E-5`'s own
+indentation defect accounts for the rest.
+
+| `P-7` | seed 1234567 | 20261005 | 7 |
+|---|---|---|---|
+| as proposed on 2026-10-02 | 46 | 47 | 47 |
+| **with the four columns** | 0 | 1 | 0 |
+
+The one document remaining at seed 20261005 was not this family and not a gap in
+the specification: it was a lift bug, fixed in
+[mindmapmd#15](https://github.com/mindmapmarkdown/mindmapmd/pull/15). With that
+fix in place, six seeds over **240,000 documents report zero**.
 
 **The rule does not ask what the paragraph's first line says.** It could have
 been written to drop the blank line only where the line would otherwise open a
@@ -119,27 +184,29 @@ forbidden spellings. The unconditional rule is one sentence, decidable by lookin
 at two `block` names, and cannot disagree with CommonMark because it does not
 restate any of it.
 
-### Why no blank line is the right spelling
+### Why this is the right spelling
 
 A definition and the paragraph after it were **one block** in the document
 CommonMark read: the definition was taken out of the front of a paragraph.
-Writing them on consecutive lines puts them back the way they were found, which
+Writing them on consecutive lines, with the paragraph's first line indented far
+enough to be a continuation line, puts them back the way they were found — which
 is why the result lifts to the same two entries. The blank line was never
-information — it was `P-7` applied to a boundary that is not one.
+information; it was `P-7` applied to a boundary that is not one. The four columns
+are not information either, and `E-5` removes them again on the way back in.
 
 ### Examples
 
-Three are proposed, in §2.2 beside RFC 0051's definition examples. Each was
+Four are proposed, in §2.2 beside RFC 0051's definition examples. Each was
 checked against the prototype.
 
 `````markdown
-A paragraph directly below a definition is written there, with no blank line
-(P-7). Here it has to be: after a blank line, `1.` with nothing after it opens a
-list, and the paragraph would come back as a node.
+A paragraph directly below a definition is written there, indented four columns
+and with no blank line (P-7). Here it has to be: after a blank line, `1.` with
+nothing after it opens a list, and the paragraph would come back as a node.
 
 ````example
 [x]: /x
-1.
+    1.
 .
 {"content":[
   {"block":"link_reference_definition","source":"[x]: /x"},
@@ -154,13 +221,27 @@ the same way:
 # Guide
 
 [x]: https://example.com
-See [the guide][x].
+    See [the guide][x].
 .
 {"content":[],"children":[
   {"kind":"section","label":"Guide","content":[
     {"block":"link_reference_definition","source":"[x]: https://example.com"},
     {"block":"paragraph","source":"See [the guide][x]."}],
    "children":[]}]}
+````
+
+Four columns, and not simply the line below, because the line below is the start
+of a block. An `=` there would underline the definition's own line as a setext
+heading and take the definition with it:
+
+````example
+[x]: /x
+    =
+.
+{"content":[
+  {"block":"link_reference_definition","source":"[x]: /x"},
+  {"block":"paragraph","source":"="}],
+ "children":[]}
 ````
 
 A block that can interrupt a paragraph is a block of its own, and P-7 is
@@ -181,7 +262,7 @@ unchanged for it:
 ````
 `````
 
-All three are canonical.
+All four are canonical.
 
 ### Round-trip consequence
 
@@ -189,10 +270,20 @@ All three are canonical.
   under RFC 0051 alone.
 - **Conforming documents.** Nothing changes. No document starts or stops
   conforming.
-- **Canonical documents.** One shape changes status: a blank line between a
-  definition and the paragraph after it. `[x]: /x`, blank, `See [x].` is
-  conforming and no longer canonical, and settles to the two-line form on the
-  first round trip — the same cost `L-9` and `L-10` already pay.
+- **Canonical documents.** One shape changes status, and the four columns make
+  it a wider shape than the 2026-10-02 rule did. Every spelling of a definition
+  followed by a paragraph is now non-canonical except the indented one: `[x]: /x`,
+  blank, `See [x].` and `[x]: /x` then `See [x].` at column 0 both settle to
+  `[x]: /x` then four columns then `See [x].` on the first round trip — the same
+  cost `L-9` and `L-10` already pay, on more documents.
+
+  **This is what the revision costs, said plainly.** Canonical form now has an
+  indented line in the common case — a definition followed by ordinary prose,
+  where the prose could have stood at column 0 perfectly well. It reads like a
+  mistake and it is four columns from reading like code. The alternative is to ask
+  what the line says, which is the partial CommonMark grammar this RFC refuses on
+  its first page. Of the two, an odd-looking canonical form is the one that costs
+  nothing a reader can lose.
 - **The suite.** No existing example changes.
 
 ### Edge cases
@@ -201,7 +292,7 @@ All three are canonical.
 |---|---|
 | Adjacent definitions | Already one entry under RFC 0051; the paragraph joins that one entry's lines |
 | A definition as the last content entry, followed by children | Unaffected: the next thing is a node, and `P-10` already separates content from children |
-| A definition inside a list item | `P-4` indents both lines, and the pair stays together |
+| A definition inside a list item | `P-4` indents both lines, and the four columns are measured from the item's content column — so the paragraph's first line is written six columns in for a top-level item |
 | A `block_quote`, `code_block` or table after a definition | Unaffected — each can interrupt a paragraph, so each is a block of its own and keeps its blank line |
 | A definition after a paragraph | Unaffected; the rule is one-directional |
 
@@ -210,11 +301,22 @@ is parsed.
 
 ### How it is tested
 
-The three examples above, once they are in `spec.md`. And a prototype on
+The four examples above, once they are in `spec.md`. And a prototype on
+[`rfc/definition-lazy-continuation`](https://github.com/mindmapmarkdown/mindmapmd/tree/rfc/definition-lazy-continuation),
+stacked on the RFC 0079 prototype. Its `test/definition-paragraph.test.js` holds
+nineteen cases, each checking the tree round trip, byte stability, and whether
+the document is canonical; three of them are the three rows of the table in
+*Revised, 2026-10-05*, and five belong to #61 rather than to this RFC, added by
+the RFC 0069 prototype below this one in the stack. 256 tests across the whole
+branch, 256 pass, 0 fail, 0 todo.
+
+The prototype for the rule as proposed on 2026-10-02 remains on
 [`rfc/definition-paragraph`](https://github.com/mindmapmarkdown/mindmapmd/tree/rfc/definition-paragraph),
-branched from the RFC 0051 prototype: eleven cases, each checking the tree round
-trip, byte stability, and whether the document is canonical. 150 tests, 149 pass,
-1 todo — the empty-first-child case RFC 0046 closes.
+branched from the RFC 0051 prototype, with its eleven cases and 150 tests.
+
+The revision is stacked on RFC 0079 rather than on RFC 0051 alone because the
+number it has to be judged by — 46 down to 0 — cannot be measured anywhere else.
+Below RFC 0079 the 46 are hidden inside 139 failures of a different kind.
 
 ## Alternatives
 
@@ -230,6 +332,15 @@ when a perfectly good tree for it exists and projection can write that tree back
 rather than of the text, which is a much larger change to Chapter 1 than the
 defect warrants. Rejected, but recorded as the answer if a member of this family
 is ever found that no spelling can write back.
+
+**Keep the paragraph adjacent and leave it at column 0** — the rule as proposed
+on 2026-10-02. It fixes the two documents in *Motivation* and leaves 46 in
+40,000, because a line below a definition starts a block unless it cannot, and
+`- a`, `=` and `***` all can. Rejected on 2026-10-05, with the measurement in
+*What the revision was measured against*. It is worth recording that the
+narrower rule looked complete for three days: the documents that defeat it need
+a definition **and** a first line that can open a block, and the generator
+produced the first shape long before the second.
 
 **Record the definition and the paragraph as one opaque entry**, since they were
 one block. It round-trips, and it is arguably what the source says. It also makes
