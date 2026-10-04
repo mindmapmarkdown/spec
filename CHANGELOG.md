@@ -92,9 +92,22 @@ it afterwards makes it Breaking rather than Normative.
 Two of the nine remaining are decided, and six are open with periods — RFC 0048
 to 2026-10-11, RFC 0051 to 2026-10-13, RFC 0057 Parts 1 and 2, RFC 0058 and RFC
 0069 to 2026-10-16, and RFC 0072 to 2026-10-17. One has no proposal:
-[#74](https://github.com/mindmapmarkdown/spec/issues/74), found on 2026-10-04. The release follows the last period
-rather than the 2026-10-05 the roadmap first carried; **#74 does not move it**,
-because it is what keeps `S-7` deferred rather than what holds the tag.
+[#74](https://github.com/mindmapmarkdown/spec/issues/74), found on 2026-10-04.
+
+**Correction, the same day: #74 does hold the release, and the sentence that
+first stood here said it did not.** That sentence was written on the assumption
+that #74 only mattered to `S-7`. It does not. RFC 0038 Part 1 is already in
+`spec.md`, so `␣␣cont` then `␣␣␣␣- n3` is a **conforming document today** whose
+canonical projection lifts to a different tree — and §1.2.4 L1 requires of an L1
+implementation that "lifting the canonical projection of a tree MUST yield that
+same tree". With or without `S-7`, 0.1.0 would ship a conformance level that no
+implementation can satisfy for a document the specification accepts.
+
+Deferring `S-7` does not avoid that; it only changes which sentence is wrong.
+With `S-7`, §2.4's claim that lift cannot produce an ill-formed tree is false of
+that document. Without it, §1.2.4's L1 is unsatisfiable for it. **The only way
+to have neither is to answer #74**, so the release follows its period and not
+RFC 0072's.
 
 **The accepted rules do not all land at once.** RFC 0038 landed on its own and
 has left this table; see *Changed* above. RFC 0039 and 0046 land together with
