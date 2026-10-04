@@ -77,7 +77,7 @@ it afterwards makes it Breaking rather than Normative.
 
 | Question | Proposal | Comment period ends |
 |---|---|---|
-| [#35](https://github.com/mindmapmarkdown/spec/issues/35) — `L-10` swallows a document that opens with a thematic break and carries a later one. RFC [0037](rfcs/0037-front-matter-opening-thematic-break.md) proposed keeping `L-10` and was **rejected 2026-09-28**: a reader reported writing every note that way | RFC 0048 ([#48](https://github.com/mindmapmarkdown/spec/pull/48)) — front matter does not open on a blank line | 2026-10-11 |
+| [#35](https://github.com/mindmapmarkdown/spec/issues/35) — `L-10` swallows a document that opens with a thematic break and carries a later one. RFC [0037](rfcs/0037-front-matter-opening-thematic-break.md) proposed keeping `L-10` and was **rejected 2026-09-28**: a reader reported writing every note that way. A second reader then pointed out that **Pandoc already has the replacement rule** | RFC 0048 ([#48](https://github.com/mindmapmarkdown/spec/pull/48)) — front matter does not open on a blank line | 2026-10-11 |
 | Whether an ordered list's numbers are part of the tree — left open by RFC [0004](rfcs/0004-canonical-hierarchy.md), and **missing from this list until 2026-09-15** | RFC [0039](rfcs/0039-ordered-lists.md) — ordered items record their ordinal and delimiter | **Accepted 2026-09-29.** The rules land in `spec.md` as their own pull request |
 | [#40](https://github.com/mindmapmarkdown/spec/issues/40) — projection drops every link reference definition. **Deferred on 2026-09-15; the deferral was withdrawn on 2026-09-29**, because RFC 0039 turns the loss into an ill-formed tree: ordered lists separated by a definition lift to a restart with nothing between them, which `S-5` rejects and `S-3` requires refusing to project | RFC 0051 ([#51](https://github.com/mindmapmarkdown/spec/pull/51)) — a definition is node content, recorded opaquely | 2026-10-13 |
 | [#45](https://github.com/mindmapmarkdown/spec/issues/45) — an item with a label whose first child has an empty label has no canonical projection, so a tree lift produces cannot be written back | RFC [0046](rfcs/0046-empty-first-child.md) — one blank line between the label and the nested list in that position | **Accepted 2026-10-01.** Lands with 0051, 0057 and 0058 |
@@ -207,6 +207,44 @@ Neither option moved the date much. RFC 0057 and RFC 0058 run to 2026-10-16
 either way, because each fixes documents that lose their meaning with or without
 `S-7`; the rules land on 2026-10-17 and the tag follows on 2026-10-18. What the
 deferral buys is not time but **certainty**.
+
+### Where the rules came from, 2026-10-02
+
+Both external contributions this project has had are on the same question, and
+both changed it.
+
+The first was a **report**: asked on the Obsidian forum whether anyone writes
+files that open with `---` as a rule, a reader answered that he writes every
+note that way. RFC 0037 had proposed keeping `L-10` on the grounds that the
+shape was hypothetical, and was **rejected** on 2026-09-28 because it is not.
+
+The second was a **citation**, from João Vitor Andrade on markmap discussion
+[#363](https://github.com/markmap/markmap/discussions/363), and it is the more useful of the two. Pandoc's manual
+([§8.10.2](https://pandoc.org/demo/example33/8.10-metadata-blocks.html)) says:
+
+> A YAML metadata block is a valid YAML object, delimited by a line of three
+> hyphens (`---`) at the top and a line of three hyphens (`---`) or three dots
+> (`...`) at the bottom. **The initial line `---` must not be followed by a blank
+> line.**
+
+That last sentence is RFC 0048's rule. The RFC's *Prior art* table had three
+rows — Jekyll, gray-matter, Hugo — and concluded that the rule was stricter than
+every tool examined; **that conclusion was the weakest part of the proposal**,
+because a specification inventing a condition no implementation has is usually
+wrong. It now reads the other way round.
+
+The same reply proposed Pandoc's other half, requiring the block to parse as a
+YAML object. It is rejected — deciding that needs a YAML parser, and §1.1.2
+keeps this specification out of owning a metadata format — but the rejection is
+now written with the measurement that shows **§1.2.4 L0 prefers the other answer
+for one shape**, and the residual is RFC 0048's unresolved question 3 rather than
+nothing. `L-10` is not parsing the block in 0.1.0, and what that costs is
+written down.
+
+Neither contribution came from someone building an implementation, which is
+what [`GOVERNANCE.md` §5](GOVERNANCE.md#5-phase-transitions) counts toward Phase 1.
+Both changed the specification anyway, and the second changed how confident the
+project is entitled to be about a rule it had already written.
 
 ### Deferred past 0.1.0
 
