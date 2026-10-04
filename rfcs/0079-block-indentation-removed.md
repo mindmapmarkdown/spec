@@ -110,8 +110,9 @@ projection. The first row is this defect. What remains in the third row is a
 separate family — a paragraph a link reference definition was read out of
 ([#56](https://github.com/mindmapmarkdown/spec/issues/56)) — which RFC
 [0058](https://github.com/mindmapmarkdown/spec/pull/58) answers; with its
-revision of 2026-10-05 in place as well, six seeds over 240,000 documents report
-**zero**.
+revision of 2026-10-05 and one lift bug
+([mindmapmd#15](https://github.com/mindmapmarkdown/mindmapmd/pull/15)) in place as
+well, six seeds over 240,000 documents report **zero**.
 
 The two candidate numbers come out close on this generator because it produces
 the block-quote shape about once in 40,000 documents. They are not close on every
@@ -254,7 +255,9 @@ them is two and the tree is identical. The phrase being amended appears once in
 
 - **Trees.** Both documents in *Motivation* lift to a different tree than they do
   today, and both survive the round trip. Six seeds, 240,000 documents, with RFC
-  0058's revision in place: zero trees fail to survive their own projection.
+  0058's revision and mindmapmd#15 in place: zero trees fail to survive their own
+  projection. Without mindmapmd#15 one document in 240,000 fails, and it is a
+  defect in the implementation's `labelOf` rather than in any rule here.
 - **Canonical documents.** No document that is canonical today stops being
   canonical, and none that is not becomes canonical. The rule changes what is
   recorded for documents that were not canonical either way — a block whose
