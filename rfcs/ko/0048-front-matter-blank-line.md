@@ -198,8 +198,8 @@ Breaking 이 된다.
 
 ### 블록을 파싱해 YAML 매핑인지 확인하기
 
-Pandoc 규칙의 나머지 절반이고, 2026-10-02 markmap [#363](https://github.com/markmap/markmap/discussions/363) 에서 독립된 둘째
-검사로 제기되었다. 보고된 모양은 이 검사에도 걸린다 — 주석과 평범한 스칼라는 YAML
+Pandoc 규칙의 나머지 절반이고, 2026-10-01 [@Vituartzz](https://github.com/markmap/markmap/discussions/363) 가 markmap
+[#363](https://github.com/markmap/markmap/discussions/363) 에서 독립된 둘째 검사로 제기했다. 보고된 모양은 이 검사에도 걸린다 — 주석과 평범한 스칼라는 YAML
 객체가 아니다.
 
 **거부한다. 다만 이 대안이 여기 적힌 것들 중 가장 강하므로, 이유도 취향보다 나아야

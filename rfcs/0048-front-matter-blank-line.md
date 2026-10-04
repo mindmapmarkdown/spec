@@ -39,9 +39,10 @@ reach this*). A prototype passes the suite unchanged and eleven further tests.
 
 **The rule is not an invention.** Pandoc has required it since it grew a metadata
 block: "The initial line `---` must not be followed by a blank line."
-That was pointed out on 2026-10-02 by João Vitor Andrade on markmap discussion
-[#363](https://github.com/markmap/markmap/discussions/363), after this RFC was written, and it is why the *Prior art* table
-below now reads the other way round from the way it was first drafted.
+That was pointed out by [@Vituartzz](https://github.com/markmap/markmap/discussions/363) on markmap discussion
+[#363](https://github.com/markmap/markmap/discussions/363) on 2026-10-01, after this RFC was written, and it is why the
+*Prior art* table below now reads the other way round from the way it was first
+drafted.
 
 ## Motivation
 
@@ -206,8 +207,8 @@ it later is Breaking rather than Normative.
 
 ### Parse the block and require it to be a YAML mapping
 
-Pandoc's other half, raised on markmap [#363](https://github.com/markmap/markmap/discussions/363) as a second and
-independent check: the reported shape fails it too, because a comment and a plain
+Pandoc's other half, raised by [@Vituartzz](https://github.com/markmap/markmap/discussions/363) on markmap [#363](https://github.com/markmap/markmap/discussions/363)
+as a second and independent check: the reported shape fails it too, because a comment and a plain
 scalar are not a YAML object.
 
 **It is rejected, and it is the strongest of these alternatives — so the reason
