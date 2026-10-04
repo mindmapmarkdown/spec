@@ -85,14 +85,16 @@ it afterwards makes it Breaking rather than Normative.
 | [#59](https://github.com/mindmapmarkdown/spec/issues/59) — a recorded `source` or `label` whose line ends in whitespace has **no** canonical projection: `P-9` writes it back and `P-8` forbids the result. One stray space at the end of a paragraph is enough. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 2** — no line of a recorded string ends in whitespace, except a code block's content | 2026-10-16 |
 | [#56](https://github.com/mindmapmarkdown/spec/issues/56) — a content entry whose `source`, written where `P-9` writes it, is read back as a different construct. **Two arrangements.** First: a definition leaves a paragraph whose first line is a paragraph only because it cannot interrupt one, and after `P-7`'s blank line that line opens a list. Second, found later the same day: a paragraph whose source is *exactly* a definition — `[y]: /y` then `---` — becomes a definition when written with a blank line after it | RFC 0058 ([#58](https://github.com/mindmapmarkdown/spec/pull/58)) answers the **first**. The second was **not a specification question at all** — commonmark.js leaves an empty paragraph behind, covering the definition's own line, and lift recorded an entry for it. Fixed in [mindmapmd#11](https://github.com/mindmapmarkdown/mindmapmd/pull/11) | 2026-10-16 for the first; the second needs nothing |
 | [#64](https://github.com/mindmapmarkdown/spec/issues/64) — a section's `label` can contain a line break and an ATX heading cannot carry one, so a setext heading spanning two lines has no canonical projection. Found 2026-10-02 | RFC 0067 ([#67](https://github.com/mindmapmarkdown/spec/pull/67)) — **Part 1**: a soft line break in a label is one space, because a soft break in a heading renders as one. **Part 2**: `S-8`, a section's label may not contain a line feed, which after Part 1 only a hard break can do | 2026-10-16 |
+| [#74](https://github.com/mindmapmarkdown/spec/issues/74) — `E-5`'s indentation removal can turn a lazy continuation line into a block. `␣␣cont` then `␣␣␣␣- n3` is one paragraph; the recorded source loses two columns from the second line, and at two columns a list item interrupts a paragraph, so the projection lifts to a paragraph **and a node**. No canonical document exists for that tree. Found 2026-10-04 | **None.** Two answers were measured and both fail: removing the container's column instead (RFC 0038's rejected alternative) takes 70 failures to 639, because projection can change whether a block is contained; removing all leading whitespace is strictly worse | **Not open** |
 | [#71](https://github.com/mindmapmarkdown/spec/issues/71) — what an item's `label` is when its first block is not a paragraph. RFC 0043 named it and did not answer it. `-` then `␣␣---` took the label `---`, and `- ---` is itself a thematic break, so that tree had no canonical projection; `-` then `␣␣> q` lifted to a node *named* `> q`. Found 2026-10-03 | RFC 0072 ([#72](https://github.com/mindmapmarkdown/spec/pull/72)) — **Part 1**: only a paragraph can be a label, and any other first block is content. **Part 2**: `P-4` may not indent to four columns when the item begins with a blank line, where CommonMark reads four as code | 2026-10-17 |
 | [#61](https://github.com/mindmapmarkdown/spec/issues/61) — an empty-labelled item whose content is a definition loses its children: `P-7`'s blank line before the content, plus the blank line before the child, leaves two in a row once the definition is read out, and two blank lines end the item. Found 2026-10-02 | RFC 0069 ([#69](https://github.com/mindmapmarkdown/spec/pull/69)) — the first `content` entry follows the marker directly when the label is empty **and** there are children. The same sentence without the second condition was written into RFC 0058 and withdrawn the same day: it fixed 27 documents and broke 81 | 2026-10-16 |
 
-Two of the eight remaining are decided, and six are open with periods — RFC 0048
+Two of the nine remaining are decided, and six are open with periods — RFC 0048
 to 2026-10-11, RFC 0051 to 2026-10-13, RFC 0057 Parts 1 and 2, RFC 0058 and RFC
-0069 to 2026-10-16, and RFC 0072 to 2026-10-17. **Every question found this week
-now has a proposal.** The release follows the last period rather than the
-2026-10-05 the roadmap first carried.
+0069 to 2026-10-16, and RFC 0072 to 2026-10-17. One has no proposal:
+[#74](https://github.com/mindmapmarkdown/spec/issues/74), found on 2026-10-04. The release follows the last period
+rather than the 2026-10-05 the roadmap first carried; **#74 does not move it**,
+because it is what keeps `S-7` deferred rather than what holds the tag.
 
 **The accepted rules do not all land at once.** RFC 0038 landed on its own and
 has left this table; see *Changed* above. RFC 0039 and 0046 land together with
@@ -238,12 +240,33 @@ have to argue for it.
 
 **Update, 2026-10-03: all three are now in hand, and none is decided.** #61 is
 answered by RFC 0069, the label question by RFC [0072](https://github.com/mindmapmarkdown/spec/pull/72)
-([#71](https://github.com/mindmapmarkdown/spec/issues/71)), and with both prototyped the sweep reports zero over
-300,000 documents across five seeds with `S-7` active. The deferral stands
-because a proposal is not a decision: RFC 0072's period ends 2026-10-17, and
-**whether to withdraw this deferral is a question for that date**, not for this
-entry. If it is withdrawn, `S-7` lands with everything else on 2026-10-18 and
-0.1.0 carries it after all.
+([#71](https://github.com/mindmapmarkdown/spec/issues/71)), and with both prototyped the sweep reported zero over
+300,000 documents across five seeds with `S-7` active. On the strength of that,
+withdrawing this deferral was recommended for 2026-10-17 — **with a trigger
+attached**: if a broadened sweep found a seventh shape before then, the deferral
+would stand.
+
+**Update, 2026-10-04: it did, so the deferral stands.** The sweep's generator was
+widened on purpose — 79 fragments instead of 34, twelve per document instead of
+six, a second generator that mutates conformance-suite documents, and failures
+shrunk before they are printed ([mindmapmd#13](https://github.com/mindmapmarkdown/mindmapmd/pull/13)). On the identical
+configuration, identical seed and count:
+
+| Generator | Ill-formed in 40,000 |
+|---|---|
+| the narrow one | **0** |
+| the wider one | **139** |
+
+All 139 are [#74](https://github.com/mindmapmarkdown/spec/issues/74), and it has no proposal. **The question
+pencilled in for 2026-10-17 is therefore answered in advance, against the
+recommendation made the day before**, which is what the trigger was for: a
+release date should not depend on how hard anyone happened to look.
+
+What this says about the three conditions is that the third was never a
+threshold a single run could clear. It is restated: the sweep reporting zero
+**on a generator that has stopped finding new shapes when it is widened**. Twice
+in three days, widening it found something; until that stops being true, zero
+means the generator and not the specification.
 
 ---
 
