@@ -37,6 +37,12 @@ grounds that the shape was hypothetical, and whose analysis of guards does not
 apply to the shape that was actually reported (see *Why 0037's objection does not
 reach this*). A prototype passes the suite unchanged and eleven further tests.
 
+**The rule is not an invention.** Pandoc has required it since it grew a metadata
+block: "The initial line `---` must not be followed by a blank line."
+That was pointed out on 2026-10-02 by João Vitor Andrade on markmap discussion
+[#363](https://github.com/markmap/markmap/discussions/363), after this RFC was written, and it is why the *Prior art* table
+below now reads the other way round from the way it was first drafted.
+
 ## Motivation
 
 ### The report
@@ -200,10 +206,43 @@ it later is Breaking rather than Normative.
 
 ### Parse the block and require it to be a YAML mapping
 
-That is what a tool does; a specification that did it would have to say which YAML
-version, and the suite would have to model YAML failure modes. `L-10` exists
-because this specification reads front matter **without** parsing it, and §1.4.3
-requires a test that can be written down.
+Pandoc's other half, raised on markmap [#363](https://github.com/markmap/markmap/discussions/363) as a second and
+independent check: the reported shape fails it too, because a comment and a plain
+scalar are not a YAML object.
+
+**It is rejected, and it is the strongest of these alternatives — so the reason
+has to be better than a preference.**
+
+What it buys is real, and narrower than it looks. For the shape that was reported
+the blank-line condition already decides it, so the second check changes nothing
+there. It changes one other shape: a block with **no** blank line whose content is
+not YAML.
+
+```markdown
+---
+# Meeting notes
+We agreed on the plan.
+---
+```
+
+Measured against the prototype: under this RFC that is front matter, so the
+heading is not a node. Without `L-10`, commonmark.js reads it as a thematic
+break and **two headings** — the closing fence is a setext underline, so the
+prose line becomes one. §1.2.4 L0 asks the tree to agree with what an unmodified
+renderer shows, and on that test **the second check gives the better answer for
+this shape**, which the first draft of this section did not admit.
+
+What it costs is a YAML parser. "A valid YAML object" cannot be decided without
+one, and §1.1.2 keeps this specification out of the business of owning a metadata
+format: it would have to name a YAML version, and §1.4.3 asks for a test that can
+be written down, which "valid YAML in version X" is not — the suite would have to
+model YAML's failure modes to express it.
+
+The trade-off offered on #363 was that falling back to content is the better
+failure mode "because nothing is lost". That is true of a renderer and **not of
+this specification**: `L-10` records the run of lines opaquely and `P-11` writes
+it back, so a block that is not YAML loses no bytes either way. What it loses is
+a node, which is the residual below.
 
 ### Require the closing fence before the first blank line
 
@@ -215,19 +254,39 @@ between keys is valid YAML and appears in the wild.
 `key:`-shaped, that is. It is parsing by another name, and it turns away a block
 whose first line is a comment — `# title: x` — which is a thing people write.
 
-### Prior art, and where this rule is stricter
+### Prior art — and one tool already has this rule
 
 | Tool | What it does | This rule |
 |---|---|---|
-| Jekyll | `YAML_FRONT_MATTER_REGEXP = %r!\A(---\s*\n.*?\n?)^((---\|\.\.\.)\s*$\n?)!m` — `\s*` spans blank lines, so a block that opens on one matches | Stricter |
+| **Pandoc** | "A YAML metadata block is a valid YAML object, delimited by a line of three hyphens (`---`) at the top and a line of three hyphens (`---`) or three dots (`...`) at the bottom. **The initial line `---` must not be followed by a blank line.**" ([manual, §8.10.2](https://pandoc.org/demo/example33/8.10-metadata-blocks.html)) | **The same, for this half** |
+| Jekyll | `YAML_FRONT_MATTER_REGEXP = %r!\A(---\s*\n.*?\n?)^((---\|\.\.\.)\s*$\n?)!m` — `\s*` spans blank lines, so a block that opens on one matches | Stricter than Jekyll |
 | gray-matter | Checks the opening delimiter, then searches for the next `\n---`; nothing looks at the line after the fence | Stricter |
 | Hugo | Lexes from the opening delimiter to the closing one | Stricter |
 
-The divergence is deliberate and small: a document whose author wrote real front
-matter **after** a blank line is read here as thematic break and paragraphs. Its
-bytes still survive the round trip; only the name of the block differs. The
-reported shape is the commoner of the two, and the one where the difference costs
-a node.
+**This matters more than a citation.** The first draft of this table had three
+rows and concluded that the rule was stricter than every tool examined, which is
+an argument a reviewer is entitled to be suspicious of: a specification inventing
+a condition no implementation has is usually wrong. With Pandoc in the table the
+proposal is not an invention — it is the rule the one tool that bothered to write
+a condition down already has. §1.5.1 prefers interoperating to competing, and
+this is what that looks like.
+
+Pandoc differs in two further ways, and this specification stays stricter in
+both:
+
+- **Position.** "A YAML metadata block may occur anywhere in the document, but if
+  it is not at the beginning, it must be preceded by a blank line." `L-10` reads
+  front matter only at line 1, and `S-4` records it only as the root's first
+  content entry. A block in the middle of a document is content here.
+- **Validity.** Pandoc requires the block to be a valid YAML object and falls back
+  to reading it as content when it is not. This specification does not parse the
+  block at all; see the alternative below.
+
+The remaining divergence from Jekyll, gray-matter and Hugo is deliberate and
+small: a document whose author wrote real front matter **after** a blank line is
+read here as thematic break and paragraphs. Its bytes still survive the round
+trip; only the name of the block differs. The reported shape is the commoner of
+the two, and the one where the difference costs a node.
 
 ## Unresolved questions
 
@@ -235,10 +294,18 @@ None blocks acceptance.
 
 1. **Other fences.** `***` and `___` open no front matter under `L-10` and are
    unaffected. Whether a document should be allowed to open with `...` — YAML's
-   other terminator, which Jekyll accepts as a closing fence — is not addressed.
+   other terminator, which Jekyll accepts as a closing fence, and which
+   [Pandoc](https://pandoc.org/demo/example33/8.10-metadata-blocks.html) accepts as one too — is not addressed.
 2. **What a reader sees.** Obsidian, where the report comes from, shows the
    reported file as rules and prose. This RFC aligns the tree with that reading
    for this shape; it does not attempt to track any tool's behaviour in general.
+3. **A block with no blank line whose content is not YAML.** Named because the
+   alternative above shows this RFC gets it wrong by §1.2.4 L0's own test: a
+   renderer shows two headings and the tree shows none. The rule is kept anyway,
+   because the only thing that decides it is a YAML parser and §1.1.2 refuses to
+   own one. **This is the residual cost of not parsing**, it is stated here rather
+   than left to be discovered, and it is where to start if someone later decides
+   the dependency is worth paying. Raised on markmap [#363](https://github.com/markmap/markmap/discussions/363).
 
 ## Decision and rationale
 
