@@ -429,6 +429,37 @@ answered, and the sweep reporting zero over a run large enough to mean something
 Recorded here as a condition so that the next person does not have to argue for
 it.
 
+#### Update, 2026-10-05 — the fourth hole is answered, the third condition is not met
+
+[#74](https://github.com/mindmapmarkdown/spec/issues/74), which had no proposal
+when the deferral was written, is answered by RFC
+[0079](https://github.com/mindmapmarkdown/spec/pull/79): `E-5` removes from a
+block's later lines the **lesser** of what the block's first line gave up and what
+`P-4` will put back. With it, the revision made to RFC 0058 the same day, and a
+lift bug fixed in [mindmapmd#15](https://github.com/mindmapmarkdown/mindmapmd/pull/15),
+`tools/sweep.mjs` reports **zero ill-formed documents over 240,000, across six
+seeds**, on the configuration where every open proposal lands, with `S-7` active.
+
+**That is not the third condition.** It was restated on 2026-10-04, after a
+widened generator took a configuration from zero to 139: the sweep reporting zero
+**on a generator that has stopped finding new shapes when it is widened**. The
+generator has not been widened since, so today's zero is zero on the same
+generator that reported 139 yesterday. The first two conditions are in hand and
+awaiting their decisions — #61 by RFC 0069, the label question by RFC 0072 — and
+the third is untested.
+
+Widening it again, and running it on the full configuration, is due before the
+last of the open comment periods ends on **2026-10-19**. No recommendation is
+made here, because making one before the run is what the trigger added on
+2026-10-03 exists to prevent.
+
+One observation for whoever does widen it. Both defects found on 2026-10-05 were
+found by **changing the configuration**, not by widening the generator: one by
+prototyping a rule and measuring it, one by running the same sweep against a
+second, narrower generator that scored a broken rule at zero. The sweep searches
+documents. It does not search rules, and two of this week's shapes were only
+reachable that way.
+
 ### What lands, and where
 
 - `spec.md`: `S-7` in §2.4 with the definition of well-formed amended, the
