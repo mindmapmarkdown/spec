@@ -406,7 +406,7 @@ making it before the run is what the trigger of 2026-10-03 was added to prevent.
 There is a reason to expect it may find something. Both defects found on
 2026-10-05 were found by *changing* the configuration rather than by widening the
 generator: one by prototyping a rule and measuring it, one by running the same
-sweep against a second generator. A third of the week's shapes were reached that
+sweep against a second generator. Two of the week's shapes were reached that
 way, and that is not a direction the sweep searches at all.
 
 ---
