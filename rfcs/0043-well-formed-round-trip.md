@@ -460,6 +460,28 @@ second, narrower generator that scored a broken rule at zero. The sweep searches
 documents. It does not search rules, and two of this week's shapes were only
 reachable that way.
 
+#### Update, 2026-10-07 — the run was made, and the deferral stands
+
+The sweep was widened before 2026-10-19, as the update above required, and it
+found new shapes. Four new questions are filed —
+[#81](https://github.com/mindmapmarkdown/spec/issues/81),
+[#82](https://github.com/mindmapmarkdown/spec/issues/82),
+[#83](https://github.com/mindmapmarkdown/spec/issues/83) and
+[#84](https://github.com/mindmapmarkdown/spec/issues/84) — and a member of
+#74's family that RFC 0079 does not reach is recorded on
+[#79](https://github.com/mindmapmarkdown/spec/pull/79#issuecomment-6120870454).
+By the condition as restated on 2026-10-04, **the deferral stands**.
+
+The widening was partly a repair. **`tools/sweep.mjs` had not been searching the
+space it reported.** Its random number generator lost its low bits, and
+`rand(n)` used them. From 2026-10-02 to 2026-10-07 the mutating generator ran on
+about one document in 250, and documents had a handful of fixed fragment counts
+([mindmapmd#16](https://github.com/mindmapmarkdown/mindmapmd/pull/16)). Every zero
+recorded in this RFC before 2026-10-07 was over that narrower space. With the
+generator fixed, the configuration that reported zero on 2026-10-05 reports 213
+and 79 ill-formed documents over 240,000 from its two existing generators, and
+more from a third. The details are in the CHANGELOG under *Found on 2026-10-07*.
+
 ### What lands, and where
 
 - `spec.md`: `S-7` in §2.4 with the definition of well-formed amended, the

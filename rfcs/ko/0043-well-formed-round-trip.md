@@ -417,6 +417,26 @@ OPML은 노드 글자를 XML 속성에 담는다. 이스케이프는 XML이 맡�
 문서를 탐색한다. 규칙은 탐색하지 않으며, 이번 주 모양 중 둘은 그 길로만 닿을 수
 있었다.
 
+#### 갱신, 2026-10-07 — 실행했고, 연기는 유지된다
+
+위 갱신이 요구한 대로 2026-10-19 전에 훑기를 넓혔고, 새로운 모양을 찾았다. 새 질문
+넷을 등록했다 — [#81](https://github.com/mindmapmarkdown/spec/issues/81),
+[#82](https://github.com/mindmapmarkdown/spec/issues/82),
+[#83](https://github.com/mindmapmarkdown/spec/issues/83),
+[#84](https://github.com/mindmapmarkdown/spec/issues/84). 그리고 RFC 0079가 닿지 않는
+#74 계열의 한 사례를 [#79](https://github.com/mindmapmarkdown/spec/pull/79#issuecomment-6120870454)에
+기록했다. 2026-10-04에 다시 진술한 조건에 따라 **연기는 유지된다**.
+
+넓히는 일의 일부는 수리였다. **`tools/sweep.mjs`는 보고한 공간을 탐색하고 있지
+않았다.** 난수 생성기가 하위 비트를 잃었는데 `rand(n)`이 바로 그 비트를 썼다.
+2026-10-02부터 2026-10-07까지 변형 생성기는 문서 250개 중 1개꼴로만 돌았고, 문서의
+조각 수는 몇 가지 고정된 값뿐이었다
+([mindmapmd#16](https://github.com/mindmapmarkdown/mindmapmd/pull/16)). 이 RFC에
+2026-10-07 이전에 기록된 0은 모두 그 좁은 공간에서의 0이다. 생성기를 고치자
+2026-10-05에 0을 보고한 구성이 기존 두 생성기에서 240,000건 중 적격하지 않은 문서
+213건과 79건을 보고했고, 셋째 생성기에서는 더 많이 나왔다. 자세한 내용은 CHANGELOG의
+*Found on 2026-10-07*에 있다.
+
 ### 무엇이 어디에 반영되나
 
 - `spec.md`: §2.4 의 `S-7` 과 적격 정의 개정, 참고 설명, 그리고 L1 을 적격한 트리로
