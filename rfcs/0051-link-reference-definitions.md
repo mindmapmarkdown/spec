@@ -6,7 +6,7 @@ normative force, and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-09-29 |
@@ -224,4 +224,74 @@ None blocks acceptance.
 
 ## Decision and rationale
 
-<!-- LEAVE THIS EMPTY UNTIL THE COMMENT PERIOD HAS ENDED. -->
+**Accepted**, 2026-10-13, by lazy consensus. The comment period ran in full, from
+2026-09-29 to 2026-10-13, with no comment on the pull request and no objection
+raised anywhere.
+
+### Why this outcome
+
+Lift drops every link reference definition today, so a conforming document that
+uses reference-style links loses their targets on the round trip. Since RFC
+[0039](0039-ordered-lists.md), the same loss also produces a tree that cannot be
+projected. The alternatives are recorded above, and each one either keeps that
+loss, refuses ordinary documents, or gives the tree a structure CommonMark does
+not expose. Recording the lines as content is the only one that keeps the round
+trip without any of those costs.
+
+### Checked before deciding
+
+The sweep that tests the round trip was found on 2026-10-07 to have been searching
+a far narrower space than it reported
+([mindmapmd#16](https://github.com/mindmapmarkdown/mindmapmd/pull/16)). So the
+question this decision depends on was asked again with the repaired tool: **does
+`L-13` itself break a round trip that holds without it?**
+
+On 2026-10-13 the sweep ran against `mindmapmd` `main` and against this RFC's
+prototype, with all three generators, three seeds each and 20,000 documents per
+run. Every shape that failed on the prototype and not on `main` was then probed
+on both — every shape among the failures the sweep shrinks, which is the first
+fifty of each kind per run, so this is a sample and not an enumeration. **Each one is a definition that begins on a list item's marker line.**
+That is a defect in the prototype, not in the rule, and it is described below.
+On `main` those documents pass only because `main` drops the definition, which is
+#40 itself. No failure traced to `L-13`, so nothing here is an objection under
+[`GOVERNANCE.md`](../GOVERNANCE.md) §4.
+
+### A correction to *How an implementation finds them*
+
+That informative section describes the prototype's method and ends *"this is one
+that does"*. **It does not, for one case.** The method counts a list item's
+marker line as covered, so that a bare `-` is not read as a definition, and so it
+never sees a definition that **begins on that line**:
+
+| Document | Recorded by the prototype |
+|---|---|
+| `- [x]: /x` | nothing — the definition is lost |
+| `- [x]:` ⏎ `␣␣/x` | `/x` |
+| `- [` ⏎ `a]:a` | `a]:a` |
+
+`L-13` requires all three to be recorded whole, and nothing in this decision
+changes that. The first row is the more serious one. The tree loses the
+definition at lift, its projection lifts to the same tree, and so neither the
+round trip nor `S-7` can detect it. It is tracked as
+[mindmapmd#18](https://github.com/mindmapmarkdown/mindmapmd/issues/18). When
+`L-13` lands in `spec.md`, the informative note must not say the marker-line
+method is sufficient unless it has been fixed to find these.
+
+The prototype has also moved since *How it is tested* was written. The branch was
+rebuilt, so `0ae9922` is no longer in its history, and it is now at `c49a7f0`.
+Since then it has gained two fixes: a tab before a definition counts as four
+columns (`e321e80`), and a definition the parser hid inside an empty paragraph is
+found (`c49a7f0`, which brings in
+[mindmapmd#11](https://github.com/mindmapmarkdown/mindmapmd/pull/11)).
+
+### What lands, and where
+
+- `spec.md`: `L-13`, the amendment to `E-5`, and the three examples. All three
+  are canonical, so the suite tests them both ways. The informative note on
+  finding definitions is corrected as above.
+- `mindmapmd`: the prototype, rebuilt on current `main` with #18 fixed, as a pull
+  request.
+- `CHANGELOG.md`: #40 leaves *Open before 0.1.0*.
+
+It lands with RFC 0039, 0046, 0057 and 0058. Why they wait for each other is
+recorded in `CHANGELOG.md`, under *Open before 0.1.0*.
