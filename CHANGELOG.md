@@ -77,9 +77,9 @@ it afterwards makes it Breaking rather than Normative.
 
 | Question | Proposal | Comment period ends |
 |---|---|---|
-| [#35](https://github.com/mindmapmarkdown/spec/issues/35) — `L-10` swallows a document that opens with a thematic break and carries a later one. RFC [0037](rfcs/0037-front-matter-opening-thematic-break.md) proposed keeping `L-10` and was **rejected 2026-09-28**: a reader reported writing every note that way. A second reader then pointed out that **Pandoc already has the replacement rule** | RFC 0048 ([#48](https://github.com/mindmapmarkdown/spec/pull/48)) — front matter does not open on a blank line | 2026-10-11 |
+| [#35](https://github.com/mindmapmarkdown/spec/issues/35) — `L-10` swallows a document that opens with a thematic break and carries a later one. RFC [0037](rfcs/0037-front-matter-opening-thematic-break.md) proposed keeping `L-10` and was **rejected 2026-09-28**: a reader reported writing every note that way. A second reader then pointed out that **Pandoc already has the replacement rule** | RFC [0048](rfcs/0048-front-matter-blank-line.md) — front matter does not open on a blank line | **Accepted 2026-10-13**, two days after its period ended. #35 is closed |
 | Whether an ordered list's numbers are part of the tree — left open by RFC [0004](rfcs/0004-canonical-hierarchy.md), and **missing from this list until 2026-09-15** | RFC [0039](rfcs/0039-ordered-lists.md) — ordered items record their ordinal and delimiter | **Accepted 2026-09-29.** The rules land in `spec.md` as their own pull request |
-| [#40](https://github.com/mindmapmarkdown/spec/issues/40) — projection drops every link reference definition. **Deferred on 2026-09-15; the deferral was withdrawn on 2026-09-29**, because RFC 0039 turns the loss into an ill-formed tree: ordered lists separated by a definition lift to a restart with nothing between them, which `S-5` rejects and `S-3` requires refusing to project | RFC 0051 ([#51](https://github.com/mindmapmarkdown/spec/pull/51)) — a definition is node content, recorded opaquely | 2026-10-13 |
+| [#40](https://github.com/mindmapmarkdown/spec/issues/40) — projection drops every link reference definition. **Deferred on 2026-09-15; the deferral was withdrawn on 2026-09-29**, because RFC 0039 turns the loss into an ill-formed tree: ordered lists separated by a definition lift to a restart with nothing between them, which `S-5` rejects and `S-3` requires refusing to project | RFC [0051](rfcs/0051-link-reference-definitions.md) — a definition is node content, recorded opaquely | **Accepted 2026-10-13.** Lands with 0039, 0046, 0057 and 0058. The prototype does not yet find a definition that begins on a list marker's line ([mindmapmd#18](https://github.com/mindmapmarkdown/mindmapmd/issues/18)) |
 | [#45](https://github.com/mindmapmarkdown/spec/issues/45) — an item with a label whose first child has an empty label has no canonical projection, so a tree lift produces cannot be written back | RFC [0046](rfcs/0046-empty-first-child.md) — one blank line between the label and the nested list in that position | **Accepted 2026-10-01.** Lands with 0051, 0057 and 0058 |
 | [#55](https://github.com/mindmapmarkdown/spec/issues/55) — a multi-line label below the top level keeps the indentation of the item holding it, and `P-4` adds it again, so the document does not survive the round trip. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 1** — a label's later lines lose what the first line gave up, and `P-1` writes them back at the node's content column | 2026-10-16 |
 | [#59](https://github.com/mindmapmarkdown/spec/issues/59) — a recorded `source` or `label` whose line ends in whitespace has **no** canonical projection: `P-9` writes it back and `P-8` forbids the result. One stray space at the end of a paragraph is enough. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 2** — no line of a recorded string ends in whitespace, except a code block's content | 2026-10-16 |
@@ -93,12 +93,12 @@ it afterwards makes it Breaking rather than Normative.
 | [#83](https://github.com/mindmapmarkdown/spec/issues/83) — an empty-labelled item's content is projected after `P-7`'s blank line, outside the item, and `P-4`'s indentation then counts from column 0. `-` ⏎ `>` ⏎ `␣␣> q` fails on `main` today; one member appears only with RFC 0058's revision. Found 2026-10-07 | **None** | **Not open** |
 | [#84](https://github.com/mindmapmarkdown/spec/issues/84) — a definition can leave a label that is a list marker (`1) [x]:x` ⏎ `␣␣␣2)`), which fails on `main` today; and RFC 0058 moves a paragraph that had a blank line before it up against a definition, which breaks a document that round-trips without 0058. Found 2026-10-07 | **None** | **Not open** |
 
-Two of the nine remaining are decided, and six are open with periods — RFC 0048
-to 2026-10-11, RFC 0051 to 2026-10-13, RFC 0057 Parts 1 and 2 and RFC 0069 to
-2026-10-16, RFC 0072 to 2026-10-17, and — **as of 2026-10-05** — RFC 0079 and
-the revised RFC 0058 to 2026-10-19. One had no proposal when this was written:
-[#74](https://github.com/mindmapmarkdown/spec/issues/74), found on 2026-10-04 and
-answered by RFC 0079 the day after.
+**As of 2026-10-13, four proposals are decided** — RFC 0039, RFC 0046, and that
+day RFC 0048 and RFC 0051. **Five are open with periods**: RFC 0057 Parts 1 and 2
+and RFC 0069 to 2026-10-16, RFC 0072 to 2026-10-17, and — **as of 2026-10-05** —
+RFC 0079 and the revised RFC 0058 to 2026-10-19. One had no proposal when this
+was written: [#74](https://github.com/mindmapmarkdown/spec/issues/74), found on
+2026-10-04 and answered by RFC 0079 the day after.
 
 **As of 2026-10-07, four more have no proposal:** #81, #82, #83 and #84, found
 when the sweep's random numbers were fixed (see *Found on 2026-10-07* below). And
