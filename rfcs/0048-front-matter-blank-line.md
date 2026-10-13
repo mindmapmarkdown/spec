@@ -6,7 +6,7 @@ force, and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-09-27 |
@@ -310,4 +310,72 @@ None blocks acceptance.
 
 ## Decision and rationale
 
-<!-- LEAVE THIS EMPTY UNTIL THE COMMENT PERIOD HAS ENDED. -->
+**Accepted**, 2026-10-13, by lazy consensus. The comment period ran in full, from
+2026-09-27 to 2026-10-11, with no comment on the pull request and no objection
+raised. **This decision is recorded two days after the period ended.** Nothing was
+raised in those two days, on the pull request, on
+[#35](https://github.com/mindmapmarkdown/spec/issues/35) or on markmap
+[#363](https://github.com/markmap/markmap/discussions/363).
+
+The text changed during the period, on 2026-10-04: Pandoc was added to the prior
+art, the YAML-object alternative was answered at length, and the third unresolved
+question was added. None of those changes touches the amended `L-10` or its
+examples, so the period was not restarted.
+
+### Why this outcome
+
+The shape is real. A reader of #35 opens every note with `---` and later adds a
+second one, and today `L-10` reads everything between them as front matter: the
+prose is recorded as an opaque block, and a heading written there stops being a
+node. The rule this RFC adds is the condition Pandoc already states — *"the
+initial line `---` must not be followed by a blank line"* — so the specification
+does not invent a condition. It adopts the one condition a major tool wrote down.
+
+The strongest alternative, raised on markmap #363, adds Pandoc's other half:
+require the block to be a YAML object. It is rejected above, and its cost is
+named rather than hidden — unresolved question 3, a block with no blank line whose
+content is not YAML. That question stays open, and the decision does not answer it.
+
+### Checked before deciding
+
+The round-trip sweep was found on 2026-10-07 to have been searching a far
+narrower space than it reported
+([mindmapmd#16](https://github.com/mindmapmarkdown/mindmapmd/pull/16)), so the
+question was asked again with the repaired tool: **does the amended `L-10` break a
+round trip that holds without it?**
+
+The prototype was built on a `main` from before 2026-10-02, and compared as it was
+it shows more failures than current `main`. Those are fixes it does not have, not
+failures it causes. So the prototype was merged with current `main` first
+(`fdf8377`; 156 tests, 155 pass, 0 fail, 1 todo — the todo is `main`'s). Then the
+sweep ran against both, with all three generators, three seeds each and 20,000
+documents per run:
+
+| Generator | `main`, three seeds | with this RFC |
+|---|---|---|
+| `assembled` | 2329 · 2347 · 2302 | 2292 · 2314 · 2261 |
+| `mutated` | 341 · 337 · 330 | 331 · 328 · 320 |
+| `nested` | 6224 · 6146 · 6259 | 6225 · 6145 · 6258 |
+
+`main` has none of the other proposals, which is why both columns are large. The
+comparison is the difference between them. **No failure shape appears with this
+RFC that does not appear without it.** As with any sweep, that covers the failures
+it shrinks — the first fifty of each kind per run — so it is a sample and not an
+enumeration.
+
+Two shapes go the other way. They fail on `main` and pass with this RFC:
+`␣---` ⏎ `---` and `---` ⏎ `␣---`. Each lifts to two thematic breaks, and
+`P-7` writes two thematic breaks as `---` ⏎ ⏎ `---` — which `L-10` as it stands
+reads back as front matter. So today a tree holding two thematic breaks at the
+start of the root has **no canonical projection**, and this rule gives it one.
+That is #35's defect reached from the other side, and the RFC did not claim it.
+
+### What lands, and where
+
+- `spec.md`: the amended `L-10` and the two examples, beside the existing
+  front-matter examples in §2.2. Both are canonical, so the suite tests them both
+  ways.
+- `mindmapmd`: the prototype, rebuilt on current `main`, as a pull request.
+- `CHANGELOG.md`: #35 leaves *Open before 0.1.0*.
+- #35 is closed when this lands, as RFC 0037's decision said it would stay open
+  until this one was decided.
