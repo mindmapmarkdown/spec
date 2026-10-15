@@ -81,7 +81,7 @@ it afterwards makes it Breaking rather than Normative.
 | Whether an ordered list's numbers are part of the tree — left open by RFC [0004](rfcs/0004-canonical-hierarchy.md), and **missing from this list until 2026-09-15** | RFC [0039](rfcs/0039-ordered-lists.md) — ordered items record their ordinal and delimiter | **Accepted 2026-09-29.** The rules land in `spec.md` as their own pull request |
 | [#40](https://github.com/mindmapmarkdown/spec/issues/40) — projection drops every link reference definition. **Deferred on 2026-09-15; the deferral was withdrawn on 2026-09-29**, because RFC 0039 turns the loss into an ill-formed tree: ordered lists separated by a definition lift to a restart with nothing between them, which `S-5` rejects and `S-3` requires refusing to project | RFC [0051](rfcs/0051-link-reference-definitions.md) — a definition is node content, recorded opaquely | **Accepted 2026-10-13.** Lands with 0039, 0046, 0057 and 0058. The prototype does not yet find a definition that begins on a list marker's line ([mindmapmd#18](https://github.com/mindmapmarkdown/mindmapmd/issues/18)) |
 | [#45](https://github.com/mindmapmarkdown/spec/issues/45) — an item with a label whose first child has an empty label has no canonical projection, so a tree lift produces cannot be written back | RFC [0046](rfcs/0046-empty-first-child.md) — one blank line between the label and the nested list in that position | **Accepted 2026-10-01.** Lands with 0051, 0057 and 0058 |
-| [#55](https://github.com/mindmapmarkdown/spec/issues/55) — a multi-line label below the top level keeps the indentation of the item holding it, and `P-4` adds it again, so the document does not survive the round trip. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 1** — a label's later lines lose what the first line gave up, and `P-1` writes them back at the node's content column | 2026-10-16 |
+| [#55](https://github.com/mindmapmarkdown/spec/issues/55) — a multi-line label below the top level keeps the indentation of the item holding it, and `P-4` adds it again, so the document does not survive the round trip. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 1** — a label's later lines lose what the first line gave up, and `P-1` writes them back at the node's content column | **Objected to on 2026-10-14** ([#57](https://github.com/mindmapmarkdown/spec/pull/57#issuecomment-6160196350)): Part 1 makes `- a␣␣` ⏎ `=` fail, which round-trips today. Not decided on 2026-10-16. RFC 0085 is resolution 2 of that objection, and the two are decided together on 2026-10-29 |
 | [#59](https://github.com/mindmapmarkdown/spec/issues/59) — a recorded `source` or `label` whose line ends in whitespace has **no** canonical projection: `P-9` writes it back and `P-8` forbids the result. One stray space at the end of a paragraph is enough. Found 2026-10-02 | RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) **Part 2** — no line of a recorded string ends in whitespace, except a code block's content | 2026-10-16 |
 | [#56](https://github.com/mindmapmarkdown/spec/issues/56) — a content entry whose `source`, written where `P-9` writes it, is read back as a different construct. **Two arrangements.** First: a definition leaves a paragraph whose first line is a paragraph only because it cannot interrupt one, and after `P-7`'s blank line that line opens a list. Second, found later the same day: a paragraph whose source is *exactly* a definition — `[y]: /y` then `---` — becomes a definition when written with a blank line after it | RFC 0058 ([#58](https://github.com/mindmapmarkdown/spec/pull/58)) answers the **first**, and was **revised on 2026-10-05**: keeping the paragraph adjacent is not enough, because a definition ends the paragraph it came out of and `- a` or `=` below it starts a block. The line is also indented four columns, the fewest at which no CommonMark block begins. The second arrangement was **not a specification question at all** — commonmark.js leaves an empty paragraph behind, covering the definition's own line, and lift recorded an entry for it. Fixed in [mindmapmd#11](https://github.com/mindmapmarkdown/mindmapmd/pull/11) | 2026-10-19 for the first; the second needs nothing |
 | [#64](https://github.com/mindmapmarkdown/spec/issues/64) — a section's `label` can contain a line break and an ATX heading cannot carry one, so a setext heading spanning two lines has no canonical projection. Found 2026-10-02 | RFC 0067 ([#67](https://github.com/mindmapmarkdown/spec/pull/67)) — **Part 1**: a soft line break in a label is one space, because a soft break in a heading renders as one. **Part 2**: `S-8`, a section's label may not contain a line feed, which after Part 1 only a hard break can do | 2026-10-16 |
@@ -92,10 +92,11 @@ it afterwards makes it Breaking rather than Normative.
 | [#82](https://github.com/mindmapmarkdown/spec/issues/82) — an ordered first child numbered other than 1, in a tight list, cannot interrupt its parent's label and is read into it. The case RFC 0039 handles between two lists, missing between a label and its children. Found 2026-10-07 | **None** | **Not open** |
 | [#83](https://github.com/mindmapmarkdown/spec/issues/83) — an empty-labelled item's content is projected after `P-7`'s blank line, outside the item, and `P-4`'s indentation then counts from column 0. `-` ⏎ `>` ⏎ `␣␣> q` fails on `main` today; one member appears only with RFC 0058's revision. Found 2026-10-07 | **None** | **Not open** |
 | [#84](https://github.com/mindmapmarkdown/spec/issues/84) — a definition can leave a label that is a list marker (`1) [x]:x` ⏎ `␣␣␣2)`), which fails on `main` today; and RFC 0058 moves a paragraph that had a blank line before it up against a definition, which breaks a document that round-trips without 0058. Found 2026-10-07 | **None** | **Not open** |
+| What 0.1.0 does with the documents in #74's family that have no answer — #81 to #84 and the #79 counterexample, which make §1.2.4 L1 unsatisfiable for documents §1.2.3 accepts. **Added 2026-10-15** | RFC 0085 ([#85](https://github.com/mindmapmarkdown/spec/pull/85)) — a document whose tree is not well-formed does not conform, and `S-7` lands | 2026-10-29 |
 
 **As of 2026-10-13, four proposals are decided** — RFC 0039, RFC 0046, and that
 day RFC 0048 and RFC 0051. **Five are open with periods**: RFC 0057 Parts 1 and 2
-and RFC 0069 to 2026-10-16, RFC 0072 to 2026-10-17, and — **as of 2026-10-05** —
+(Part 1 objected to on 2026-10-14; see the table) and RFC 0069 to 2026-10-16, RFC 0072 to 2026-10-17, and — **as of 2026-10-05** —
 RFC 0079 and the revised RFC 0058 to 2026-10-19. One had no proposal when this
 was written: [#74](https://github.com/mindmapmarkdown/spec/issues/74), found on
 2026-10-04 and answered by RFC 0079 the day after.
@@ -110,8 +111,27 @@ paragraph case, #83's first two documents, #84's first document and the #79
 counterexample each fail the round trip on `main`, with no open proposal merged.
 Each is a conforming document today whose canonical projection lifts to a
 different tree, so §1.2.4's L1 is unsatisfiable for it with or without `S-7`.
-None has a proposal, so none can be decided by 2026-10-19. Whether 0.1.0 waits
-for them is the maintainer's decision, and it is not recorded here as made.
+None has a proposal, so none can be decided by 2026-10-19.
+
+**Decided 2026-10-15: 0.1.0 waits — for one rule, not for each of them.** The
+alternative was to release on 2026-10-21 with these recorded as known defects. It
+was turned down for three reasons. It would ship a MUST that no implementation can
+meet for documents the specification accepts. It would break the rule at the top of
+this table. And the first answer to any of them would then be Breaking, which means
+a major version straight after the first release.
+
+Waiting for each of them to be answered would tie the release to a search that has
+not converged — the reason `S-7` was deferred on 2026-10-02. So the release waits
+instead for RFC [0085](https://github.com/mindmapmarkdown/spec/pull/85), opened
+the same day. It makes a document whose tree is not well-formed non-conforming,
+which makes L1 hold by definition and lets `S-7` land. Every later answer to a
+member of the family then extends what conforms, and that is Normative. Measured
+over 747 real Markdown files, it turns none of them away in the 0.1.0
+configuration.
+
+**The release now follows 2026-10-29**, RFC 0085's period, and RFC 0057 Part 1,
+which is decided with it. It no longer follows 2026-10-19. The decisions due on
+2026-10-16, 2026-10-17 and 2026-10-19 go ahead as scheduled.
 
 **Correction, the same day: #74 does hold the release, and the sentence that
 first stood here said it did not.** That sentence was written on the assumption
@@ -490,6 +510,15 @@ withdrawing the deferral does not go to the 2026-10-19 decisions, and 0.1.0's
 The condition itself stands as restated. Twice more it has been shown that one
 generator's zero describes the generator, and the second time the generator was
 not even searching the space its output described.
+
+**Update, 2026-10-15: RFC [0085](https://github.com/mindmapmarkdown/spec/pull/85)
+proposes to withdraw this deferral by removing the reason for the third
+condition.** That condition existed because §2.4 *claimed* that lift never
+produces a tree `S-7` rejects. RFC 0085 makes such a document non-conforming, so
+the claim becomes a definition, and a new shape is a document without a tree yet
+rather than a defect in `spec.md`. If 0085 is accepted, `S-7` lands in 0.1.0 once
+#61 (RFC 0069) and the label question (RFC 0072) are answered. If it is not, this
+deferral stands as it is.
 
 ---
 
