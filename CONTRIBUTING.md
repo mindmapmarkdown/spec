@@ -140,13 +140,26 @@ git rebase --signoff main     # all commits on the branch
 git commit --amend -s --no-edit   # just the last one
 ```
 
+**How it is enforced.** There is no automated DCO check on pull requests. The
+maintainer reads the trailer on every commit in review, and a pull request with
+a commit that lacks one is not merged until that commit is amended. To check your
+own branch before asking:
+
+```sh
+git log --format='%h %s%n  %(trailers:key=Signed-off-by)' main..HEAD
+```
+
 **Editing through the GitHub web UI counts.** The web editor is a convenient way
-to fix a typo without cloning, and it is fully supported here — but the DCO
-check runs on web commits exactly as it does on pushed ones. The commit form
-presents a sign-off checkbox, and it is mandatory: leaving it unticked produces
-a commit with no `Signed-off-by` trailer, the DCO check fails, and the pull
-request cannot merge until the commit is amended. There is no path into this
-repository that skips the sign-off.
+to fix a typo without cloning, and it is fully supported here. This repository
+requires sign-off on web-based commits, so GitHub adds the trailer to them for
+you. Check that it carries your real name (see below), because it is taken from
+your account.
+
+**Merge commits.** The commit GitHub creates when a pull request is merged
+carries no content of its own, and it is the one commit without a sign-off. Do
+not create others: to bring your branch up to date, rebase it on `main`
+(`git rebase main`) rather than merging `main` into it, so that the branch holds
+only your signed commits.
 
 Use a real name and an address that reaches you. Anonymous and pseudonymous
 sign-offs cannot be accepted, because the certification is only meaningful if it
