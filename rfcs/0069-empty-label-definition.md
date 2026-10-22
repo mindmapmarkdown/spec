@@ -6,7 +6,7 @@ force, and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-10-02 |
@@ -274,3 +274,84 @@ answer being "the block, as now" in the table above; if that changes, the
 measurement that lets the rule be stated over `content` has to be re-run.
 
 ## Decision and rationale
+
+**Accepted**, 2026-10-22, by lazy consensus. The comment period ran in full, from
+2026-10-02 to 2026-10-16, with no comment on the pull request and no objection
+raised. The text did not change while the period ran, so it was not restarted.
+
+**This decision is recorded six days after the period ended.** Nothing was raised
+in those six days. Four issues were filed while the period was open
+([#81](https://github.com/mindmapmarkdown/spec/issues/81),
+[#82](https://github.com/mindmapmarkdown/spec/issues/82),
+[#83](https://github.com/mindmapmarkdown/spec/issues/83),
+[#84](https://github.com/mindmapmarkdown/spec/issues/84)) and none of them is
+about this rule: the first two are the label and first-child questions, the third
+is the empty-label case **without** children, which the second condition here
+deliberately leaves alone, and the fourth is RFC
+[0058](https://github.com/mindmapmarkdown/spec/pull/58).
+
+### Why this outcome
+
+The tree is one lift produces from a conforming document, and `P-7` left it with
+no writable spelling. The blank line before the content, plus the blank line
+before the nested list, leaves two in a row once the definition is read out
+again, and two blank lines end a list item — so the children came back as
+siblings. One of the two blank lines has to go, and the one before the content is
+the only one that can: the other is what keeps the child a child.
+
+The sentence is stated over `content` rather than over definitions. That looked
+like caution when it was written and is now the reason the rule survives a change
+underneath it, which is the next section.
+
+### Checked before deciding
+
+Measured 2026-10-22, by projecting each tree, lifting the result, and comparing
+both the tree and the bytes.
+
+The three examples are canonical — projection returns the document byte for byte
+and the tree round-trips — in every current configuration:
+`rfc/definition-lazy-continuation` at `8463da3` (RFC 0058 revised, `S-7` active),
+`trial/0.1.0-c` at `099c221`, and `trial/0.1.0-b` at `14f2ad7`, which carries RFC
+[0072](https://github.com/mindmapmarkdown/spec/pull/72).
+
+**The re-measurement the unresolved question asked for has been run.** That
+question says this RFC leans on an item's first non-paragraph block being the
+label, and that the measurement has to be re-run if
+[#71](https://github.com/mindmapmarkdown/spec/issues/71)'s answer changes. RFC
+0072 Part 1 changes it: a non-paragraph first block becomes content. On
+`trial/0.1.0-b`, `-` ⏎ `␣␣> q` ⏎ ⏎ `␣␣- b` now lifts to an empty label with a
+`block_quote` content entry **and** one child — a shape the table above could not
+produce, because there the quote became the label — and it round-trips. So the
+rule's scope widens under 0072 and the rule still holds. Writing it over
+`content` is what makes that true; a sentence about definitions would have had to
+be amended.
+
+`trial/all-rfcs` at `3643d4a` rejects the first example under `S-7`. That branch
+carries the **superseded** 0058, which writes the paragraph adjacent with no
+indentation where the revision of 2026-10-05 writes four columns. It is a stale
+merge rather than a defect in this rule: the same example is canonical on every
+branch carrying the revision.
+
+Prototype `rfc/empty-label-definition` at `8eb4eeb`: 164 tests, 163 pass, 0 fail,
+1 todo.
+
+### What this does not settle
+
+[#83](https://github.com/mindmapmarkdown/spec/issues/83) stays open. An
+empty-labelled item **without** children still has its content written outside
+the item, and the second condition in this rule is exactly why that case is
+untouched. It has no proposal.
+
+And the rule has never been measured with **no** RFC 0058 present: every branch
+carrying it carries one of the two 0058 lineages. The mechanism is independent —
+this is the gap after a bare marker, 0058 is the join between a definition and
+the paragraph after it — but independence is argued here, not measured. If 0058
+is rejected outright, that measurement should be made before `spec.md` is
+written.
+
+### Where it lands
+
+`spec.md` gets the `P-7` sentence and the three examples, together with RFC 0051,
+RFC 0046 and RFC 0039, so that no rule lands over a hole. `CHANGELOG.md` drops
+[#61](https://github.com/mindmapmarkdown/spec/issues/61) from *Open before
+0.1.0*.
