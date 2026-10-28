@@ -6,7 +6,7 @@ normative force, and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-10-15 |
@@ -300,4 +300,131 @@ None blocks acceptance.
 
 ## Decision and rationale
 
-<!-- LEAVE THIS EMPTY UNTIL THE COMMENT PERIOD HAS ENDED. -->
+**Accepted**, 2026-10-29, by lazy consensus. The comment period ran in full, from
+2026-10-15 to 2026-10-29, and no objection was raised. The text did not change
+while the period ran, so it was not restarted. **This is the only decision in
+this group recorded on the day its own period ended**; the other five were
+overdue, and `CHANGELOG.md` says what that cost.
+
+One comment was posted, on 2026-10-23, by the author: the prototype and the
+repeated corpus run that *Unresolved questions* 3 asked for before the decision.
+It is reported below rather than taken on trust.
+
+### Why this outcome
+
+§1.2.4 L1 requires that lifting the canonical projection of a tree yields that
+same tree, and §2.4 said lift cannot produce a tree that is not well-formed.
+**Both sentences were false of documents §1.2.3 accepted** — not in one place but
+in a family, and the family kept growing: [#55](https://github.com/mindmapmarkdown/spec/issues/55),
+[#56](https://github.com/mindmapmarkdown/spec/issues/56),
+[#59](https://github.com/mindmapmarkdown/spec/issues/59),
+[#61](https://github.com/mindmapmarkdown/spec/issues/61),
+[#64](https://github.com/mindmapmarkdown/spec/issues/64),
+[#71](https://github.com/mindmapmarkdown/spec/issues/71),
+[#74](https://github.com/mindmapmarkdown/spec/issues/74), then
+[#81](https://github.com/mindmapmarkdown/spec/issues/81) to
+[#84](https://github.com/mindmapmarkdown/spec/issues/84) when the sweep's random
+numbers were fixed. Each new member was answered by a rule about where a
+character goes, and each answer left the next member standing.
+
+This RFC stops answering members. It makes the two sentences true by
+construction: a document whose tree is not well-formed is not a conforming
+document, so lift is never asked about it, and L1 is a statement about the
+documents that remain. Every later answer to a member then **widens** what
+conforms, which is Normative — where answering them one at a time before a
+release made each next answer Breaking.
+
+That is the argument the release decision of 2026-10-15 already made, and this
+decision is the point at which it either holds or does not. It holds.
+
+### Measured
+
+`tools/sweep.mjs`, 20,000 generated documents per seed, the same branch with and
+without the change:
+
+| | 1234567 | 20261005 | 7 |
+|---|---|---|---|
+| not conforming, without | 792 | 773 | 744 |
+| not well-formed, without | 1559 | 1571 | 1525 |
+| **not conforming, with** | **2351** | **2344** | **2269** |
+| **not well-formed, with** | **0** | **0** | **0** |
+
+792 + 1559 = 2351. 773 + 1571 = 2344. 744 + 1525 = 2269. **Every ill-formed tree
+becomes a non-conforming document and nothing else moves**, on every seed,
+exactly. That is the claim *Round-trip consequence* makes, and the equality is
+what distinguishes this rule from one that also turns away something else.
+
+`tools/corpus.mjs` over 770 real `.md` files, 8.4 MB — every one in
+`easymindmap` including `node_modules`, plus this repository and `mindmapmd`:
+
+```
+770 files · 8.4 MB · 0 refused · 0 ill-formed · 0 with no canonical projection · 0 failed the round trip
+```
+
+**It turns away no real document.** The figure was re-run on 2026-10-29, on
+`rfc/0057p1-on-0085` at `6c26411` — the configuration that now lands, RFC 0057
+Part 1 included — and again on `rfc/0085-on-accepted` at `30f9cbb` without it.
+Both are zero.
+
+`lift` now runs the `S-7` check on every call: a projection and a second raw
+lift. On `spec.md`, 50 KB, 32 ms becomes 39 ms — **1.2×**, which is what *Cost,
+bounds, and decidability* argued was affordable.
+
+Prototype: [mindmapmd#21](https://github.com/mindmapmarkdown/mindmapmd/pull/21),
+on `rfc/0085-on-accepted`. The import cycle between `lift.js` and
+`wellformed.js` is deliberate and is described there.
+
+### What this rule now carries that the RFC did not claim
+
+**[#56](https://github.com/mindmapmarkdown/spec/issues/56).** RFC 0058 ([#58](https://github.com/mindmapmarkdown/spec/pull/58)) was **rejected today**, and its own
+*Alternatives* section named this rule as the answer *"if a member of this family
+is ever found that no spelling can write back"*. #84 part 1 is that member. So
+this rule answers #56 as well, by refusing two documents rather than giving them
+a spelling, and 0058's decision records the measurement on both sides. Measured
+on `rfc/0085-on-accepted`:
+
+| Document | Result |
+|---|---|
+| `[x]: /x` ⏎ `1.` | not conforming |
+| `[x]: /x` ⏎ `2. a` | not conforming |
+| `1) [x]:x` ⏎ `␣␣␣2)` — #84 part 1 | not conforming |
+| `[x]:x` ⏎ ⏎ `[y]:>` ⏎ `-` — #84 part 2 | conforms, round-trips |
+
+The last row is the one to notice: this rule turns away the three documents that
+have no canonical form and leaves alone the one that works. A rule that answered
+#56 by spelling could not do that, which is why 0058 was rejected.
+
+**The dependency on RFC 0057 Part 1 is gone.** *Interaction with open proposals*
+said the 0.1.0 corpus figure depends on Part 1 landing, because the wrapped-label
+shape is 5.6% of the corpus. RFC 0067 ([#67](https://github.com/mindmapmarkdown/spec/pull/67)) answers that
+shape instead — a wrapped label folds to one line — so this rule never needed the
+rule that was under objection. Part 1 is accepted today on its own merits, and
+the corpus figure above is zero with it and without it.
+
+### What this does not settle
+
+*Unresolved questions* 1 — a way for the conformance suite to state that a
+document is **not** conforming — matters more now than when it was written. The
+set the suite cannot express is now exactly the set this rule defines. `S-1` has
+the same gap today, which is why this does not block, but the gap is wider and
+whoever writes the suite should treat it as the first thing to fix.
+
+[#89](https://github.com/mindmapmarkdown/spec/issues/89) — `spec.md` says nothing
+about line endings, and 24% of the corpus carries a carriage return — was filed
+on 2026-10-23 while this period was open. It is Normative and needs an RFC of its
+own. It does not bear on this rule: a CRLF document is conforming either way.
+Every figure above includes the one-line normalisation on `fix/crlf`, without
+which the corpus cannot be measured at all under RFC 0067.
+
+### Where it lands
+
+`spec.md` §1.2.3 gains the third condition, §2.4's informative note gains the
+paragraph saying lift refuses such a document, and **`S-7` lands with it** —
+deferred past 0.1.0 on 2026-10-02 and now the rule the third condition is stated
+over. `CHANGELOG.md` drops the 2026-10-15 row and moves
+[#56](https://github.com/mindmapmarkdown/spec/issues/56),
+[#81](https://github.com/mindmapmarkdown/spec/issues/81) to
+[#84](https://github.com/mindmapmarkdown/spec/issues/84) out of *Open before
+0.1.0*: each is a document with no tree, which this rule makes a statement about
+conformance rather than a hole in the rules.
+
