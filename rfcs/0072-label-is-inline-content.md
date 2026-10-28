@@ -6,7 +6,7 @@ force, and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-10-03 |
@@ -316,3 +316,86 @@ the claim, and anyone adding to it should expect to be the next person writing
 one of these.
 
 ## Decision and rationale
+
+**Part 1: accepted. Part 2: accepted.** 2026-10-29, by lazy consensus. The
+comment period ran in full, from 2026-10-03 to 2026-10-17, with no comment and no
+objection while it was open, and the text did not change. The decision is
+recorded **twelve days late**.
+
+### What was raised after the period closed, and how both were resolved
+
+An objection was filed on 2026-10-22, five days late, on two grounds. Like RFC
+0067's it says of itself that it is about the evidence and not the rule.
+
+**1. The 247 tests were measured on a stack containing an objected rule.** The
+prototype sat on `trial/0.1.0-b`, which merges RFC 0067 — and RFC 0057 Part 1
+underneath it, then under objection — together with `rfc/definition-paragraph`,
+the RFC 0058 that the revision of 2026-10-05 superseded. So 247 of 247 was not a
+statement about this rule on its own.
+
+**Resolved 2026-10-23.** `rfc/0072-on-accepted` at `bf384cd` is
+`trial/accepted-only` — current `main` plus the accepted rules and `S-7`, nothing
+undecided — plus this RFC's two parts and nothing else. 222 tests, 222 pass.
+
+**2. [mindmapmd#17](https://github.com/mindmapmarkdown/mindmapmd/issues/17) was
+open against this rule's own prototype.** A non-paragraph first block sharing the
+marker's line recorded the marker in its `source`, so `- ***`, `- >`, `- <a>` and
+`1) ---` did not round-trip. The objection is right that this is an
+implementation defect and not a specification question, and right that it still
+mattered: it was most of the `nested` generator's ill-formed documents, so the
+sweep could not say what else this rule does.
+
+**Resolved 2026-10-23.** Not with a pattern for things that look like markers —
+the issue is right that no pattern can work — but with the columns at which the
+parser says list items actually open, read from `sourcepos`, with the marker text
+checked at exactly those columns:
+
+| Document | recorded `source` before | after |
+|---|---|---|
+| `- ***` | `- ***` | `***` |
+| `- >` | `- >` | `>` |
+| `- > q` ⏎ `␣␣> r` | `- > q␤␣␣> r` | `> q␤> r` |
+| `- <a>` | `- <a>` | `<a>` |
+| `1) ---` | `1) ---` | `---` |
+
+That is the shape of fix the issue called for, and it is in the branch above.
+
+### What the isolated measurement found in this rule's favour
+
+Worth recording here, because it is load-bearing elsewhere. Under Part 1, `-` ⏎
+`␣␣> q` ⏎ ⏎ `␣␣- b` lifts to an empty label with a `block_quote` content entry
+**and** one child — a shape that is unreachable without this rule, because today
+the quote becomes the label — and it round-trips. That is the re-measurement RFC
+[0069](0069-empty-label-definition.md)'s unresolved question asked for before its
+own decision, and it is recorded in 0069's decision of 2026-10-22. **This rule
+widens the scope of an accepted rule and the accepted rule still holds**, which
+is the strongest thing the isolated branch had to say.
+
+### What this decision does not settle
+
+**Whether `L-2` or `E-4` is the right home for Part 1** is left as written. It is
+in both: `L-2` says which block gives the label, `E-4` says what a label is. No
+reviewer said they would put it in one place only, and the behaviour is the same.
+The `spec.md` edit should keep both sentences or merge them on editorial grounds,
+not on this decision's authority.
+
+**A multi-line label whose first block is a paragraph** is RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) Part 1 and RFC 0067 ([#67](https://github.com/mindmapmarkdown/spec/pull/67)), both accepted today and both unchanged by this
+rule: Part 1 here decides *whether* there is a label, not what it may contain.
+The three decisions are consistent, and each names the other two.
+
+**Zero is evidence, not proof**, and this RFC says so about itself. The sweep
+searches a space built from twenty-six fragments; it found nothing in 300,000
+documents, and it had found 136 in 40,000 the day after finding none in 240,000.
+That sentence is not softened by acceptance. The fragment set is the limit of the
+claim, and the next person to add a fragment should expect to be the one writing
+the next one of these — which is what happened on 2026-10-07 when the sweep's
+random numbers were fixed and [#81](https://github.com/mindmapmarkdown/spec/issues/81)
+to [#84](https://github.com/mindmapmarkdown/spec/issues/84) appeared at once.
+
+### Where it lands
+
+`spec.md` gets Part 1's sentences in `L-2` and `E-4`, and Part 2's `P-4`
+condition, together with the other rules accepted for 0.1.0, in the single
+landing pull request. `CHANGELOG.md` drops
+[#71](https://github.com/mindmapmarkdown/spec/issues/71) from *Open before
+0.1.0*.
