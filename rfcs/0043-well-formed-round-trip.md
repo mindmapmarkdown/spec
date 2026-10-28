@@ -346,6 +346,142 @@ answered:
 `spec.md` while either hole is open would state a rule the specification itself
 breaks.
 
+#### Correction, 2026-10-02 — there were four, not two
+
+**The sentence above undercounted.** Two more cases where lift produces a tree
+`S-7` rejects were found on 2026-10-02, the day after this decision was written,
+by a sweep over 40,000 generated documents run against the reference
+implementation with every accepted and proposed rule merged together. Nine
+hundred of them failed. The decision stands; the list in it does not.
+
+- **A multi-line label below the top level**
+  ([#55](https://github.com/mindmapmarkdown/spec/issues/55)) — 305 of the
+  failures. `E-4` records a label "exactly as it appears in the source", so a
+  label that runs onto a second line keeps the indentation of the item holding
+  it; `P-4` adds that indentation again. RFC 0057
+  ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) Part 1 answers it; its
+  period ends 2026-10-16.
+- **A paragraph whose source reads as a list**
+  ([#56](https://github.com/mindmapmarkdown/spec/issues/56)) — the remaining 270.
+  A link reference definition can leave a paragraph whose first line is a
+  paragraph only because it cannot interrupt one; after the blank line `P-7` puts
+  in front of it, that line opens a list. RFC 0058
+  ([#58](https://github.com/mindmapmarkdown/spec/pull/58)) answers it; its period
+  ends 2026-10-16. **It was invisible until RFC 0051**, which is why it is not in
+  the list above: without 0051 the definition is dropped and this defect hides
+  behind that one.
+
+The other 595 failures were not a specification gap but an implementation bug in
+how a block's starting column was measured, fixed in
+[mindmapmd#8](https://github.com/mindmapmarkdown/mindmapmd/pull/8).
+
+**`S-7` lands with 0046, 0051, 0057 Part 1 and 0058.** The release date follows
+2026-10-16 rather than 2026-10-13.
+
+**What this says about the decision.** Nothing in the reasoning changes: `S-7` is
+the rule that finds these, and each one it found is a document that silently
+lost its meaning before `S-7` existed to name the loss. What changes is the
+confidence of the sentence "both are answered". A rule stated over a round trip
+has a search space, and the honest way to count its holes is to search it — which
+is what was done the next day, and should have been done before the list was
+written.
+
+A fifth defect was found in the same sweep's wake and is **not** in this list,
+because `S-7` does not catch it: a recorded string whose line ends in whitespace
+has no canonical projection at all, since `P-9` writes it back and `P-8` forbids
+the result ([#59](https://github.com/mindmapmarkdown/spec/issues/59), RFC 0057
+Part 2). The tree round trip passes, so it is #45's shape rather than this RFC's.
+It blocks the release, not `S-7`.
+
+#### Landing deferred past 0.1.0, 2026-10-02
+
+**This RFC stays accepted. `S-7`'s landing in `spec.md` is deferred to 0.2.0.**
+
+The Correction above counts four documents that lift to trees `S-7` rejects where
+this decision said two. Three have proposals. The fourth,
+[#61](https://github.com/mindmapmarkdown/spec/issues/61), does not: the one sentence written for it fixed 27
+documents and broke 81, because the fix pushes a second content block inside the
+item where it becomes the item's label.
+
+That is the question this RFC named under *Unresolved questions* and did not
+answer — what an item's label is when its first block is not a paragraph — and
+`S-7` cannot be made true by rules about where blank lines go. It needs that
+question answered, which is a design problem rather than a fortnight's drafting.
+
+The third reason is the one that decided it. `tools/sweep.mjs` in the reference
+implementation has found a new shape on **every day it has been run**, and
+[#64](https://github.com/mindmapmarkdown/spec/issues/64) — found the same way — is not an `S-7` hole at all but a
+well-formed tree with no canonical projection. **The family is larger than this
+rule**, and a release date that waits for a search to stop finding things is not
+a date.
+
+What is not deferred: every rule the search produced. RFC 0039, 0046, 0048, 0051,
+0057 and 0058 all land in 0.1.0, because each fixes a document that silently
+loses its meaning whether or not `S-7` exists to name the loss. `S-7` is the rule
+that *finds* such documents; it is not what fixes them.
+
+What it costs, said plainly: §2.4 ships as it is, so a tree can be well-formed by
+shape and still project to a document that lifts to something else, and this
+specification has no sentence to point at when it does.
+
+What has to be true before it lands: #61 answered, the label question behind it
+answered, and the sweep reporting zero over a run large enough to mean something.
+Recorded here as a condition so that the next person does not have to argue for
+it.
+
+#### Update, 2026-10-05 — the fourth hole is answered, the third condition is not met
+
+[#74](https://github.com/mindmapmarkdown/spec/issues/74), which had no proposal
+when the deferral was written, is answered by RFC
+[0079](https://github.com/mindmapmarkdown/spec/pull/79): `E-5` removes from a
+block's later lines the **lesser** of what the block's first line gave up and what
+`P-4` will put back. With it, the revision made to RFC 0058 the same day, and a
+lift bug fixed in [mindmapmd#15](https://github.com/mindmapmarkdown/mindmapmd/pull/15),
+`tools/sweep.mjs` reports **zero ill-formed documents over 240,000, across six
+seeds**, on the configuration where every open proposal lands, with `S-7` active.
+
+**That is not the third condition.** It was restated on 2026-10-04, after a
+widened generator took a configuration from zero to 139: the sweep reporting zero
+**on a generator that has stopped finding new shapes when it is widened**. The
+generator has not been widened since, so today's zero is zero on the same
+generator that reported 139 yesterday. The first two conditions are in hand and
+awaiting their decisions — #61 by RFC 0069, the label question by RFC 0072 — and
+the third is untested.
+
+Widening it again, and running it on the full configuration, is due before the
+last of the open comment periods ends on **2026-10-19**. No recommendation is
+made here, because making one before the run is what the trigger added on
+2026-10-03 exists to prevent.
+
+One observation for whoever does widen it. Both defects found on 2026-10-05 were
+found by **changing the configuration**, not by widening the generator: one by
+prototyping a rule and measuring it, one by running the same sweep against a
+second, narrower generator that scored a broken rule at zero. The sweep searches
+documents. It does not search rules, and two of this week's shapes were only
+reachable that way.
+
+#### Update, 2026-10-07 — the run was made, and the deferral stands
+
+The sweep was widened before 2026-10-19, as the update above required, and it
+found new shapes. Four new questions are filed —
+[#81](https://github.com/mindmapmarkdown/spec/issues/81),
+[#82](https://github.com/mindmapmarkdown/spec/issues/82),
+[#83](https://github.com/mindmapmarkdown/spec/issues/83) and
+[#84](https://github.com/mindmapmarkdown/spec/issues/84) — and a member of
+#74's family that RFC 0079 does not reach is recorded on
+[#79](https://github.com/mindmapmarkdown/spec/pull/79#issuecomment-6120870454).
+By the condition as restated on 2026-10-04, **the deferral stands**.
+
+The widening was partly a repair. **`tools/sweep.mjs` had not been searching the
+space it reported.** Its random number generator lost its low bits, and
+`rand(n)` used them. From 2026-10-02 to 2026-10-07 the mutating generator ran on
+about one document in 250, and documents had a handful of fixed fragment counts
+([mindmapmd#16](https://github.com/mindmapmarkdown/mindmapmd/pull/16)). Every zero
+recorded in this RFC before 2026-10-07 was over that narrower space. With the
+generator fixed, the configuration that reported zero on 2026-10-05 reports 213
+and 79 ill-formed documents over 240,000 from its two existing generators, and
+more from a third. The details are in the CHANGELOG under *Found on 2026-10-07*.
+
 ### What lands, and where
 
 - `spec.md`: `S-7` in §2.4 with the definition of well-formed amended, the
@@ -357,7 +493,8 @@ breaks.
   request. The lift bug it exposed — `## Title \#` lifting to the label
   `Title \` — was fixed on 2026-09-28 (mindmapmd#3), so the false rejection it
   caused is gone.
-- `CHANGELOG.md`: this question leaves *Open before 0.1.0*.
+- `CHANGELOG.md`: this question leaves *Open before 0.1.0*. **As of 2026-10-02 it
+  is in *Deferred past 0.1.0* instead**, for the reasons above.
 
 ### The unresolved questions, after today
 
