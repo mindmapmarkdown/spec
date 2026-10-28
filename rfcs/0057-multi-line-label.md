@@ -6,7 +6,7 @@ and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-10-02 |
@@ -420,3 +420,152 @@ to that line's construct. A reviewer who prefers another home should say so; it
 changes nothing about behaviour.
 
 ## Decision and rationale
+
+**Part 1: accepted. Part 2: accepted.** 2026-10-29. The comment period ran from
+2026-10-02 and ended 2026-10-16; this decision is recorded thirteen days later,
+and each part was held for a different reason. *Unresolved questions* asked that
+the decision record each part's outcome separately, as RFC 0038's did, so it
+does.
+
+### Part 1 — the objection of 2026-10-14, and what answers it
+
+The objection is on the pull request and is [here](https://github.com/mindmapmarkdown/spec/pull/57#issuecomment-6160196350).
+It is sound and it is confirmed. Part 1's `P-1` sentence writes a label's later
+lines at the item's content column; a `=` that was a lazy continuation line at
+column zero becomes a **setext underline** once it is indented into the item; the
+projection then holds a heading inside a list item, which `S-1` forbids. Five
+documents that round-trip without Part 1 are affected.
+
+It also contradicted a sentence in *Edge cases* — that a continuation line which
+reads as a block *"cannot arise from indentation"* — and it was right about that
+too. A lazy continuation line is a continuation **because** it is not indented.
+That sentence is wrong and is not defended here.
+
+The objection named three resolutions and said choosing among them was the point.
+**Resolution 2 is taken**: RFC 0085 ([#85](https://github.com/mindmapmarkdown/spec/pull/85)),
+accepted today, makes a document whose tree is not well-formed non-conforming, so
+these five are not a broken round trip but documents the specification turns
+away, and lift says so. The objection attached a condition to that route — it
+*"needs the argument #74 asked for: why refusing is better than answering"*. That
+argument is below, and it is measured rather than asserted.
+
+Resolution 1, an amended Part 1, was not available: the candidate the objection
+sketched — write such a line at column 0 instead — is a rule that asks what the
+line **says**, which is the partial CommonMark grammar this project has refused
+three times now (RFC 0043 for `S-7`, RFC 0058, and here). Resolution 3, Part 1
+split off and decided with #81, would leave the 33.4% figure below unanswered
+through 0.1.0 while #81 has no proposal at all.
+
+### Why refusing is better than answering, measured 2026-10-29
+
+Both sides on one branch: `rfc/0057p1-on-0085` at `6c26411` — the accepted rules,
+RFC 0067, Part 2, RFC 0085, and Part 1 on top. `MMD_P1=0` lifts without Part 1,
+so one process compares the two. 230 tests, 230 pass.
+
+**What Part 1 costs.** Five documents stop conforming. Each round-trips on
+`rfc/0067-on-accepted` at `8f6e354` and each is refused here:
+
+| Document | without Part 1 | with Part 1 |
+|---|---|---|
+| `- a␣␣` ⏎ `=` | round-trips | not conforming |
+| `- a\` ⏎ `=` | round-trips | not conforming |
+| `- ␣\` ⏎ `=` | round-trips | not conforming |
+| `1. a␣␣` ⏎ `=` | round-trips | not conforming |
+| `- a␣␣` ⏎ `===` | round-trips | not conforming |
+
+**What Part 1 buys, on real documents.** Without Part 1, `E-4` keeps every line
+of a label as it appears, so a label that wrapped inside a list item records the
+list's indentation **inside the label text**. RFC 0067 folds the break to a
+space but does not remove those columns, so `- a` ⏎ `␣␣b` gives the label
+`a␣␣␣b`, and at depth two `a␣␣␣␣␣b`. RFC 0067's own table says that label should
+be `a b` — *"one line, nothing to indent"* — and Part 1 is what makes that true.
+
+Measured over the corpus, lifting each file both ways in one process:
+
+```
+773 files · 258 have at least one label Part 1 changes (33.4%) · 3,436 labels differ
+```
+
+These are ordinary documents, not constructed ones. One `rxjs` changelog entry
+reads `operator's␣␣␣closing selector` without Part 1, where the author wrote a
+line wrap; a code of conduct reads `sexual attention or␣␣␣advances`. **Every view
+of the tree shows those spaces**, and no later rule can remove them, because by
+then they are the label.
+
+**And a hard break below the top level becomes writable.** `- x` ⏎ `␣␣- a\` ⏎
+`␣␣␣␣b` has no canonical projection without Part 1 and round-trips with it. RFC
+0067 cannot reach it — a hard break is not a soft one — which is the sentence in
+that RFC saying Part 1 *"is still needed, for hard breaks only, and this RFC does
+not subsume it"*. Rejecting Part 1 would have left that family non-conforming
+under RFC 0085, so refusal was not avoidable by rejecting; it was only a choice
+of **which** documents get refused.
+
+**Neither choice turns away a real document.** `tools/corpus.mjs` with Part 1:
+770 `.md` files, 8.4 MB, 0 refused, 0 ill-formed, 0 with no canonical projection,
+0 failed the round trip — identical to the figure without it. The corpus tool
+counts `.md` only, which is three files fewer than the comparison above.
+
+So the trade is 3,436 labels in 258 real files against five documents that occur
+in none of them, and the five are turned away by a rule that says why. That is
+the answer to the condition the objection set.
+
+### Part 2 — held for no fault of its own, and measured on its own
+
+Part 2's period also ended 2026-10-16, and the note of 2026-10-22 on the pull
+request records why it was not decided then: the only prototype carrying it also
+carried Part 1, so there was no configuration in which it had been measured
+without a rule under objection. Nothing was ever filed against the rule itself.
+
+That prototype exists: `rfc/0057p2-on-accepted` at `040ed78` — the accepted rules
+plus Part 2 alone. Measured 2026-10-29 by projecting each tree and checking `P-8`
+on the projection directly, because the defect is **not** a broken tree round
+trip: it is that `P-9` writes the source back as it stands and `P-8` forbids the
+line that results, so the tree has no canonical projection at all and a
+round-trip check cannot see it.
+
+| Document | without Part 2 | with Part 2 |
+|---|---|---|
+| `# H` ⏎ ⏎ `x␣` | projection breaks `P-8` | `P-8` holds |
+| `# H` ⏎ ⏎ `x` ⏎ `y␣` | projection breaks `P-8` | `P-8` holds |
+| `# H` ⏎ ⏎ `> q␣` | projection breaks `P-8` | `P-8` holds |
+| `# H` ⏎ ⏎ ```` ``` ```` ⏎ `x␣` ⏎ ```` ``` ```` | `P-8` holds | `P-8` holds |
+
+The last row is the exemption, and it works: in a code block the trailing spaces
+**are** the content, `L-11` records them, and `P-8` already exempts them.
+
+**The honest cost stands as written.** An HTML block's trailing whitespace goes
+too, and inside a `<pre>` it was significant to a browser. That is stated in
+*Detailed design* rather than hidden, and the alternative — exempting
+`html_block` — leaves that block's tree with no canonical projection, which is
+the defect being fixed.
+
+### What this decision does not settle
+
+**The `P-1` home question** is left as it stands. *Unresolved questions* asked
+whether `P-1` or `P-4` or `P-9` should carry projection's half; no reviewer said,
+and it changes no behaviour. `P-1` it is.
+
+**[#81](https://github.com/mindmapmarkdown/spec/issues/81) is not answered.** It
+is the same mechanism as the objection's five documents, for a paragraph rather
+than a label, and it fails on `main` today with no proposal. RFC 0085 makes it a
+non-conforming document rather than a hole, which is why it does not hold the
+release — but anyone who answers #81 with a spelling later should expect to be
+able to answer these five the same way, and the five are recorded above for
+exactly that reason.
+
+**[#64](https://github.com/mindmapmarkdown/spec/issues/64) is not this RFC's.**
+Part 1's `P-1` sentence was narrowed on the day the RFC opened to say nothing
+about a section, because an ATX heading is one line. RFC 0067 answers #64 by
+folding, and is accepted today.
+
+### Where it lands
+
+`spec.md` gets Part 1's `E-4` sentence and `P-1` sentence, and Part 2's sentences
+in `E-4` and `E-5`, together with RFC 0039, 0046, 0051, 0067, 0069, 0072, 0079
+and 0085 — the single landing pull request, so that no rule lands over a hole.
+*Edge cases*' claim that a continuation line reading as a block cannot arise from
+indentation is **not** carried into `spec.md`; it is wrong, and the five
+documents above are what it was wrong about. `CHANGELOG.md` drops
+[#55](https://github.com/mindmapmarkdown/spec/issues/55) and
+[#59](https://github.com/mindmapmarkdown/spec/issues/59) from *Open before
+0.1.0*.
