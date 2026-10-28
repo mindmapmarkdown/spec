@@ -6,14 +6,14 @@ force, and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Rejected |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-10-02 |
 | **Comment period ends** | 2026-10-19 |
 | **Discussion** | <https://github.com/mindmapmarkdown/spec/pull/58> |
 | **Supersedes** | — |
-| **Superseded by** | — |
+| **Superseded by** | RFC 0085 ([#85](https://github.com/mindmapmarkdown/spec/pull/85)), which answers #56 by refusing the document |
 
 > **Revised on 2026-10-05, and the comment period restarts with it** — it ran
 > from 2026-10-02 and now ends 2026-10-19. The rule proposed on 2026-10-02 kept
@@ -397,3 +397,137 @@ cannot leave a paragraph's tail behind, because its closing fence ends the run.
 Nothing to do here, named so that the next reader does not have to re-derive it.
 
 ## Decision and rationale
+
+**Rejected**, 2026-10-29. The comment period ran from 2026-10-02, restarted with
+the revision of 2026-10-05, and ended 2026-10-19. This decision is recorded ten
+days later; what was raised in those ten days is below, and none of it is new
+argument for the rule.
+
+The ground is the one `GOVERNANCE.md` §4 names explicitly.
+[#84](https://github.com/mindmapmarkdown/spec/issues/84) part 2 was filed
+2026-10-12, while the period was open, and says this RFC breaks a document that
+round-trips without it. §4 is direct about that form — *"this breaks round-trip
+for case X" pauses everything until case X is answered* — and case X has not been
+answered. No amendment was proposed between 2026-10-19 and today, and none is
+proposed here, because the reason there is none is structural and is the subject
+of the next section.
+
+### Why no amendment was available
+
+The rule applies to *a `paragraph` entry that directly follows a
+`link_reference_definition` entry*. Two different documents produce that pair:
+
+| | |
+|---|---|
+| **(a)** | a paragraph CommonMark left behind when it took the definition out of the front of it — the document this RFC is about |
+| **(b)** | a paragraph that merely comes after the definition in `content`, with a blank line that was always there — #84 part 2 |
+
+**The tree does not record which.** `content` is a list of entries; nothing in it
+says whether a blank line stood between two of them in the document CommonMark
+read, because that blank line is not information about the tree — it is `P-7`'s
+business, which is the rule this RFC amends. A rule written over two `block` names
+therefore cannot tell (a) from (b), and the rule has to be unconditional for the
+reason this RFC argues on its first page: the alternative is a second, partial
+grammar of CommonMark inside this specification.
+
+So the amendment would have had to add something to the encoding — a field saying
+whether a content entry came out of the entry before it. That is a change to what
+a tree *is*, to close a gap in how a tree is *written*, and no reading of the
+defect justifies it.
+
+### Measured on both sides, 2026-10-29
+
+Each document projected, the projection lifted, and the tree and bytes compared.
+Left column: `rfc/0085-on-accepted` at `30f9cbb` — the accepted rules, RFC 0067,
+RFC 0057, RFC 0085, and **no 0058**. Right column: `rfc/definition-lazy-continuation`
+at `8463da3`, the revision's own prototype, where `S-7` is active.
+
+| Document | no 0058, with RFC 0085 | 0058 revised |
+|---|---|---|
+| #56 `[x]: /x` ⏎ `1.` | **not conforming** | canonical as `[x]: /x` ⏎ `␣␣␣␣1.` |
+| #56 `[x]: /x` ⏎ `2. a` | **not conforming** | canonical as `[x]: /x` ⏎ `␣␣␣␣2. a` |
+| #84 part 1 `1) [x]:x` ⏎ `␣␣␣2)` | not conforming | **tree has no projection** |
+| #84 part 2 `[x]:x` ⏎ ⏎ `[y]:>` ⏎ `-` | **canonical, round-trips** | **tree has no projection** |
+
+Read the two columns together. This RFC gains the two documents in *Motivation*
+and loses one that works today, and #84 part 1 is unanswered either way. RFC 0085
+answers all four the same way: the three that have no canonical form are not
+conforming documents, and the one that works is left alone.
+
+**Neither column turns away a real document.** `tools/corpus.mjs` over 770 real
+`.md` files, 8.4 MB, on the left-hand configuration: 0 refused, 0 ill-formed, 0
+with no canonical projection, 0 failed the round trip. Neither #56's shape nor
+#84's occurs in the corpus at all.
+
+### Why RFC 0085 is the answer instead, in this RFC's own words
+
+*Alternatives* above considered RFC 0085's mechanism — *a document whose lift is
+not well-formed does not conform* — and rejected it with a condition attached:
+
+> Rejected, but recorded as the answer if a member of this family is ever found
+> that no spelling can write back.
+
+**That member has been found.** #84 part 1 is it. A definition inside a list item
+can leave behind a paragraph that is the item's *first* inline content, which
+makes it the **label**; `P-1` writes a label on the marker's line, and there is no
+second line to indent four columns. This RFC's sentence has nowhere to apply, and
+no sentence about where a blank line goes can have, because the construct that
+would carry it does not exist. The condition this RFC set for its own replacement
+is met, and the replacement is accepted the same day.
+
+So #56 joins #81 to #84: not a gap in the rules but a document with no tree. That
+is the position `CHANGELOG.md` already records for that family, and it is why
+rejecting this RFC does not hold the release.
+
+### What it costs, said plainly
+
+Two documents that conform today stop conforming: `[x]: /x` followed by `1.`, and
+`[x]: /x` followed by `2. a`. This RFC's objection to RFC 0085 is right about
+them — a perfectly good tree exists and projection can write it back, as the
+right-hand column above shows, and refusing them throws that away. That argument
+was weighed and lost to three things: the rule that buys them breaks a document
+that works today, it cannot be narrowed without adding to the encoding, and
+neither shape occurs in 770 real files.
+
+**The direction of the remaining risk is the deciding reason.** Rejecting now and
+answering #56 with a spelling later widens what conforms, which is Normative.
+Accepting now and withdrawing after 0.1.0 narrows it, which is Breaking and means
+a major version. Of the two ways to be wrong, this is the recoverable one.
+
+### The measurement RFC 0069's decision asked for
+
+RFC [0069](0069-empty-label-definition.md)'s decision of 2026-10-22 recorded that
+its rule *"has never been measured with **no** RFC 0058 present"*, and that if
+0058 were rejected outright the measurement should be made before `spec.md` is
+written. It has been made, on 2026-10-29, on `rfc/0085-on-accepted`:
+
+| RFC 0069's example | Result with no 0058 |
+|---|---|
+| `-` ⏎ `␣␣[x]: /x` ⏎ ⏎ `␣␣- b` | canonical, round-trips |
+| `-` ⏎ ⏎ `␣␣[x]: /x` | canonical, round-trips |
+| `- a` ⏎ ⏎ `␣␣[x]: /x` ⏎ ⏎ `␣␣- b` | canonical, round-trips |
+
+RFC 0069 holds in the configuration that now lands. The independence its decision
+argued is measured rather than argued, and 0069 needs no revisiting.
+
+### What stays open
+
+[#56](https://github.com/mindmapmarkdown/spec/issues/56) is answered by refusal,
+not by a spelling, and the difference matters to whoever reads it next. If a
+document of that shape is ever found in use, the rule to reach for is the one
+above: the sentence, its four columns, and the measurement behind them are
+recorded here and not deleted. It would then be a Normative widening of what
+conforms, with #84 part 2 as the case any new version has to answer first.
+
+The second arrangement in #56 — a paragraph whose source is exactly a definition
+— was never a specification question and was fixed in
+[mindmapmd#11](https://github.com/mindmapmarkdown/mindmapmd/pull/11). Nothing here
+changes that.
+
+### Where it lands
+
+Nowhere in `spec.md`. `P-7` keeps the sentence RFC 0069 adds and nothing else.
+`CHANGELOG.md` moves [#56](https://github.com/mindmapmarkdown/spec/issues/56) out
+of *Open before 0.1.0* on the same ground as #81 to #84, and records this
+rejection beside RFC 0037's — the second proposal this project has turned down,
+and the first turned down because a measurement went against it.
