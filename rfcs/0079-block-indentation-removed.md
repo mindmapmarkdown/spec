@@ -6,7 +6,7 @@ force, and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-10-05 |
@@ -358,3 +358,104 @@ taken with it active, which is why they can be quoted at all.
 ## Decision and rationale
 
 <!-- Left empty until the comment period ends on 2026-10-19. -->
+
+**Accepted**, 2026-10-29, by lazy consensus. The comment period ran in full, from
+2026-10-05 to 2026-10-19. The decision is recorded **ten days late**, and what
+stood in the way was not an objection to the rule.
+
+### The counterexample of 2026-10-12 is a scoping note, and it stands
+
+A counterexample was posted while the period was open: `- a` ⏎ `␣b` ⏎
+`␣␣␣␣- c`, where a paragraph attached from **outside** the item is written back
+**inside** it, and `- c` at three columns past the content column interrupts the
+paragraph. It fails on `main` and it fails with this rule.
+
+It is not an objection, and it says so: *"this rule neither causes it nor fixes
+it"*, and this rule still answers the document in
+[#74](https://github.com/mindmapmarkdown/spec/issues/74). That reading is
+accepted. What it establishes is the **boundary of this RFC**: `E-5`'s number
+answers #74's document and does not close #74's family, because the family's
+cause is the one #74 named — projection can change whether a block is contained
+— and no choice of column fixes that.
+
+**RFC 0085 is what answers the family**, accepted today: a document whose tree is
+not well-formed does not conform, so each remaining member is a document the
+specification turns away rather than a rule it cannot satisfy. That is the
+division of labour this decision records — a number for the documents a number
+can fix, and a conformance condition for the rest. The members with no answer are
+[#81](https://github.com/mindmapmarkdown/spec/issues/81) to
+[#84](https://github.com/mindmapmarkdown/spec/issues/84) and this counterexample,
+and `CHANGELOG.md` already lists them that way.
+
+### Why it was not decided on 2026-10-19, and what resolved it
+
+The note of 2026-10-22 records the reason, and it is the reason given on RFC 0067
+and RFC 0072 the same day: the prototype sat on `trial/0.1.0-b`, which carries
+RFC 0057 Part 1 — then under objection — and the superseded RFC 0058. **That
+matters more here than elsewhere**, because this RFC's case is explicitly
+comparative: it measures four answers and argues the other three are worse. A
+comparison is only as good as the configuration all four were measured in.
+
+**Resolved 2026-10-23.** `rfc/0079-on-accepted` at `6656e01` is
+`trial/accepted-only` — the accepted rules and `S-7`, nothing undecided — plus
+this RFC's `PAD` plumbing and a run-time switch, `MMD_E5`, selecting which answer
+is in force. The four are then compared **on one branch that differs in nothing
+else**, and `MMD_E5=gave` reproduces the baseline's numbers exactly, which is the
+check that the switch changes nothing but the rule. RFC 0057 Part 2 is
+deliberately absent: it moves the canonical-projection count by about 1,450 per
+20,000 and would swamp the difference being measured.
+
+Every tree with no usable canonical document — ill-formed trees plus trees with
+no canonical projection — over 20,000 documents per seed:
+
+| rule | 1234567 | 20261005 | 7 |
+|---|---|---|---|
+| `gave` — RFC 0038, in force today | 4273 | 4330 | 4234 |
+| **`lesser` — this RFC** | **4258** | **4315** | **4209** |
+| `pad` — as many as `P-4` will add | 4284 | 4339 | 4248 |
+| `all` — every column | 4419 | 4459 | 4382 |
+
+**This RFC's answer is best on every seed, and `pad` is worse than doing
+nothing.** The round trip fails nowhere under any of the four. The ranking is the
+one the RFC claimed, now measured where it means something.
+
+**The margin is small and the documents decide it.** About 20 per 20,000 — a
+tenth of a percent — so the aggregate is not the argument. #74's own document,
+`␣␣cont` ⏎ `␣␣␣␣- n3`, is refused under `gave` and under `all`, and round-trips
+under `lesser` and under `pad`. The block quote attached across a container
+boundary, `-` ⏎ `>` ⏎ `␣␣> q`, is what separates `lesser` from `pad`: `pad` adds
+columns the first line never gave up, and `E-5` then has to remove what `P-4`
+never added. `lesser` is the only one of the four that gets both sides of that
+boundary right, which is why it is a minimum rather than a tuned constant.
+
+### What this decision does not settle
+
+**A label's later lines** — the same arithmetic on the other side of the encoding
+— are RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57)) Part 1, **accepted today**. The RFC
+said that if both are accepted the two rules should be stated in terms of each
+other rather than separately, and called that an editorial question for the
+`spec.md` edit. Both are accepted, so that is now a task rather than a
+conditional: `E-4`'s sentence and `E-5`'s should be one piece of arithmetic
+stated once, with the label and the content block as its two cases. Recorded here
+so the landing pull request does not restate it twice and let the two drift.
+
+**Whether `L-3` should attach a block written at column 0 to a node at all** is
+untouched. Narrowing `L-3` would remove the disagreement between attachment and
+containment that the block-quote example rests on, and a great deal else with it
+— content before any node, content after a list, content under a heading all
+depend on attachment. Not proposed, and named again so that the next reader of
+that example does not wonder whether it was considered.
+
+**`S-7` lands with RFC 0085, not with this rule.** This RFC does not propose
+`S-7` and does not depend on it; `S-7` is what makes the failures above
+*visible*, not what fixes them. The measurements were taken with it active, which
+is why they can be quoted at all.
+
+### Where it lands
+
+`spec.md` gets `E-5`'s amended sentence, together with the other rules accepted
+for 0.1.0, in the single landing pull request — stated with RFC 0057 Part 1's
+`E-4` sentence as one arithmetic, per the note above. `CHANGELOG.md` drops
+[#74](https://github.com/mindmapmarkdown/spec/issues/74) from *Open before
+0.1.0*, and keeps the counterexample recorded with #81 to #84 as a member of
+#74's family that no column answers.
