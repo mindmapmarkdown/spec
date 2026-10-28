@@ -6,7 +6,7 @@ and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-10-02 |
@@ -303,3 +303,106 @@ cannot be accepted without Part 1, because without the fold `S-8` would refuse
 every wrapped heading. The decision should record each part.
 
 ## Decision and rationale
+
+**Part 1: accepted. Part 2: accepted.** 2026-10-29, by lazy consensus. The
+comment period ran in full, from 2026-10-02 to 2026-10-16, with no comment and no
+objection while it was open. The text did not change, so the period was not
+restarted. *Unresolved questions* asked that the decision record each part, so it
+does; and the decision is recorded **thirteen days late**, which is the subject of
+the next paragraph.
+
+### What was raised after the period closed
+
+An objection was filed on 2026-10-22, six days late, and it says of itself that
+it is **not about the rule** but about the only evidence there was for it: the
+prototype was branched from RFC 0057's, whose Part 1 was under objection, so the
+149 tests measured two undecided rules at once and *"no document that round-trips
+today stops doing so"* could not be checked. It asked for one thing — a prototype
+of this RFC on current `main` without Part 1 — and listed three claims it had to
+show.
+
+That branch was built the same day. `rfc/0067-on-accepted` at `8f6e354` is
+`trial/accepted-only` — current `main` plus the accepted rules and `S-7`, nothing
+undecided — plus this RFC alone. All three claims hold.
+
+**1. The three refusals were not this rule's.** `- a␣␣` ⏎ `=`, `- a\` ⏎ `=` and
+`- ␣\` ⏎ `=` are refused on `rfc/soft-break-label` and round-trip here. They
+belong to RFC 0057 Part 1, as its own objection describes, and Part 1 is accepted
+today with those five documents recorded as its cost.
+
+**2. Nothing else stops round-tripping, and a great deal stops being ill-formed.**
+`tools/sweep.mjs`, 40,000 documents per seed, three seeds:
+
+| | baseline | with this RFC |
+|---|---|---|
+| failed the round trip | 0 · 0 · 0 | **0 · 0 · 0** |
+| not well-formed | 5630 · 5756 · 5537 | **3131 · 3150 · 3034** |
+| not conforming | 1376 · 1339 · 1390 | 1523 · 1494 · 1554 |
+
+Ill-formed trees fall by about 45%. The rise in *not conforming* is `S-8` doing
+its job: a heading whose label carries a hard break is refused at lift instead of
+producing a tree with no canonical projection. **A refusal is a decidable answer
+where an ill-formed tree is not**, which is the trade the RFC describes and the
+reason it is a good one.
+
+**3. Both halves do what the RFC says.** `Head` ⏎ `more` ⏎ `===` round-trips as
+`# Head more`, where `main` writes `# Head` ⏎ `more` and loses the heading —
+[#64](https://github.com/mindmapmarkdown/spec/issues/64) answered. `Head\` ⏎
+`more` ⏎ `===` is refused with a message naming `S-8` and `P-6`, where `main`
+silently writes a heading it cannot read back.
+
+221 tests, 221 pass.
+
+### The third option the isolated branch opened, and why it is not taken
+
+Measured alone, this rule leaves an item's container indentation **inside the
+label**: `- a` ⏎ `␣␣b` gives `a␣␣␣b`, and `- x` ⏎ `␣␣- a` ⏎ `␣␣␣␣b` gives
+`a␣␣␣␣␣b`. Everything round-trips, but *Interaction with RFC 0057*'s table says
+that label should be `a b`, and it is `a b` only if RFC 0057 Part 1 is also
+accepted. That was pinned as a test on the branch rather than fixed, because
+which way it went was the decision.
+
+So a third option became visible: **narrow this rule's fold to a `section` label
+only**, leaving the item case to RFC 0057 Part 1 where it already belongs. It
+would have answered #64 on this date whatever happened to Part 1, which is why it
+was worth recording.
+
+**It is not taken, because Part 1 is accepted today.** The option existed to
+protect #64 from Part 1's objection, and that objection is resolved —
+see RFC 0057 ([#57](https://github.com/mindmapmarkdown/spec/pull/57))'s decision, where Part 1's cost is five
+documents and its benefit is 3,436 labels in 258 real files. With both accepted,
+the first option in that list is what happens: an item's label is what this RFC's
+table says it is. Narrowing the rule now would be a change to the text after its
+period closed, for no remaining reason.
+
+### Separability, as the RFC asked
+
+Part 1 can stand without Part 2 — a wrapped heading becomes writable and a
+heading carrying a hard break still has no canonical projection, which is better
+than today and still a hole. Part 2 **cannot** stand without Part 1, because
+without the fold `S-8` would refuse every wrapped heading. Both are accepted, so
+neither case arises; it is recorded because the RFC asked for it and because a
+later amendment to one of them needs to know.
+
+### What this decision does not settle
+
+**Where `S-8` is stated** is left as written. It is a well-formedness rule
+because that is where `S-1` sits and the refusal follows from §2.4 rather than
+from a new mechanism. No reviewer argued for `L-2`, and the behaviour is the same
+either way.
+
+**A hard break inside a heading may deserve a better answer than refusal.** It is
+expressible in Markdown and a renderer shows it, so refusing is this
+specification choosing not to represent something a reader can see. The RFC names
+this rather than settling it, and that stands: if someone reports writing
+headings that way, the answer should change, exactly as it did for
+[#35](https://github.com/mindmapmarkdown/spec/issues/35), where a reader's report
+turned down RFC 0037 after it had been argued for. The `S-8` refusals in the
+table above are the population that report would be about.
+
+### Where it lands
+
+`spec.md` gets Part 1's `E-4` sentence and Part 2's `S-8`, together with the
+other rules accepted for 0.1.0, in the single landing pull request.
+`CHANGELOG.md` drops [#64](https://github.com/mindmapmarkdown/spec/issues/64)
+from *Open before 0.1.0*.
