@@ -139,7 +139,8 @@ A **conforming document** is a Markdown document that
 
 - is a valid CommonMark document, and
 - lifts (§1.3) to exactly one tree under the rules of this specification, with
-  no construct whose interpretation this specification leaves undefined.
+  no construct whose interpretation this specification leaves undefined, and
+- whose tree is well-formed (§2.4).
 
 A **canonical document** is a conforming document that is byte-identical to the
 canonical projection (§1.3) of its own tree. Every canonical document is a conforming
@@ -162,7 +163,7 @@ level it claims, and MUST NOT claim a level it does not satisfy in full.
 | Level | Name | Requirement |
 |---|---|---|
 | **L0** | Read | A conforming document is usable by software that knows nothing about this specification |
-| **L1** | Structure | Lifts any conforming document to the prescribed tree, and projects any tree to canonical form |
+| **L1** | Structure | Lifts any conforming document to the prescribed tree, and projects any well-formed tree to canonical form |
 | **L2** | Round-trip | Diffs and merges trees, and operates on a subtree without the rest of the document |
 
 **L0 — Read.** L0 places its requirement on documents, not on software. A
@@ -176,14 +177,16 @@ be an accident: adopting this specification costs nothing to anyone who has not
 adopted it. A proposed requirement that fails L0 fails §1.4.1 with it.
 
 **L1 — Structure.** An L1 implementation MUST lift every conforming document to
-the tree this specification prescribes for it, and MUST project every tree to
-that tree's canonical form. Both operations MUST be deterministic: the same
-input MUST produce the same output, in the same process and in any other
-conforming implementation. Sibling order MUST be preserved in both directions.
+the tree this specification prescribes for it, and MUST project every
+**well-formed** tree (§2.4) to that tree's canonical form. Both operations MUST
+be deterministic: the same input MUST produce the same output, in the same
+process and in any other conforming implementation. Sibling order MUST be
+preserved in both directions.
 
 The two operations MUST be mutually inverse, in this exact sense: lifting the
-canonical projection of a tree MUST yield that same tree, and projecting the
-lift of a canonical document MUST yield that same document, byte for byte. For a
+canonical projection of a **well-formed** tree MUST yield that same tree, and
+projecting the lift of a canonical document MUST yield that same document, byte
+for byte. For a
 conforming document that is *not* canonical, only the tree survives; the bytes do
 not, and are not required to. Beyond the tree, an L1 implementation is not
 required to preserve anything about a document.
@@ -232,7 +235,9 @@ in [Chapter 2](#2-canonical-hierarchy).
 **kind** — A property of every node other than the root, with exactly two values:
 **`section`**, a node written as a Markdown heading, and **`item`**, a node
 written as a list item. Kind is part of the tree. Two trees that are otherwise
-equal but differ in the kind of any node are different trees.
+equal but differ in the kind of any node are different trees. An `item` written as
+an ordered list item carries two further properties, an **ordinal** and a
+**delimiter**; they are part of the tree in the same way (L-12).
 
 **tree** — A root node together with all of its descendants. A tree is rooted
 and **ordered**: the sequence of a node's children is part of the tree, and two
@@ -475,13 +480,17 @@ The reverse — an `item` containing a `section` — is not a well-formed tree; 
 other CommonMark block produces a node.
 
 **L-2.** A heading produces a node of kind `section`. A list item produces a
-node of kind `item`.
+node of kind `item`. An item's `label` is the inline content of its first block
+when that block is a paragraph, and is empty otherwise. A block that does not
+give a label is node content (L-3), in the position it occupies.
 
 **L-3.** Every block that is not a heading or a list item — paragraph, fenced or
 indented code block, block quote, table, HTML block, thematic break — is **node
 content**, and attaches to the nearest node preceding it in document order.
 Content appearing before any node attaches to the root. A document's front
-matter is node content as well, and attaches to the root; L-10 says how.
+matter is node content as well, and attaches to the root; L-10 says how. So is a
+link reference definition, which CommonMark reports as no block at all; L-13
+says how.
 
 **L-4.** The root node is synthetic. It has no label, no kind, and no
 corresponding text in the document. A document whose entire content sits under a
@@ -497,13 +506,14 @@ trailing spaces, or a trailing backslash. Lift MUST produce the same tree for
 both spellings, and MUST record the break in `source` in the backslash form.
 
 **L-10.** If a document's first line consists of exactly three hyphen-minus
-characters, optionally followed by spaces or tabs, and some later line consists
-of the same, then the lines from the first through the **first** such later line
-are **front matter**. Front matter produces no node. It is recorded as a single
-entry in the root's `content` (E-1), with `block` equal to `front_matter` and
-`source` that run of lines verbatim, both fences included and each line's
-trailing spaces and tabs removed. A document with no such later line has no
-front matter, and its first line is read as CommonMark reads it.
+characters, optionally followed by spaces or tabs, the line after it is not
+blank, and some later line consists of the same, then the lines from the first
+through the **first** such later line are **front matter**. Front matter produces
+no node. It is recorded as a single entry in the root's `content` (E-1), with
+`block` equal to `front_matter` and `source` that run of lines verbatim, both
+fences included and each line's trailing spaces and tabs removed. A document with
+no such later line, or whose second line is blank, has no front matter, and its
+first line is read as CommonMark reads it.
 
 **L-11.** A code block — fenced or indented — MUST be recorded with `block` equal
 to `code_block` and `source` made of:
@@ -525,6 +535,17 @@ empty.
 The **fence** is backtick characters, or tilde characters if the info string
 contains a backtick. Its length is three, or one more than the longest run of that
 character anywhere in the content, whichever is greater.
+
+**L-12.** An item of an ordered list has an **ordinal** and a **delimiter**. The
+ordinal is the list's start number plus the item's zero-based position in that
+list, both as CommonMark determines them. The delimiter is `.` or `)`, as
+written. An item of a bullet list has neither. The list marker is not part of the
+label (E-4).
+
+**L-13.** A link reference definition (CommonMark §4.7) produces no node. It is
+**node content**: one entry with `block` equal to `link_reference_definition` and
+`source` the definition's lines as written, and it attaches as L-3 attaches any
+block. A run of definitions that no blank line separates is one entry.
 
 *(Informative)* L-1 is what keeps a prose document from exploding. A README with
 forty paragraphs and six headings has six nodes, not forty-six. The test for
@@ -608,6 +629,47 @@ canonical document may carry trailing whitespace, and an editor that trims on
 save will change that document; the same editor changes the code in any Markdown
 file, and what this specification can do is not be the thing that changes it.
 
+The word doing the work in L-2's third sentence is **inline**. A heading's label
+is its heading text and an item's is its first paragraph's text; a thematic
+break, a block quote, a fenced block, a table and an HTML block have no inline
+content of their own to lend. They were never labels — L-2 did not say so, and
+lift took whatever first block it was given. An item opening with a thematic
+break then had the label `---`, and `- ---` is itself a thematic break, so that
+node could not be written down at all. An item opening with a quotation was worse
+for being writable: it lifted to a node *named* `> q`, which is not what the
+document says.
+
+L-10's second condition — that the line after the opening fence is not blank —
+keeps the rule from swallowing a document that opens with a thematic break and
+carries a later one. That is a note beginning with a horizontal rule, which is
+how some people write every note, and without the condition its whole first
+section became opaque front matter. The condition costs real front matter
+nothing: it opens on its first key, in every tool this rule exists to
+accommodate, and Pandoc requires the same thing. A line is blank when it is empty
+or contains only spaces and tabs, as CommonMark defines it. An empty block is
+unaffected — `---` immediately followed by `---` has a non-blank line after it,
+its own closing fence.
+
+L-12 records an ordered list's numbers because they are meaning rather than
+spelling. A reader who writes `3.` is saying *third*, and a tool that renumbers
+it to 1 has changed the document's content, not its formatting. CommonMark reads
+a list's start from its **first** item only, so the number written on any later
+item is not recorded: a list written 1, 1, 1 lifts to 1, 2, 3 and comes back
+written that way. A new list begins where CommonMark begins one — a change of
+delimiter, a change between bullet and ordered, or a block that interrupts the
+list. Blank lines alone do not. And L-3 is unchanged by this, but worth reading
+once more with numbers in mind: a block that follows a list attaches to the
+nearest node preceding it, which is the list's **deepest last item**, and P-12 is
+what writes it back where the numbering needs it.
+
+L-13 records a definition rather than parsing it, and takes the run rule L-10
+already takes for front matter, for the same reason: telling one definition from
+the next means parsing them. A blank line between two definitions makes two
+entries. Before this rule projection dropped every definition, so a document's
+reference links rendered as links in the text that was read and as literal
+brackets in the text that came back — a change to what the document says that no
+comparison of trees can detect, because both documents lift to the same tree.
+
 A paragraph is content, not a node:
 
 ````example
@@ -618,6 +680,35 @@ Node.js 20 or later.
 {"content":[],"children":[
   {"kind":"section","label":"Install",
    "content":[{"block":"paragraph","source":"Node.js 20 or later."}],
+   "children":[]}]}
+````
+
+A block that is not a paragraph gives no label, and is content where it stands
+(L-2). An unlabelled bullet carrying a quotation is a node with no name, not a
+node called `> q`:
+
+````example
+-
+
+  > q
+.
+{"content":[],"children":[
+  {"kind":"item","label":"",
+   "content":[{"block":"block_quote","source":"> q"}],
+   "children":[]}]}
+````
+
+The same for a thematic break, which is the case that could not be written back
+at all — `- ---` is itself a thematic break:
+
+````example
+-
+
+  ---
+.
+{"content":[],"children":[
+  {"kind":"item","label":"",
+   "content":[{"block":"thematic_break","source":"---"}],
    "children":[]}]}
 ````
 
@@ -678,6 +769,43 @@ ordinary thematic break, which L-3 attaches to the root:
  "children":[{"kind":"section","label":"A","content":[],"children":[]}]}
 ````
 
+L-10 needs the line after the opening fence to be non-blank, and this is the
+other case it must not swallow — a note that opens with a horizontal rule and
+carries a later one. Every line of it is ordinary content of the root:
+
+````example
+---
+
+A note that opens with a rule.
+
+---
+
+More text.
+.
+{"content":[
+  {"block":"thematic_break","source":"---"},
+  {"block":"paragraph","source":"A note that opens with a rule."},
+  {"block":"thematic_break","source":"---"},
+  {"block":"paragraph","source":"More text."}],
+ "children":[]}
+````
+
+Front matter as the tools that write it write it opens on its first key, so the
+condition does not reach it:
+
+````example
+---
+title: A note
+---
+
+# Heading
+.
+{"content":[
+  {"block":"front_matter","source":"---\ntitle: A note\n---"}],
+ "children":[
+  {"kind":"section","label":"Heading","content":[],"children":[]}]}
+````
+
 Every other block is content too, and a section with a quotation and a code
 block beneath it has one node rather than three:
 
@@ -728,8 +856,10 @@ print(1)
    "children":[]}]}
 ````
 
-A block inside a list item carries none of the item's indentation (E-5), on any of
-its lines:
+A block inside a list item carries none of the item's indentation (E-5, E-10), on
+any of its lines. Both of E-10's numbers are two here — the columns the block's
+first line gave up, and the columns P-4 will write back — so two is what every
+later line loses:
 
 ````example
 - Install
@@ -746,6 +876,39 @@ its lines:
    "content":[
      {"block":"paragraph","source":"Run this\nfrom the root:"},
      {"block":"code_block","source":"```sh\nnpm i\n```"}],
+   "children":[]}]}
+````
+
+The two numbers come apart in two ways, and each has a document behind it. A
+block attached to the root gave up columns that P-4 will not replace, so nothing
+is removed from its later lines; canonical form writes the block at the root's
+content column, which is zero, and this document is conforming and not canonical:
+
+````example
+␣␣cont
+␣␣␣␣- n3
+.
+{"content":[{"block":"paragraph","source":"cont\n    - n3"}],"children":[]}
+````
+
+Had the two columns been removed, `- n3` would have come back at two columns,
+where a list marker interrupts a paragraph — and the projection would hold a node
+the tree does not.
+
+The other way round, a block written at column 0 and attached to an item by L-3
+gave up no columns at all, and P-4 will add the item's two. No line loses more
+than it gave up, so the block quote's continuation line keeps all four of its
+columns and projection writes it six columns in:
+
+````example
+- a
+> q
+> r
+␣␣␣␣- n3
+.
+{"content":[],"children":[
+  {"kind":"item","label":"a",
+   "content":[{"block":"block_quote","source":"> q\n> r\n    - n3"}],
    "children":[]}]}
 ````
 
@@ -814,6 +977,217 @@ second line
    "content":[{"block":"paragraph","source":"first line\\\nsecond line"}],
    "children":[]}]}
 ````
+
+Trailing whitespace that is *not* a hard break is not recorded at all, so a stray
+space at the end of a paragraph does not leave a tree that cannot be written back
+(E-10). Shown here as `␣`, and this document is conforming and not canonical:
+
+````example
+# Note
+
+para␣␣
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Note",
+   "content":[{"block":"paragraph","source":"para"}],
+   "children":[]}]}
+````
+
+A link reference definition produces no node and is recorded whole (L-13). At the
+top of a document it attaches to the root, like any other block that precedes
+every node:
+
+````example
+[x]: https://example.com
+
+# Guide
+
+See [the guide][x].
+.
+{"content":[
+  {"block":"link_reference_definition","source":"[x]: https://example.com"}],
+ "children":[
+  {"kind":"section","label":"Guide","content":[
+    {"block":"paragraph","source":"See [the guide][x]."}],"children":[]}]}
+````
+
+and elsewhere it attaches as L-3 attaches anything else — to the nearest node
+preceding it, in the position it occupies:
+
+````example
+# Guide
+
+Text.
+
+[x]: https://example.com
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Guide","content":[
+    {"block":"paragraph","source":"Text."},
+    {"block":"link_reference_definition","source":"[x]: https://example.com"}],
+   "children":[]}]}
+````
+
+including inside a list item, where it takes none of the item's indentation:
+
+````example
+- a
+
+  [x]: https://example.com
+
+- b
+.
+{"content":[],"children":[
+  {"kind":"item","label":"a","content":[
+    {"block":"link_reference_definition","source":"[x]: https://example.com"}],
+   "children":[]},
+  {"kind":"item","label":"b","content":[],"children":[]}]}
+````
+
+A definition is the one block CommonMark does not report, which is why it alone
+can sit between a bare marker and a nested list without becoming that node's
+label. An empty label's first content entry is written on the line below the
+marker when the node has children (P-7): a blank line there would leave two in a
+row once the definition is read out again, and two blank lines end the item, so
+the child below would come back as a sibling.
+
+````example
+-
+  [x]: /x
+
+  - b
+.
+{"content":[],"children":[
+  {"kind":"item","label":"",
+   "content":[{"block":"link_reference_definition","source":"[x]: /x"}],
+   "children":[
+     {"kind":"item","label":"b","content":[],"children":[]}]}]}
+````
+
+With no children there is one blank line to leave behind and the item survives
+it, so P-7 is unchanged:
+
+````example
+-
+
+  [x]: /x
+.
+{"content":[],"children":[
+  {"kind":"item","label":"",
+   "content":[{"block":"link_reference_definition","source":"[x]: /x"}],
+   "children":[]}]}
+````
+
+and a label of its own puts the content back where P-7 always had it:
+
+````example
+- a
+
+  [x]: /x
+
+  - b
+.
+{"content":[],"children":[
+  {"kind":"item","label":"a",
+   "content":[{"block":"link_reference_definition","source":"[x]: /x"}],
+   "children":[
+     {"kind":"item","label":"b","content":[],"children":[]}]}]}
+````
+
+An ordered item records its number and its delimiter (L-12):
+
+````example
+# Setup
+
+1. Install
+2. Configure
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Setup","content":[],"children":[
+    {"kind":"item","label":"Install","ordinal":1,"delimiter":".",
+     "content":[],"children":[]},
+    {"kind":"item","label":"Configure","ordinal":2,"delimiter":".",
+     "content":[],"children":[]}]}]}
+````
+
+A list that starts at 3 keeps its start:
+
+````example
+# Steps
+
+3. Test
+4. Ship
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Steps","content":[],"children":[
+    {"kind":"item","label":"Test","ordinal":3,"delimiter":".",
+     "content":[],"children":[]},
+    {"kind":"item","label":"Ship","ordinal":4,"delimiter":".",
+     "content":[],"children":[]}]}]}
+````
+
+CommonMark does not read the numbers written on later items, and neither does
+lift. Canonical form writes them in order, so this document is conforming and not
+canonical:
+
+````example
+# Steps
+
+1. One
+1. Two
+1. Three
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Steps","content":[],"children":[
+    {"kind":"item","label":"One","ordinal":1,"delimiter":".",
+     "content":[],"children":[]},
+    {"kind":"item","label":"Two","ordinal":2,"delimiter":".",
+     "content":[],"children":[]},
+    {"kind":"item","label":"Three","ordinal":3,"delimiter":".",
+     "content":[],"children":[]}]}]}
+````
+
+The delimiter is recorded as written:
+
+````example
+# Steps
+
+1) One
+2) Two
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Steps","content":[],"children":[
+    {"kind":"item","label":"One","ordinal":1,"delimiter":")",
+     "content":[],"children":[]},
+    {"kind":"item","label":"Two","ordinal":2,"delimiter":")",
+     "content":[],"children":[]}]}]}
+````
+
+A line that begins with a date is three nested ordered lists to CommonMark, and
+every number is kept:
+
+````example
+# Log
+
+- 2026. 1. 15. 10:00
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Log","content":[],"children":[
+    {"kind":"item","label":"","content":[],"children":[
+      {"kind":"item","label":"","ordinal":2026,"delimiter":".",
+       "content":[],"children":[
+         {"kind":"item","label":"","ordinal":1,"delimiter":".",
+          "content":[],"children":[
+            {"kind":"item","label":"10:00","ordinal":15,"delimiter":".",
+             "content":[],"children":[]}]}]}]}]}]}
+````
+
+*(Informative)* That last tree is not a mistake, and it is not something this
+specification chose. CommonMark reads `2026.` as a list marker, and so every
+renderer in existence already reads that line as three nested lists; recording
+anything else would be recording something no reader of the document sees. It is
+not canonical, and its canonical form is a shape nobody would write — which is
+the honest answer for a document whose text and whose meaning disagree.
 
 A label is inline source rather than rendered text, and lift never resolves what
 that source points at (E-4, L-8). The link below is the whole label, brackets and
@@ -909,8 +1283,28 @@ contains the list rather than from the document (L-7):
 **S-4.** A `front_matter` entry MUST be the first entry of the root's `content`,
 and MUST NOT appear anywhere else in a tree.
 
-A tree satisfying S-1, S-2, and S-4 is **well-formed**. Lift cannot produce a
-tree that is not well-formed; a tree constructed programmatically can be.
+**S-5.** Among consecutive sibling items, an ordered item whose delimiter equals
+the previous item's, and whose ordinal is not one more than the previous item's,
+**restarts** the list. For every restart, the deepest last descendant of the
+previous item MUST have non-empty content.
+
+**S-6.** `ordinal` and `delimiter` MUST appear together, and only on items. An
+ordinal MUST be a non-negative integer, and a delimiter MUST be `.` or `)`. An
+item that begins a list — one that does not continue the item before it — MUST
+have an ordinal of at most 999999999.
+
+**S-7.** Lifting a tree's canonical projection MUST yield that tree.
+
+**S-8.** A `section`'s `label` MUST NOT contain a line feed.
+
+A tree satisfying S-1, S-2, S-4, S-5, S-6, S-7, and S-8 is **well-formed**. S-7
+is read only for a tree that satisfies the other six; a tree that fails one of
+them is not well-formed, whatever its projection would do. *Yield that tree*
+means equal under E-7.
+
+A document whose tree would not be well-formed is not a conforming document
+(§1.2.3), and lift assigns it no tree. A tree constructed programmatically can
+fail to be well-formed; S-3 applies to it.
 
 **S-3.** An implementation MUST reject a tree that is not well-formed, and MUST
 NOT project it by coercing the offending nodes to `item`.
@@ -933,17 +1327,98 @@ lifts to a *different* tree from the one projected, breaking that requirement in
 the one place it is hardest to notice. Refusing is the only behaviour consistent
 with Chapter 1.
 
+*(Informative)* **This is how S-1 has always worked.** `- a` followed by
+`␣␣# h` is valid CommonMark and lifts, under L-1 and L-2, to a section inside an
+item. No conforming document can denote that tree, so the document is not
+conforming, and an implementation reports it rather than producing the tree. The
+definition in §1.2.3 now says so for every rule in this section, where it used to
+be implied for S-1 alone.
+
+A document this turns away is still valid Markdown. L0 is untouched: every
+renderer, editor, and diff tool reads it exactly as before. What it does not have
+is a tree, because the one tree the rules would give it is a tree its own
+canonical projection does not return.
+
+S-5 and S-6 are what makes a numbering restart survive. CommonMark merges two
+adjacent lists of the same type and delimiter unless a block interrupts them, and
+in any document that block is — by L-3 — the content of the node just before the
+second list. S-5 states in the tree what the document already had to contain, so
+that projection can write it back (P-12). S-6's bound is CommonMark's: a list
+marker carries at most nine digits, so `999999999.` begins a list and
+`1000000000.` is a paragraph. An item that *continues* a list may exceed it — the
+second item of a list starting at 999999999 is number 1000000000 — because such
+an item's number is never written for CommonMark to read (P-3).
+
+S-8 is S-1's shape applied to a label. After E-4 folds a soft break, the only
+line break a section's label can still carry is a hard one; it renders, so the
+argument that folding changes nothing a reader can see does not reach it, and P-6
+has no way to write it, because an ATX heading is one line. A heading whose
+inline content carries a hard break is therefore refused exactly as a heading
+inside a list item is, and for the same reason: lift is defined over conforming
+documents.
+
+S-7 states as a property of a tree what §1.2.4 L1 requires of the two operations.
+A tree that fails S-1, S-2, or S-4 fails the round trip as well; those rules stay,
+and are read first, because each names its reason.
+
+It is stated over the round trip rather than as a list of forbidden labels because
+such a list would be a second, partial grammar of CommonMark, and would be wrong
+the first time the two disagreed. S-7 defers to the rules already written, so it
+is exactly as strict as they are.
+
+A tree S-7 rejects is usually one character away from a tree it accepts:
+
+| Rejected | Well-formed instead |
+|---|---|
+| an item labelled `1. Install`, `1) Install`, `- x`, `+ x`, `* x`, or `-` | `1\. Install`, `1\) Install`, `\- x`, `\+ x`, `\* x`, `\-` |
+| an item labelled `# x` | `\# x` |
+| an item labelled `[x]: /url`, which is a link reference definition and produces no block | `\[x]: /url` |
+| an item labelled `---`, since `- ---` is a thematic break | `\---` |
+| a section labelled `Title #`, whose `#` is a closing sequence | `Title \#` |
+| a label with leading or trailing whitespace | the label trimmed (E-4) |
+| a `paragraph` whose source is `- x`, `# x`, `---`, or `<div>` | `\- x`, `\# x`, `\---`, `\<div>` — or the block that source is |
+| an entry whose `block` does not name the block its `source` is | the name lift gives |
+
+One case does not appear in that table, and the reason is worth stating. A
+recorded string whose line ends in whitespace has no canonical projection either,
+but E-10 forbids it outright, so S-7 is never asked. L-9 records the one spelling
+of trailing whitespace that means something; everywhere else it goes at lift.
+
+A tree is well-formed as a whole, not part by part. A `code_block` whose source
+is an unclosed fence is well-formed as the last thing in a document, and is not
+when a node follows it, because the fence swallows the node. An operation that
+inserts a subtree checks the tree it produces.
+
+How a label is displayed or edited is outside this specification (§1.1.2). An
+editor can let someone type `1. Install`, show it that way, and hold
+`1\. Install` in the tree.
+
+**No example is given for any rule in this section.** The suite is a list of
+documents, and a document these rules turn away has no tree to write down. That
+gap is recorded rather than papered over; §1.4.3 asks for mechanically decidable
+conformance, and these rules are decidable — one projection, one lift, and one
+E-7 comparison — without the suite being able to state a case.
+
 ### 2.5 Canonical projection
 
 **P-1.** Kind MUST be preserved. A `section` MUST be written as an ATX heading; an
-`item` MUST be written as a bullet list item.
+`item` MUST be written as a list item. When an `item`'s `label` contains a line
+feed, each line after the first MUST be written at that item's content column
+(P-4).
 
 **P-2.** A section's heading level MUST equal its depth.
 
-**P-3.** The bullet marker MUST be `-`.
+**P-3.** A bullet item's marker MUST be `-`. An ordered item's marker MUST be its
+ordinal followed by its delimiter; an item that continues a list and whose ordinal
+exceeds 999999999 MUST use `999999999` in place of its ordinal.
 
-**P-4.** Each list nesting level MUST be indented by exactly two spaces relative
-to its parent item's marker.
+**P-4.** The **content column** of the root and of a `section` is zero. The
+content column of an `item` is that of the node holding it plus the width of the
+item's own marker plus one: two under `-`, three under `1.`, four under `10.`. An
+item's node content and its nested lists MUST be indented to the item's content
+column — except that where the item's `label` is empty and its content is written
+after a blank line, that content MUST be indented three columns wherever the
+content column would be four or more.
 
 **P-5.** Code blocks MUST be fenced — with backticks, or with tildes when the
 info string contains a backtick. Indented code blocks MUST NOT appear in a
@@ -955,7 +1430,10 @@ document.
 **P-7.** A single blank line MUST separate a heading from what follows it and
 each block of node content from the next. A list MUST be tight — no blank line
 between items — unless an item carries block content, in which case the list MUST
-be loose.
+be loose. When an item's `label` is not empty and its first child's label is, a
+single blank line MUST separate the label from what follows it. When a node's
+`label` is empty and the node has children, its first `content` entry MUST be
+written on the line immediately below the marker, with no blank line between them.
 
 **P-8.** No line may end in whitespace, **except a content line of a code block**,
 and the document MUST end with exactly one line feed.
@@ -970,6 +1448,14 @@ joined into a single line.
 
 **P-11.** A `front_matter` block MUST be written first, beginning at the first
 line of the document, followed by a single blank line before whatever comes next.
+
+**P-12.** Consecutive sibling items MUST be written as one list for as long as
+each continues the previous one — the same type and, for ordered items, the same
+delimiter and an ordinal one greater. Where one list ends and another begins, a
+single blank line MUST separate them. At a restart (S-5), the content of the
+previous item's deepest last descendant MUST be written between the two lists,
+unindented, and not inside the first list; P-7 then decides whether the first list
+is loose from the content it still contains.
 
 *(Informative)* P-5 is doing more work than it appears to. The worst ambiguity in
 CommonMark for this specification is that four spaces of indentation may mean an
@@ -989,6 +1475,52 @@ still looks like a valid Markdown document — but a table folded onto one line
 lifts back as a paragraph, so the tree has changed and mutual inversion has failed
 silently.
 
+P-4's indentation is the width of the marker rather than a fixed two columns
+because under an ordered item two columns are not merely different, they are
+wrong: a list indented two spaces under `1.` is not nested in it — CommonMark
+reads it as a new list after the first — and four columns are needed under `10.`.
+Naming the number **content column** is what lets the other rules that need it
+cite it instead of restating it: P-1 writes a multi-line label's later lines
+there, and E-10 removes no more than it from a block's later lines. The exception
+below is about the indentation written, not about the number — the content column
+is still the marker's width plus one, which is what E-10 reads.
+
+P-4's exception is CommonMark's constraint and not a preference. An item whose
+first line is a bare marker followed by a blank line has its content measured from
+column 0, so at four columns that content is an indented code block whatever the
+marker was — and `11.` reaches four. Three is the largest indentation that is not
+code, and it still places the content inside the item. A labelled item never
+reaches the exception: its content is measured from the marker, where the content
+column is exactly right.
+
+P-1's second sentence is needed with E-10's first case, not instead of it.
+Removing a label's indentation at lift and writing nothing back would put a
+continuation line at column 1 inside a list, where CommonMark reads it as a lazy
+continuation of whatever list encloses the item — a different tree again. P-1 says
+nothing about a `section`, deliberately: an ATX heading is one line, so no column
+exists to write a second one at, and S-8 is why no well-formed tree asks for one.
+
+P-7's last two sentences are each there because no other spelling of one tree
+lifts back. **Directly below a label, a bare `-` is a setext heading underline**,
+and CommonMark lets no empty list item of any other marker interrupt a paragraph
+— so a blank line is the only way to write an item whose first child has an empty
+label. A document that puts a date line under an item, `- Meeting` then
+`␣␣- 2026. 1. 15. 10:00`, lifts to exactly that shape. The other sentence runs the
+opposite way: under an **empty** label a blank line before the content is what
+breaks the tree, because P-7's blank line plus the blank line before the nested
+list leaves two in a row once a definition is read out again, and two blank lines
+end a list item — the children would come back as siblings.
+
+The two do not collide. The first is about the label of the first *child*, and
+only applies when the node has no content of its own; the second is about the
+label of the node being written, and only when it has some.
+
+P-12's blank line between two lists is necessary rather than stylistic: without
+it, an ordered item whose number is not 1 reads as a lazy continuation of the item
+above. And the restart rule is what makes a numbering restart survive — indented,
+the interrupting paragraph would sit inside the first list, the second list would
+merge into it, and 1, 2 would come back as 3, 4.
+
 P-7's blank line is a requirement on **projection**, not on lift. A document that
 runs a heading straight into what follows it is conforming and lifts to the same
 tree as the canonical spelling — it simply is not that spelling, and comes back
@@ -1006,8 +1538,10 @@ as one:
 *(Informative)* That shape is the most common in Markdown written by hand, so it
 is stated as its own example rather than left implicit. Every other example in
 this chapter deviates from canonical form **only in the way it is demonstrating**
-— a setext heading, a hard break spelled with spaces, a skipped level — which is
-what makes the ones that do not deviate usable as projection tests.
+— a setext heading, an indented code block, a tilde fence, a hard break spelled
+with spaces, a skipped level, a list numbered 1, 1, 1, a label wrapped over two
+lines, a block whose indentation does not match its node's content column — which
+is what makes the ones that do not deviate usable as projection tests.
 
 An item carrying block content makes the list loose (P-7), and that content
 stays a block of its own rather than joining the label:
@@ -1024,6 +1558,119 @@ stays a block of its own rather than joining the label:
    "content":[{"block":"paragraph","source":"Run the installer."}],
    "children":[]},
   {"kind":"item","label":"Verify","content":[],"children":[]}]}
+````
+
+A blank line goes between a label and an empty first child, and nowhere else
+(P-7). This is canonical, and the only spelling of this tree that lifts back to
+it:
+
+````example
+- a
+
+  -
+.
+{"content":[],"children":[
+  {"kind":"item","label":"a","content":[],"children":[
+    {"kind":"item","label":"","content":[],"children":[]}]}]}
+````
+
+An item that begins with a blank line has its content measured from column 0, so
+P-4 writes three columns where four would be an indented code block:
+
+````example
+10. a
+
+11.
+
+␣␣␣> q
+.
+{"content":[],"children":[
+  {"kind":"item","label":"a","ordinal":10,"delimiter":".",
+   "content":[],"children":[]},
+  {"kind":"item","label":"","ordinal":11,"delimiter":".",
+   "content":[{"block":"block_quote","source":"> q"}],
+   "children":[]}]}
+````
+
+A label of its own puts the content back at the content column, because the item
+does not begin with a blank line:
+
+````example
+10. a
+
+␣␣␣␣> q
+.
+{"content":[],"children":[
+  {"kind":"item","label":"a","ordinal":10,"delimiter":".",
+   "content":[{"block":"block_quote","source":"> q"}],
+   "children":[]}]}
+````
+
+A nested list is indented to the content column of the item it sits under, which
+is the width of that item's marker plus one (P-4):
+
+````example
+# Steps
+
+9. Prepare
+   - Back up
+10. Deploy
+    - Swap
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Steps","content":[],"children":[
+    {"kind":"item","label":"Prepare","ordinal":9,"delimiter":".",
+     "content":[],"children":[
+       {"kind":"item","label":"Back up","content":[],"children":[]}]},
+    {"kind":"item","label":"Deploy","ordinal":10,"delimiter":".",
+     "content":[],"children":[
+       {"kind":"item","label":"Swap","content":[],"children":[]}]}]}]}
+````
+
+A paragraph between two items interrupts the list in CommonMark, and the numbering
+continues across it. The paragraph is content of the item before it (L-3), and
+canonical form writes it inside that item, as one list:
+
+````example
+1. Overview
+
+Overview text.
+
+2. Detail
+.
+{"content":[],"children":[
+  {"kind":"item","label":"Overview","ordinal":1,"delimiter":".",
+   "content":[{"block":"paragraph","source":"Overview text."}],
+   "children":[]},
+  {"kind":"item","label":"Detail","ordinal":2,"delimiter":".",
+   "content":[],"children":[]}]}
+````
+
+When the numbering restarts, canonical form keeps the interrupting paragraph
+between the two lists, unindented, so that the restart survives (P-12):
+
+````example
+# Rollout
+
+1. Build
+2. Verify
+
+Then, on each server:
+
+1. Stop
+2. Swap
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Rollout","content":[],"children":[
+    {"kind":"item","label":"Build","ordinal":1,"delimiter":".",
+     "content":[],"children":[]},
+    {"kind":"item","label":"Verify","ordinal":2,"delimiter":".",
+     "content":[{"block":"paragraph","source":"Then, on each server:"}],
+     "children":[]},
+    {"kind":"item","label":"Stop","ordinal":1,"delimiter":".",
+     "content":[],"children":[]},
+    {"kind":"item","label":"Swap","ordinal":2,"delimiter":".",
+     "content":[],"children":[]}]}]}
 ````
 
 P-10 states what L-3 already implies, because the failure it prevents is silent.
@@ -1072,25 +1719,27 @@ MUST be present, including when empty. The root has no `label` and no `kind`,
 because it has no text of its own in the document (L-4).
 
 **E-2.** A node MUST be encoded as a JSON object with exactly four members:
-`kind`, `label`, `content`, and `children`. All four MUST be present, including
-when `content` or `children` is empty.
+`kind`, `label`, `content`, and `children` — except an item that has an ordinal,
+which has exactly six: `kind`, `label`, `ordinal`, `delimiter`, `content`, and
+`children`. All members MUST be present, including when `content` or `children`
+is empty.
 
 **E-3.** `kind` MUST be the string `section` or the string `item`.
 
-**E-4.** `label` MUST be the node's inline content exactly as it appears in the
-source, with leading and trailing whitespace removed. Inline markup MUST NOT be
-interpreted: the heading `## **Fast** start` has the label `**Fast** start`.
+**E-4.** `label` MUST be the node's **inline** content exactly as it appears in
+the source, with leading and trailing whitespace removed, and with its later lines
+as E-10 says. Inline markup MUST NOT be interpreted: the heading
+`## **Fast** start` has the label `**Fast** start`. A **soft line break** inside
+`label` — a line break that L-9 does not record as a hard break — MUST be recorded
+as a single space.
 
 **E-5.** `content` MUST be an array, in document order, of objects with exactly
 two members: `block`, the CommonMark block type name — or a block type name this
 specification defines for a construct CommonMark does not read as a single block,
-of which there is exactly one, `front_matter` (L-10) — and `source`, that block's
-Markdown source, internal line breaks included, with no trailing line feed, and
-with no line keeping more leading whitespace than the block's first line gave up.
-The first line begins at the column where the block begins; from each later line,
-up to that many columns of leading whitespace are removed, a tab advancing to the
-next multiple of four as CommonMark counts it. L-9, L-10, and L-11 further
-normalise particular blocks.
+of which there are exactly two, `front_matter` (L-10) and
+`link_reference_definition` (L-13) — and `source`, that block's Markdown source,
+internal line breaks included, with no trailing line feed, and with its later
+lines as E-10 says. L-9, L-10, and L-11 further normalise particular blocks.
 
 *(Informative)* That wording is narrower than it may look, and §2.2 already
 contains a case that resembles it and is not the same. A table has no CommonMark
@@ -1101,6 +1750,11 @@ a setext heading, and neither of them is the thing. Naming it is not filling a
 gap in CommonMark's vocabulary; it is recording that this specification reads
 those lines as one unit where CommonMark reads two.
 
+A link reference definition is the third kind of case, and the sharpest: it is a
+construct CommonMark reads as **no** block at all. The parser consumes it and
+reports nothing, which is why projection used to drop it without any rule saying
+to. Naming it is what gives P-9 something to write back.
+
 **E-6.** `children` MUST be an array of node objects, in document order.
 
 **E-7.** Two encoded trees are equal if and only if: objects have the same set of
@@ -1109,9 +1763,85 @@ and are equal element-wise in order; strings are identical sequences of Unicode
 code points. **No Unicode normalisation is applied**, in either direction, at any
 point.
 
-**E-8.** Members SHOULD appear in the order `kind`, `label`, `content`,
-`children`. Member order is not significant to E-7, and an implementation MUST
-NOT depend on it.
+**E-8.** Members SHOULD appear in the order `kind`, `label`, `ordinal`,
+`delimiter`, `content`, `children`. Member order is not significant to E-7, and an
+implementation MUST NOT depend on it.
+
+**E-9.** `ordinal` MUST be a JSON number that is a non-negative integer, and
+`delimiter` MUST be the string `.` or the string `)`.
+
+**E-10.** A **recorded string** — a `label` (E-4) or a block's `source` (E-5) —
+is a run of lines, and no line of it keeps more leading whitespace than its first
+line gave up. The first line begins at the column where the recorded text begins,
+and keeps none. From each later line, *n* columns of leading whitespace are
+removed, a tab advancing to the next multiple of four as CommonMark counts it,
+where *n* is
+
+- for a `label`, the columns the first line gave up;
+- for a block's `source`, the lesser of those columns and the content column (P-4)
+  of the node the block is attached to (L-3).
+
+No line of a recorded string may end in whitespace, except a content line of a
+code block. L-11 records a code block's content as CommonMark defines it, and this
+rule's arithmetic does not reach it.
+
+*(Informative)* E-10 is one piece of arithmetic with two cases, rather than one
+sentence in E-4 and another in E-5. The two were written separately and they do
+not give the same number; stating them together is what keeps that difference
+deliberate and in one place, instead of discovered later in two.
+
+**Why the two cases differ.** Two numbers meet on a recorded string's later
+lines: the indentation its first line gave to whatever contains it, and the
+indentation canonical projection will write back in front of it. They agree
+whenever the text begins at the content column of the node it belongs to, which is
+almost always. For a `label` they *always* agree — a label is the inline content
+of the node's own first block, so it begins inside the node that holds it, and P-1
+writes its later lines back where its first line began. One number, so there is
+nothing to take a minimum of.
+
+A block's `source` is different because L-3 can attach a block to a node the block
+was **not written inside**, and then the two numbers come apart in both
+directions. A block at the top level attached to the root gave up columns that
+P-4 will not replace — remove them and a line can come back nearer the left margin
+than it began, where a list marker or a setext underline means something it did
+not mean before. A block written at column 0 and attached by L-3 to a list item
+gave up no columns at all, and P-4 will add the item's — remove the item's and the
+line comes back *further* from the content column than it should.
+
+The lesser of the two is the number that is safe in both directions, and it is the
+only one that is: removing more than the first line gave up takes whitespace that
+was never the container's to take, and removing more than P-4 restores loses
+whitespace the author wrote. Both documents are in §2.2.
+
+**Why no line may end in whitespace.** P-8 forbids a line ending in whitespace
+outside a code block, and P-9 writes a recorded source back as it stands, so a
+recorded string whose line ends in whitespace would have no canonical projection
+at all — the P-rules would be unsatisfiable for that tree, and one stray space at
+the end of a paragraph is enough. This is the collision L-9 resolved for hard
+breaks and L-10 for front matter, resolved for everything else. L-9 has already
+taken the one spelling of trailing whitespace that a reader can see and recorded
+it as a backslash before this rule is reached.
+
+The honest cost: an HTML block's trailing whitespace goes too, and inside a
+`<pre>` it was significant to a browser. Exempting `html_block` would leave that
+block's tree with no canonical projection, which is the defect being fixed; a
+document that needs those spaces can carry a code block, which keeps them.
+
+*(Informative)* E-4's fold of a soft line break rests on the same test L-9
+applied. Checked against CommonMark's own reference renderer, a heading written
+`Head` / `more` / `===` renders as `<h1>Head` ⏎ `more</h1>` — one line of text
+with a space in it, because that is what HTML does to a newline in flow content —
+while the two spellings of a hard break render a `<br />`. So folding the soft
+break changes nothing a reader or a renderer can detect, and folding the others
+would. L-9 normalised the spelling that is invisible and kept the one that is not;
+L-10 applied the same test to front matter's trailing whitespace; this is that
+test applied to the one remaining line break this specification had not looked at.
+
+The fold is applied to what is left after the marker and any setext underline are
+removed. Applied earlier it would eat the line break before the underline, and the
+underline would join the label. Which breaks are hard is L-9's question: a run of
+backslashes before a break is a hard break when the run is odd, and an even run is
+an escaped backslash followed by a soft break.
 
 *(Informative)* E-2 forbids omitting an empty `content` or `children` because
 allowing it would mean two different JSON texts encode the same tree — an
@@ -1119,9 +1849,9 @@ ambiguity in the one notation whose entire purpose is to remove ambiguity. The
 verbosity is the cheaper of the two costs, and it is paid by a generated file
 rather than by an author.
 
-E-4 and E-5 carry source through as written — normalised only where L-9, L-10
-and L-11 say so — so that the encoding is lossless without the suite having to
-model Markdown's inline or block semantics. A label reduced to plain text would
+E-4 and E-5 carry source through as written — normalised only where L-9, L-10,
+L-11 and E-10 say so — so that the encoding is lossless without the suite having
+to model Markdown's inline or block semantics. A label reduced to plain text would
 drop emphasis and links, which would make round-trip untestable at exactly the
 point where it matters.
 
@@ -1144,6 +1874,72 @@ Inline markup is carried through untouched (E-4):
 {"content":[],"children":[
   {"kind":"section","label":"Guide","content":[],"children":[
     {"kind":"section","label":"**Fast** start","content":[],"children":[]}]}]}
+````
+
+A heading written over two lines is one line of text: the break between them is a
+soft break, which every renderer shows as a space, so the label holds a space
+(E-4). Canonical form writes it as one ATX heading, so this document is
+conforming and not canonical:
+
+````example
+Head
+more
+===
+.
+{"content":[],"children":[
+  {"kind":"section","label":"Head more","content":[],"children":[]}]}
+````
+
+The same inside a list item, where E-10 takes the item's indentation off the
+second line first and the break then folds:
+
+````example
+- x
+  - a
+    b
+.
+{"content":[],"children":[
+  {"kind":"item","label":"x","content":[],"children":[
+    {"kind":"item","label":"a b","content":[],"children":[]}]}]}
+````
+
+A line indented further than the first keeps what is left over, as a content
+block does, and the fold leaves that leftover where it is. Here the first line
+gives up two columns and the second has four, written with a tab, so one space
+from the fold and two columns left over make three:
+
+````example
+- a
+→b
+.
+{"content":[],"children":[
+  {"kind":"item","label":"a   b","content":[],"children":[]}]}
+````
+
+Neither of those two is canonical — one line each is what their labels now are,
+so canonical form writes `- x` / `␣␣- a b` and `- a   b`. Each settles on the
+first round trip, as with L-9 and L-10.
+
+A **hard** break is not folded, because it is not invisible. It survives as the
+backslash form L-9 records, and P-1 writes the line after it at the item's content
+column like any other:
+
+````example
+- a\
+  b
+.
+{"content":[],"children":[
+  {"kind":"item","label":"a\\\nb","content":[],"children":[]}]}
+````
+
+````example
+- x
+  - a\
+    b
+.
+{"content":[],"children":[
+  {"kind":"item","label":"x","content":[],"children":[
+    {"kind":"item","label":"a\\\nb","content":[],"children":[]}]}]}
 ````
 
 and no Unicode normalisation is applied, in either direction (E-7). The label
@@ -1181,8 +1977,16 @@ preserved and the bytes are normalised; the second round-trip is byte-stable.
 
 *(Informative)* Kind preservation is what makes the normalisation acceptable in
 practice. The changes a non-canonical document undergoes are confined to
-whitespace, marker characters, heading style, heading level, and code-fence
-style. **No heading becomes a bullet and no bullet becomes a heading.**
+whitespace, marker characters, heading style, heading level, code-fence style,
+the numbers written on an ordered list's later items, and the line breaks inside
+a label. **No heading becomes a bullet and no bullet becomes a heading.**
+
+The two additions to that list are worth naming, because each changes characters
+a reader can see. An ordered list written 1, 1, 1 comes back 1, 2, 3, which is
+what CommonMark already renders it as (L-12). And a label wrapped over two lines
+comes back on one, which is what every renderer already shows it as (E-4). In
+both cases the normalisation moves the text towards what the document already
+meant, rather than away from it.
 
 ---
 

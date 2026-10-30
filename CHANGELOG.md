@@ -22,7 +22,7 @@ conforms. Everything below is the state `main` has reached on the way to 0.1.0.
   conformance ladder, terminology, and the design constraints the rest of the
   specification is held to.
 - **Chapter 2** — the rules that decide which tree a document denotes and which
-  document a tree denotes: 34 rules labelled `L-`, `S-`, `P-`, and `E-`.
+  document a tree denotes: 43 rules labelled `L-`, `S-`, `P-`, and `E-`.
 - **The tree encoding used by examples** (§2.6). Examples state an expected tree,
   and the notation they state it in has to be specified or two implementations
   read the same suite differently.
@@ -34,6 +34,38 @@ conforms. Everything below is the state `main` has reached on the way to 0.1.0.
   ([#23](https://github.com/mindmapmarkdown/spec/issues/23)).
 
 ### Changed
+
+- **The ten rules accepted for 0.1.0 are in `spec.md`.** Everything decided
+  between 2026-09-29 and 2026-10-29 landed in one pull request, because each
+  rule's hole was another rule's premise and a specification that states a rule
+  it breaks is worse than one that waits. Chapter 2 grows from 34 rules to 43,
+  and the suite from 25 examples to 54.
+
+  | | |
+  |---|---|
+  | **Ordered lists keep their numbers** | `L-12` records an item's `ordinal` and `delimiter`; `S-5` and `S-6` bound them; `P-3` writes the marker, `P-4` indents to the marker's width rather than two columns, `P-12` keeps a restart separable; `E-2`, `E-8` and `E-9` encode them. RFC [0039](rfcs/0039-ordered-lists.md) |
+  | **A link reference definition is node content** | `L-13` records a run of definitions opaquely, as `L-10` records front matter, and `E-5` admits the second block type name this specification defines. Projection used to drop them silently. RFC [0051](rfcs/0051-link-reference-definitions.md) |
+  | **Front matter does not open on a blank line** | `L-10` gains the condition, so a note that opens with a horizontal rule and carries a later one keeps its text. RFC [0048](rfcs/0048-front-matter-blank-line.md) |
+  | **A label is the node's first *inline* content** | `L-2` and `E-4`: only a paragraph can be a label, and any other first block is content where it stands. An item opening with a thematic break had the label `---`, which `- ---` cannot write back. RFC [0072](rfcs/0072-label-is-inline-content.md) Part 1 |
+  | **A label's later lines lose the container's columns** | `E-4` via `E-10`, and `P-1` writes them back at the item's content column. RFC [0057](rfcs/0057-multi-line-label.md) Part 1 |
+  | **A soft break in a label is one space** | `E-4`, because a soft break inside a heading renders as a space and folding it changes nothing a reader can see; `S-8` then refuses a `section` label with a line feed, which only a hard break can now be. RFC [0067](rfcs/0067-soft-break-label.md) |
+  | **No recorded line ends in whitespace** | `E-10`, except a code block's content, where the spaces are the code. One stray space at the end of a paragraph used to leave a tree with no canonical projection at all. RFC 0057 Part 2 |
+  | **A block's later lines lose the lesser of two numbers** | `E-10`: what the first line gave up, and what `P-4` will put back. They differ only where `L-3` attaches a block to a node it was not written inside, and the four possible answers were measured. RFC [0079](rfcs/0079-block-indentation-removed.md) |
+  | **Two blank lines that broke a tree** | `P-7` gains a blank line between a label and an empty first child (RFC [0046](rfcs/0046-empty-first-child.md)) and loses the one after a bare marker that has children (RFC [0069](rfcs/0069-empty-label-definition.md)). Each is the only spelling of its tree that lifts back |
+  | **`P-4` may not indent to four columns after a bare marker** | where CommonMark reads four as code. Three is the largest that is not. RFC 0072 Part 2 |
+  | **A document whose tree is not well-formed does not conform** | §1.2.3 gains a third condition and §2.4 says lift assigns such a document no tree — which is how `S-1` has always worked, now said for every rule in that section. RFC [0085](rfcs/0085-well-formed-or-not-conforming.md) |
+  | **`S-7` — a tree must survive its own projection** | accepted 2026-10-01, deferred past 0.1.0 on 2026-10-02, and landing here because RFC 0085 changed what its third condition was for. RFC [0043](rfcs/0043-well-formed-round-trip.md) |
+
+  Two things were done that no RFC asked for, and both were forced by putting the
+  rules in one document. `E-10` is new: RFC 0079's decision required `E-4`'s
+  indentation arithmetic and `E-5`'s to be "one piece of arithmetic stated once,
+  with the label and the content block as its two cases", so that they cannot
+  drift, and `E-10` is that rule — it also absorbs RFC 0057 Part 2, which had
+  proposed the same sentence twice. And `P-4` now names the **content column**
+  once, where RFC 0039, RFC 0072 Part 2, `P-1` and `E-10` would otherwise each
+  have restated it.
+  **`P-1` is narrowed**: it said an `item` is written as a *bullet* list item,
+  which `P-3` now contradicts for an ordered item.
 
 - **A content block's `source` no longer carries its container's indentation,
   and every code block is recorded in one form.** `E-5` recorded a block's source
@@ -143,6 +175,19 @@ over a hole. After that, and after #89, the tag follows. Recorded plainly becaus
 every earlier line in this section set a date and the dates kept moving; this one
 names the work instead.
 
+**Update, 2026-10-30: the edit is written.** All ten rules and `S-7` are in
+`spec.md`; see *Changed* above. **0.1.0 now waits for [#89](https://github.com/mindmapmarkdown/spec/issues/89)
+alone**, whose period ends 2026-11-13.
+
+Two things the landing found, which no decision had reached. RFC
+[0091](https://github.com/mindmapmarkdown/spec/pull/91) had numbered its rule
+`L-12`, which is RFC 0039's; it is `L-14` now, and the RFC records why rather
+than being corrected quietly. And the reference implementation was missing RFC
+0072 and RFC 0079 — the landing text has to be verified against an
+implementation of the rules it states, and `main` refused two of the documents
+those rules exist to accept
+([mindmapmd#24](https://github.com/mindmapmarkdown/mindmapmd/pull/24)).
+
 **Correction, the same day: #74 does hold the release, and the sentence that
 first stood here said it did not.** That sentence was written on the assumption
 that #74 only mattered to `S-7`. It does not. RFC 0038 Part 1 is already in
@@ -169,6 +214,11 @@ rejects: with 0039 accepted, a conforming document whose ordered lists are
 separated by a link reference definition lifts to a restart with nothing between
 them, which `S-5` rejects. A specification that states a rule it breaks is worse
 than one that waits a fortnight.
+
+**Corrected 2026-10-30: 0058 is not among them**, having been rejected on
+2026-10-29, and the list grew by four — 0067, 0069, 0072 and 0079 — plus 0085 and
+`S-7`. The reasoning is unchanged and is what made it one pull request in the
+end: by the time every hole had a decision, every rule was waiting on another.
 
 **`S-7` is no longer in that list.** Its landing was deferred past 0.1.0 on
 2026-10-02; see *Deferred past 0.1.0* below.
@@ -557,6 +607,22 @@ the claim becomes a definition, and a new shape is a document without a tree yet
 rather than a defect in `spec.md`. If 0085 is accepted, `S-7` lands in 0.1.0 once
 #61 (RFC 0069) and the label question (RFC 0072) are answered. If it is not, this
 deferral stands as it is.
+
+**Update, 2026-10-30: the deferral is withdrawn and `S-7` has landed in 0.1.0.**
+RFC 0085 was accepted on 2026-10-29, and with it RFC 0069 and RFC 0072, so all
+three conditions are met or retired: #61 answered, the label question answered,
+and the third condition removed rather than cleared — under §1.2.3's third
+condition a new shape is a document that does not conform yet, not a sentence in
+`spec.md` that is false. `S-7` is in §2.4 as RFC 0043 accepted it, together with
+that RFC's three amendments to §1.2.4 L1.
+
+What *is* still true is the thing that condition protected. Over three seeds and
+120,000 generated documents on the configuration that carries every landed rule,
+the sweep reports **zero** ill-formed trees, zero with no canonical projection
+and zero broken round trips — and between 2,435 and 2,480 documents per seed that
+do not conform. That second number is not a defect count. It is the family §1.2.3
+now turns away, and each member is a candidate for a later rule that gives it a
+tree.
 
 ---
 
