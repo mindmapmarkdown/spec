@@ -1,6 +1,6 @@
-# RFC 0000: What a line ending is
+# RFC 0091: What a line ending is
 
-**Translations** — [한국어](ko/0000-line-endings.md). This English text is the
+**Translations** — [한국어](ko/0091-line-endings.md). This English text is the
 authoritative one; a translation is a reading aid and carries no normative force,
 and the decision recorded below is made against this file.
 
@@ -11,7 +11,7 @@ and the decision recorded below is made against this file.
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-10-30 |
 | **Comment period ends** | 2026-11-13 |
-| **Discussion** | <https://github.com/mindmapmarkdown/spec/issues/89> |
+| **Discussion** | <https://github.com/mindmapmarkdown/spec/pull/91> |
 | **Supersedes** | — |
 | **Superseded by** | — |
 

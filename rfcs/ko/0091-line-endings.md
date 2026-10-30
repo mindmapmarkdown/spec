@@ -1,6 +1,6 @@
-# RFC 0000: 줄 끝이란 무엇인가
+# RFC 0091: 줄 끝이란 무엇인가
 
-**번역** — 원문은 [English](../0000-line-endings.md)이며, 규범적 효력은 원문에만
+**번역** — 원문은 [English](../0091-line-endings.md)이며, 규범적 효력은 원문에만
 있다. 이 번역은 읽기를 돕기 위한 것이고, 결정은 원문을 대상으로 내려진다.
 
 | | |
@@ -10,7 +10,7 @@
 | **작성자** | 정제영 `<ok@baro.pro>` |
 | **작성일** | 2026-10-30 |
 | **코멘트 기간 종료** | 2026-11-13 |
-| **논의** | <https://github.com/mindmapmarkdown/spec/issues/89> |
+| **논의** | <https://github.com/mindmapmarkdown/spec/pull/91> |
 | **대체 대상** | — |
 | **대체됨** | — |
 
