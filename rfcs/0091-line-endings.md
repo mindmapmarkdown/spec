@@ -22,7 +22,7 @@ in its own text: **`P-8` fixes the output side** — *the document MUST end with
 exactly one line feed* — and nothing fixes the input side. So a carriage return
 reaches `source` and `label`, where `P-8` forbids it.
 
-This RFC adds one rule, `L-12`: a line ending is a line feed, a carriage return
+This RFC adds one rule, `L-14`: a line ending is a line feed, a carriage return
 and a following line feed, or a carriage return alone, and lift records every one
 of them as a single line feed.
 
@@ -106,15 +106,23 @@ interoperable, but it cannot be silent and interoperable.
 
 ## Detailed design
 
-### `L-12`, new
+### `L-14`, new
 
-> **L-12.** A **line ending** is a line feed (U+000A), a carriage return (U+000D)
+> **L-14.** A **line ending** is a line feed (U+000A), a carriage return (U+000D)
 > followed by a line feed, or a carriage return not followed by a line feed. Lift
 > MUST record every line ending as a single line feed. No `label` and no `source`
 > may contain a carriage return.
 
 That is the whole change. No `E-`, `S-` or `P-` rule moves, and no tree gains or
 loses an entry.
+
+**The first published version of this RFC numbered the rule `L-12`.** That number
+is taken: RFC [0039](0039-ordered-lists.md) added `L-12` and RFC
+[0051](0051-link-reference-definitions.md) added `L-13`, both accepted and
+neither yet in `spec.md`. The number is corrected here and nothing else about the
+rule changes. Worth recording rather than fixing quietly, because it is the
+hazard of a landing queue: `spec.md` is the only place a reader can see which
+labels are in use, and for a month it has been behind what is decided.
 
 The three spellings are CommonMark's own (§2.1), quoted rather than invented so
 that this specification cannot disagree with the parser underneath it. **Every
@@ -140,7 +148,7 @@ source directly is what makes the sentence necessary at all.
 
 With `L-9`, `L-10` and `L-11` — the rules that record what a construct **means**
 rather than how it was spelled, each resolving the same collision between `E-5`,
-`P-9` and `P-8`. `L-12` is the fourth and, as far as the corpus can tell, the
+`P-9` and `P-8`. `L-14` is the fourth and, as far as the corpus can tell, the
 last: after it no recorded string contains a character `P-8` forbids that the
 document did not put there deliberately.
 
