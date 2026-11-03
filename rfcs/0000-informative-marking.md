@@ -11,7 +11,7 @@ force, and the decision recorded below is made against this file.
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-11-03 |
 | **Comment period ends** | 2026-11-17 |
-| **Discussion** | <https://github.com/mindmapmarkdown/spec/pull/0000> |
+| **Discussion** | <https://github.com/mindmapmarkdown/spec/pull/93> |
 | **Supersedes** | — |
 | **Superseded by** | — |
 

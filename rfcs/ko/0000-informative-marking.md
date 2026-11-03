@@ -15,7 +15,7 @@
 | **작성자** | 정제영 `<ok@baro.pro>` |
 | **작성일** | 2026-11-03 |
 | **코멘트 기간 종료** | 2026-11-17 |
-| **논의** | <https://github.com/mindmapmarkdown/spec/pull/0000> |
+| **논의** | <https://github.com/mindmapmarkdown/spec/pull/93> |
 | **대체하는 RFC** | — |
 | **대체된 RFC** | — |
 
