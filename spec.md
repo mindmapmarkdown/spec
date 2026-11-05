@@ -1204,6 +1204,70 @@ URL included, and no request is made for it:
      "content":[],"children":[]}]}]}
 ````
 
+#### 2.2.1 How an implementation finds a definition *(Informative)*
+
+This section is informative. It describes one way of satisfying L-13 and creates
+no requirements: any method that produces the same entries conforms.
+
+CommonMark removes a link reference definition from the document **before** it
+builds the tree. No block is reported for it, and the blocks around it report
+positions that skip its lines, so an implementation that walks only the parser's
+output cannot see a definition at all. Its lines have to be recovered from the
+source text.
+
+The recovery rests on one observation: **in a conforming document, a non-blank
+line that no block covers is a definition line.** Every other construct in a
+conforming document is reported by the parser as a block — one that produces a
+node (L-1), or one that is node content (L-3) — and a block reports its own
+range, so marking the lines those blocks span leaves the definitions behind. Four
+details decide whether the method is right.
+
+**A block quote counts for its whole range.** It records its own source (E-5), so
+a definition written inside it is already part of what is recorded and is not a
+separate entry. The same holds for a code block, and for every other block whose
+source is kept as written.
+
+**A list and its items count for nothing.** A list's range spans its items and
+the gaps between them, and a gap is exactly what is being looked for. Counting
+that range as cover hides every definition written inside an item.
+
+**The marker line counts for nothing either**, because a definition may begin on
+it. `- [x]: /x` is an item whose content is a definition, and L-13 requires it to
+be recorded whole. On a line that opens an item, the definition begins after that
+item's marker; where the line opens more than one, as `- - [x]: /x` does, it
+begins after the **innermost**, because that is the item it is written inside and
+L-3 attaches it there.
+
+**A marker with nothing after it is an empty item, not a definition.** A bare `-`
+is a non-blank line that no block covers, so the observation above reads it as a
+definition unless something else separates the two. What separates them is not
+cover but what follows the marker — a marker followed only by whitespace opens an
+empty item, and anything else begins content.
+
+That fourth detail is the one worth dwelling on, because getting it wrong the
+other way is invisible. An implementation that treats the marker line as cover,
+so that a bare marker cannot be mistaken for a definition, then never sees a
+definition that begins on a marker line: `- [x]: /x` lifts to an item with no
+content, that tree projects to `-`, and the projection lifts back to the same
+tree. The round trip holds and S-7 is satisfied, so no round-trip test finds
+anything wrong — while the lift is not the tree L-13 prescribes, and every
+reference-style link that resolved through the definition has stopped resolving.
+A conforming document was silently emptied, and the only thing that detects it is
+reading L-13 against the tree.
+
+Nor does any canonical document exercise the case. P-4 requires an item's content
+to be indented to the item's content column, so canonical projection never writes
+a definition on a marker line; the canonical form of `- [x]: /x` is a bare marker
+and the definition on a later line. The case reaches lift only from documents
+somebody wrote by hand, which is the only place it has ever come from.
+
+Two points about what is recorded, rather than about finding it. A run ends at the
+next marker line: the definition after that marker is written inside the item the
+marker opens, so L-13 joins only definitions written inside one node. And a
+definition that begins on a marker line gives up the columns the marker occupies,
+not its leading whitespace alone — E-10 states that arithmetic for every recorded
+string, and P-4's content column is its other half.
+
 ### 2.3 Depth, and heading levels
 
 **L-5.** A section's depth is determined by **nesting, not by heading level**. A
