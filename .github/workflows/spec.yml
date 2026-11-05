@@ -76,6 +76,19 @@ jobs:
             node tools/check-last-updated.mjs
           fi
 
+      # §1.2.2 says a paragraph-level *(Informative)* marking covers that
+      # paragraph alone, and the document did not obey it: sixteen markings
+      # carried 42 further blocks of explanation into the normative surface
+      # (RFC 0093). Fixing the text once is not enough — the next paragraph of
+      # rationale would be written under a marking that cannot reach it. This is
+      # the check that stops it, and it reports a candidate rather than ruling:
+      # the two cases cannot be told apart by formatting, so a finding is a
+      # question for a human. It covers the blocks a marking carries, which is
+      # not every informative block in the document — RFC 0093's decision
+      # measures the set it does not reach and says why.
+      - name: Every *(Informative)* marking reaches its own run
+        run: node tools/check-informative.mjs
+
   links:
     name: links
     runs-on: ubuntu-latest
