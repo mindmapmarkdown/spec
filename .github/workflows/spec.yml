@@ -54,6 +54,17 @@ jobs:
       - name: examples.json matches spec.md
         run: node tools/extract-examples.mjs --check
 
+      # §1.2.2 says a paragraph-level *(Informative)* marking covers that
+      # paragraph alone, and the document did not obey it: sixteen markings
+      # carried 42 further blocks of explanation into the normative surface
+      # (RFC 0093). Fixing the text once is not enough — the next paragraph of
+      # rationale would be written under a marking that cannot reach it. This is
+      # the check that stops it, and it reports a candidate rather than ruling:
+      # the two cases cannot be told apart by formatting, so a finding is a
+      # question for a human.
+      - name: Every informative paragraph says so
+        run: node tools/check-informative.mjs
+
   links:
     name: links
     runs-on: ubuntu-latest
