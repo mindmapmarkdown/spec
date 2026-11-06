@@ -43,6 +43,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The last-updated check below compares spec.md against the base
+          # branch, so it needs history. The repository is small enough that
+          # fetching all of it costs nothing worth measuring.
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -53,6 +58,23 @@ jobs:
 
       - name: examples.json matches spec.md
         run: node tools/extract-examples.mjs --check
+
+      # The header said 2026-07-27 for three months — the date the file was
+      # created — surviving seven commits to spec.md because nothing looked at
+      # it. A date nobody checks does not say "unknown"; it says something false
+      # with the authority of the document's own header. Same bargain as the
+      # line above: a change to spec.md that leaves its date behind cannot
+      # merge. The check never reads the clock, so it cannot fail on the
+      # authoring timezone.
+      - name: spec.md says when it was last updated
+        env:
+          BASE: ${{ github.base_ref }}
+        run: |
+          if [ -n "$BASE" ]; then
+            node tools/check-last-updated.mjs --base "origin/$BASE"
+          else
+            node tools/check-last-updated.mjs
+          fi
 
   links:
     name: links
