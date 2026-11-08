@@ -1,12 +1,12 @@
-# RFC 0000: The *(Informative)* marking does not reach the prose it was written for
+# RFC 0093: The *(Informative)* marking does not reach the prose it was written for
 
-**Translations** — [한국어](ko/0000-informative-marking.md). This English text is
+**Translations** — [한국어](ko/0093-informative-marking.md). This English text is
 the authoritative one; a translation is a reading aid and carries no normative
 force, and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Clarifying |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-11-03 |
@@ -305,5 +305,137 @@ moment they need it.
 
 ## Decision and rationale
 
-<!-- Filled in after the comment period ends, by the person who makes the
-     decision. Not written in advance. -->
+**Accepted**, 2026-11-09, by lazy consensus. No objection was raised.
+
+**The period did not run from *Created*.** This RFC was filed on 2026-11-03 as
+Normative, announcing fourteen days. On 2026-11-06 the class was corrected to
+Clarifying and the text was revised in the same commit — the measurement
+paragraph, the second row of *How far it reaches*, and the whole of *Why this is
+Clarifying*. The period was then set to three days from that revision rather
+than three from filing, so that nobody who read the published fourteen would
+have it close under them without notice. The period that ran, **2026-11-06 to
+2026-11-09, covered the text as it now stands**, which is the condition a
+shortened period has to meet. One comment was posted, on 2026-11-06, by the
+author: the class decision, which the header and *Why this is Clarifying* now
+carry.
+
+### Why this outcome
+
+The Clarifying argument stopped being an argument and became a measurement.
+[#95](https://github.com/mindmapmarkdown/spec/pull/95) changes **not one word**
+of the specification's prose. Remove the twenty-one markings it adds and the
+three headings it inserts, collapse whitespace, and what is left is
+character-identical to `main`. Nothing is added, nothing is withdrawn, nothing
+is reworded. What changes is which of §1.2.2's two definitions a reader applies
+to forty-two blocks of rationale — and §1.2.2's own third paragraph already
+applied the one this RFC makes visible. *"[N]o conformant implementation changes
+behaviour"* is the Clarifying test, and here no implementation has anything it
+could change behaviour about.
+
+### Measured
+
+Every figure in *How far it reaches* re-derives from the text, which is what
+`--measure` exists for:
+
+| | at `1a47604` | at `436ac54` | with #95 |
+|---|---|---|---|
+| Paragraph-level markings | 16 | 16 | 34 |
+| Whose run exceeds the marked paragraph | 14 | 14 | **1** |
+| Blocks those runs carry | **42** | **42** | **1** |
+| Of those, with a BCP 14 keyword | 0 | 0 | 0 |
+
+The numbers did not move between `1a47604`, the commit this RFC measured, and
+`436ac54`, today's `main` — although §2.2.1 was added between them, sixty-three
+lines of informative prose. §2.2.1 carries a *heading*-level marking, which
+opens no run, so prose written the way §2.2.1 writes it cannot reach this defect
+at all. That is a second argument for *Detailed design* 3, which the RFC made on
+grounds of readability alone.
+
+The one block still carried is the **thematic break** before the licence footer
+in §2.7. It states nothing, it has no paragraph start to carry a marking at, and
+it is exempt by construction; `findings()` is empty and the check exits 0.
+
+**The suite.** Fifty-four examples before and after. No example's input or
+expected tree changes — the fields that differ are provenance only: `section`
+and `heading` on the nine examples now extracted from §2.5.2, and
+`start_line`/`end_line` on the sixteen below the insertion. The reference
+implementation reads both only to name a test, in
+[`test/conformance.test.js`](https://github.com/mindmapmarkdown/mindmapmd/blob/main/test/conformance.test.js),
+so re-pinning its fixture renames sixteen tests and changes no assertion. That
+fixture is pinned at `1a47604` and is already one commit stale, so one re-pin
+carries #94 and #95 together.
+
+### What this decision scopes out, and names
+
+*Unresolved questions* 4 asked whether all forty-two blocks are really
+informative. They are: none had to be rewritten as a rule or moved above a
+marking while #95 was written. But the sweep that answered it found something
+this RFC did not look for, and this decision records it rather than quietly
+absorbing it.
+
+**The forty-two are the blocks a marking *carried*. They are not every unmarked
+informative block in the document.** A run stops at a heading, a fenced block, a
+list, or a paragraph opening with bold text — and most of this specification's
+explanatory prose sits immediately after a fenced example, so no marking ever
+reached it. It was never measured, it is not marked by #95, and
+`tools/check-informative.mjs` cannot see it. Outside the two new informative
+subsections there are **109** such blocks that are neither a rule nor a §1.3
+term; **5** contain a BCP 14 keyword and are normative, and the other **104**
+need reading one at a time. Four are the shape this RFC named most sharply, and
+two of those four are its own counterexamples:
+
+| Block | Why it is in neither set |
+|---|---|
+| `**Nothing in L-10 parses the block.**` (§2.2) | *Alternatives* names it informative; it opens with bold, so no run reaches it |
+| `**Why the two cases differ.**` (§2.6) | *Alternatives* names it informative; it is why *How far it reaches* needs two numbers in its second row |
+| `**Why no line may end in whitespace.**` (§2.6) | rationale, down to its own *"The honest cost"* paragraph |
+| `**This is a test fixture encoding and nothing more.**` (§2.6) | a statement about this specification's scope — the fifth row of the classification table above |
+
+**This is left out on purpose, and the reason is the one way this change could
+have been Normative.** The 104 cannot be classified mechanically; *Alternatives*
+is the proof, and `L-12`'s *"An item of an ordered list has an **ordinal** and a
+**delimiter**"* is a requirement stated as a fact with no keyword in it. Marking
+such a block **withdraws** a requirement, which narrows what conforms. A hundred
+and four readings of that kind do not belong inside a three-day period whose
+subject was something else, so they are tracked separately, with the measurement
+above.
+
+**It does not hold 0.1.0.** By the rule at the head of `CHANGELOG.md`'s *Open
+before 0.1.0* the release waits on undecided **Normative** questions, and the
+remaining set is Clarifying by this RFC's own reasoning. Which also undercuts
+this RFC's *What happens if nothing is done*, and the correction belongs here:
+if the forty-two were never normative — and §1.2.2's third paragraph says they
+were not — then the tag does not make moving them heavier, and the urgency
+claimed on 2026-11-03 was weaker than it read. The work was still worth doing
+before the tag, for the plainer reason that a document which disobeys its own
+stated rule in forty-two places should not be the thing that gets a version
+number.
+
+### The other unresolved questions
+
+**1 — does the subsection conversion belong here?** Yes, and writing it settled
+the question harder than the RFC had. §2.5's run is followed by §2.5's
+**normative examples**, and a heading-level marking covers everything down to
+the next heading of the same or higher level — so converting that run needs a
+*second* heading to close the informative scope before the examples begin.
+§2.5.2, which carries no marking, is that heading, and the nine examples whose
+`section` moves are the whole of its cost. A separate editorial pull request
+would have had to find the same constraint without this RFC's record of why a
+marking reaches where it does.
+
+**3 — how exact should the check be?** It fails CI; it does not warn. A check
+nobody has to act on is exactly the state that let `spec.md`'s **Last updated**
+stand three months wrong through seven commits
+([#96](https://github.com/mindmapmarkdown/spec/pull/96)), a failure mode this
+repository has now paid for once. What keeps the check honest is not its
+severity but its exemption: a table and a thematic break are never reported,
+because neither can state a requirement and neither has a paragraph start to
+mark. Whether that list grows is a `tools/` question, not a specification one.
+
+### Where it lands
+
+[#95](https://github.com/mindmapmarkdown/spec/pull/95) — twenty-one markings,
+§2.4.1 and §2.5.1 carrying heading-level markings, §2.5.2 closing the second of
+them, `tools/check-informative.mjs` with its tests, one CI step, and the
+regenerated suite. §1.2.2 is untouched, which was *Detailed design* 1.
+`CHANGELOG.md` records it under *Changed*.
