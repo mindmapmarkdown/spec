@@ -397,8 +397,8 @@ is the proof, and `L-12`'s *"An item of an ordered list has an **ordinal** and a
 **delimiter**"* is a requirement stated as a fact with no keyword in it. Marking
 such a block **withdraws** a requirement, which narrows what conforms. A hundred
 and four readings of that kind do not belong inside a three-day period whose
-subject was something else, so they are tracked separately, with the measurement
-above.
+subject was something else, so they are tracked separately as [#97](https://github.com/mindmapmarkdown/spec/issues/97),
+with the measurement above.
 
 **It does not hold 0.1.0.** By the rule at the head of `CHANGELOG.md`'s *Open
 before 0.1.0* the release waits on undecided **Normative** questions, and the
