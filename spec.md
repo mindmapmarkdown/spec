@@ -4,7 +4,7 @@
 |---|---|
 | **Version** | unversioned draft |
 | **Status** | Draft |
-| **Last updated** | 2026-11-09 |
+| **Last updated** | 2026-11-13 |
 | **Latest text** | <https://github.com/mindmapmarkdown/spec/blob/main/spec.md> |
 | **Licence** | CC-BY-4.0 (see [`LICENSE`](LICENSE)) |
 
@@ -221,9 +221,11 @@ two entries are pointers rather than definitions — both terms are defined in
 §1.2, above.
 
 **document** — A sequence of Unicode code points forming a valid CommonMark
-document. Where this specification says *document* without qualification, it
-means a Markdown document. A document is not necessarily a file: it may be a
-fragment of one, a database column, or a message payload.
+document, whose line endings are the three CommonMark defines and which lift
+records as one line feed each (L-14). Where this specification says *document*
+without qualification, it means a Markdown document. A document is not
+necessarily a file: it may be a fragment of one, a database column, or a message
+payload.
 
 **node** — The unit of hierarchical structure. A node has a **label**, which is
 inline content identifying the node; zero or more units of **node content**,
@@ -547,6 +549,11 @@ label (E-4).
 `source` the definition's lines as written, and it attaches as L-3 attaches any
 block. A run of definitions that no blank line separates is one entry.
 
+**L-14.** A **line ending** is a line feed (U+000A), a carriage return (U+000D)
+followed by a line feed, or a carriage return not followed by a line feed. Lift
+MUST record every line ending as a single line feed. No `label` and no `source`
+may contain a carriage return.
+
 *(Informative)* L-1 is what keeps a prose document from exploding. A README with
 forty paragraphs and six headings has six nodes, not forty-six. The test for
 whether something should be a node is whether Markdown gives it a hierarchy of
@@ -597,6 +604,31 @@ and P-8 forbids a line ending in whitespace, so a front-matter line with a stray
 trailing space — ordinary in hand-written metadata — would otherwise make the
 document unprojectable. The cost is the same as L-9's: such a document is
 conforming but not canonical, and its bytes settle on the first round-trip.
+
+*(Informative)* L-14 is the fourth rule of that family and, as far as a corpus
+of real documents can tell, the last: after it no recorded string carries a
+character P-8 forbids that the document did not put there deliberately. It
+resolves the same collision from the input side. E-4 and E-5 record text **as
+the document has it**, taken by line and column from the source rather than
+through the parser, so a carriage return survived into `source` and `label` even
+though commonmark.js already splits lines on all three spellings — the parser's
+agreement is why the rule is one sentence rather than a rewrite, and the fact
+that these rules read the source directly is why the sentence is needed at all.
+The three spellings are CommonMark's own (§2.1), adopted rather than invented so
+that this specification cannot disagree with the parser underneath it.
+
+*(Informative)* The cost is the one L-9 and L-10 already pay, and it is worth
+naming twice rather than discovering: a CRLF document is conforming and **not
+canonical**, so its bytes settle to line feeds on the first round trip —
+including inside a code block that carried them deliberately, where those bytes
+may have been the content. Exempting a code block would leave exactly the trees
+this rule exists to make writable, so the trade is taken in the open. **No
+example is given for L-14.** The examples in this chapter are extracted from
+this file, and no Markdown file can carry one line ending in one example and a
+different one in the next without the tooling that reads it normalising them;
+§1.4.3 asks for a decidable test, and L-14's is decidable from the document's
+bytes. The gap is recorded here rather than papered over, as §2.4.1 records the
+same kind of gap for the S-rules.
 
 **Nothing in L-10 parses the block.** This specification does not know what YAML
 is, does not require the contents to be valid anything, and says nothing about

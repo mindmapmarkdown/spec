@@ -46,6 +46,21 @@ conforms. Everything below is the state `main` has reached on the way to 0.1.0.
   specification opens both rules and informative emphasis with bold lead-ins, so
   no formatting test separates them, and a finding is a question for a human.
   Run in CI beside `extract-examples --check` and `check-links`.
+- **`L-14`** — a line ending is a line feed, a carriage return and a following
+  line feed, or a carriage return alone, and lift records every one of them as
+  a single line feed. No `label` and no `source` may contain a carriage return.
+  `spec.md` had said nothing about line endings, so `E-5` recorded what the file
+  carried and `P-8` forbade writing it back: **103 of 784 real files — 13.1% —
+  were not conforming documents**, every one of them by `S-7`, and 186 of the
+  784 carry a carriage return. With the rule none is refused and **no document
+  stops conforming** — the only pure widening of this cycle. A CRLF document is
+  conforming and not canonical; its bytes settle on the first round trip, which
+  is the cost `L-9` and `L-10` already pay. No example is given, and §2.2 says
+  why: the suite is extracted from this file, which cannot hold two line
+  endings.
+  RFC 0091 ([#91](https://github.com/mindmapmarkdown/spec/pull/91)) — the link
+  becomes `rfcs/0091-line-endings.md` when that pull request merges; closes
+  [#89](https://github.com/mindmapmarkdown/spec/issues/89)
 - **`P-10`** — a node's `content` is written before any of its children. Implied
   by `L-3` and stated because the failure it prevents is silent
   ([#23](https://github.com/mindmapmarkdown/spec/issues/23)).
