@@ -4,7 +4,7 @@
 |---|---|
 | **Version** | unversioned draft |
 | **Status** | Draft |
-| **Last updated** | 2026-07-27 |
+| **Last updated** | 2026-11-06 |
 | **Latest text** | <https://github.com/mindmapmarkdown/spec/blob/main/spec.md> |
 | **Licence** | CC-BY-4.0 (see [`LICENSE`](LICENSE)) |
 

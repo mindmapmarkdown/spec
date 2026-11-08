@@ -208,7 +208,17 @@ hand. To run what the checks run:
 node --test tools/*.test.mjs         # the tools' own tests
 node tools/extract-examples.mjs --check
 node tools/check-links.mjs           # relative links and heading anchors
+node tools/check-last-updated.mjs    # spec.md's header date moved with its text
 ```
+
+**Bump the `Last updated` row of `spec.md` in the same commit that changes the
+text.** It is the only thing in the header a reader can use to judge how fresh
+the text is, and it said `2026-07-27` — the date the file was created — through
+seven later commits, because nothing looked at it. The check above compares
+`spec.md` against the base branch and fails if the text moved and the date did
+not. It does not check that the date is *correct*: comparing it to a clock would
+fail on the authoring timezone, and a check that fails for a reason the author
+cannot see gets ignored.
 
 Other conventions:
 
