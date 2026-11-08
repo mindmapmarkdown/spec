@@ -52,20 +52,32 @@ conforms. Everything below is the state `main` has reached on the way to 0.1.0.
 
 ### Changed
 
-- **Every informative paragraph says so, and the two longest runs are
-  subsections.** §1.2.2 says a paragraph-level *(Informative)* marking covers
-  that paragraph alone, and the document did not obey it: sixteen markings
-  carried **42 further blocks** of rationale, history and measurement into the
-  normative surface, where explanatory prose was never drafted to stand. Twenty-one
-  of those blocks now carry their own marking; §2.4's tail and §2.5's explanation
+- **Every *(Informative)* marking now reaches its own run, and the two longest
+  runs are subsections.** §1.2.2 says a paragraph-level marking covers that
+  paragraph alone, and the document did not obey it: sixteen markings carried
+  **42 further blocks** of rationale, history and measurement into the normative
+  surface, where explanatory prose was never drafted to stand. Twenty-one of
+  those blocks now carry their own marking; §2.4's tail and §2.5's explanation
   of its rules become **§2.4.1** and **§2.5.1**, which take a heading-level
   marking instead of twelve and eight repetitions down a page; and §2.5's worked
-  examples gain **§2.5.2** so that the informative heading closes before them.
-  §1.2.2 itself is unchanged — the defect was the document, not the rule. No
+  examples gain **§2.5.2** so the informative heading closes before them. §1.2.2
+  itself is unchanged — the defect was the document, not the rule. No
   requirement is added or removed, and no example's input or expected tree
-  changes; nine examples report `section` `2.5.2` rather than `2.5`, which the
-  reference implementation uses only in a test name. RFC 0093
-  ([#93](https://github.com/mindmapmarkdown/spec/pull/93))
+  changes: strip the markings and the three headings and the file is
+  character-identical to what it replaces. Nine examples report `section`
+  `2.5.2` and `heading` *Projection worked through* rather than §2.5's, which
+  the reference implementation reads only to name a test. RFC 0093
+  ([#93](https://github.com/mindmapmarkdown/spec/pull/93)), accepted 2026-11-09
+
+  **This is the 42 blocks a marking carried, and not every unmarked informative
+  block.** A run stops at a fence, and most of the explanation in this document
+  sits immediately after a fenced example, so no marking ever reached it: 109
+  blocks outside §2.4.1 and §2.5.1 are neither a rule nor a §1.3 term, 5 of them
+  carry a BCP 14 keyword, and the other 104 need reading one at a time. RFC
+  0093's decision measures that set and says why it is tracked on its own —
+  marking a block that is in fact normative *withdraws* a requirement, and no
+  keyword test tells the two apart. It is Clarifying either way, so it does not
+  hold 0.1.0.
 - **The ten rules accepted for 0.1.0 are in `spec.md`.** Everything decided
   between 2026-09-29 and 2026-10-29 landed in one pull request, because each
   rule's hole was another rule's premise and a specification that states a rule

@@ -9,10 +9,17 @@
 // alone". The specification did not write its informative prose that way:
 // sixteen markings each carried further paragraphs of the same rationale after
 // them, and a literal reading made 42 blocks of explanation normative. RFC 0093
-// fixed the document rather than the rule — every informative paragraph carries
-// its own marking, and the two longest runs became informative subsections —
-// and this check is what stops the next paragraph of rationale from being
-// written under a marking that cannot reach it.
+// fixed the document rather than the rule — each of those 42 blocks now carries
+// its own marking, or sits under a heading that carries one — and this check is
+// what stops the next paragraph of rationale from being written under a marking
+// that cannot reach it.
+//
+// What it does NOT cover, because RFC 0093 did not: informative prose that no
+// marking ever carried. A run stops at a fence, and most of this
+// specification's explanation sits immediately after a fenced example, so it was
+// never in the 42 and is not reported here. 0093's decision measures that set —
+// 109 blocks, of which 104 need reading one at a time — and says why marking
+// them mechanically would risk withdrawing a requirement.
 //
 // What a finding means: the paragraph is either informative, and needs its own
 // marking or a heading-level one above it, or it is normative, and should say so
