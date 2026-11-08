@@ -74,10 +74,10 @@ conforms. Everything below is the state `main` has reached on the way to 0.1.0.
   sits immediately after a fenced example, so no marking ever reached it: 109
   blocks outside §2.4.1 and §2.5.1 are neither a rule nor a §1.3 term, 5 of them
   carry a BCP 14 keyword, and the other 104 need reading one at a time. RFC
-  0093's decision measures that set and says why it is tracked on its own —
-  marking a block that is in fact normative *withdraws* a requirement, and no
-  keyword test tells the two apart. It is Clarifying either way, so it does not
-  hold 0.1.0.
+  0093's decision measures that set, and
+  [#97](https://github.com/mindmapmarkdown/spec/issues/97) tracks it — marking a
+  block that is in fact normative *withdraws* a requirement, and no keyword test
+  tells the two apart. It is Clarifying either way, so it does not hold 0.1.0.
 - **The ten rules accepted for 0.1.0 are in `spec.md`.** Everything decided
   between 2026-09-29 and 2026-10-29 landed in one pull request, because each
   rule's hole was another rule's premise and a specification that states a rule
