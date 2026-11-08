@@ -4,7 +4,7 @@
 |---|---|
 | **Version** | unversioned draft |
 | **Status** | Draft |
-| **Last updated** | 2026-11-06 |
+| **Last updated** | 2026-11-09 |
 | **Latest text** | <https://github.com/mindmapmarkdown/spec/blob/main/spec.md> |
 | **Licence** | CC-BY-4.0 (see [`LICENSE`](LICENSE)) |
 
@@ -209,8 +209,8 @@ corresponds to which in another. This specification defines no identity to key
 that decision on (§1.1.2), so it is a judgement over kind, label, position, and
 content — and the rules for making it are not yet written.
 
-The tests that decide each level are the conformance suite, generated from the
-normative examples in this document; see §1.4.3.
+*(Informative)* The tests that decide each level are the conformance suite,
+generated from the normative examples in this document; see §1.4.3.
 
 ### 1.3 Terminology
 
@@ -424,13 +424,13 @@ Preserving that is preserving what the document says, not how it is displayed.
 Colour, position, and collapse state remain presentation and remain in the
 sidecar.
 
-The cost of this is stated plainly: a document written with headings and a
-document written with bullets are **different trees**, and this specification
-offers no operation that declares them equivalent. That is believed to be
-correct rather than merely tolerated — the two documents were written
-differently because they were meant differently.
+*(Informative)* The cost of this is stated plainly: a document written with
+headings and a document written with bullets are **different trees**, and this
+specification offers no operation that declares them equivalent. That is
+believed to be correct rather than merely tolerated — the two documents were
+written differently because they were meant differently.
 
-Sections nest by heading level:
+*(Informative)* Sections nest by heading level:
 
 ````example
 # Project
@@ -552,26 +552,26 @@ forty paragraphs and six headings has six nodes, not forty-six. The test for
 whether something should be a node is whether Markdown gives it a hierarchy of
 its own; paragraphs and tables have none.
 
-L-3 also settles what a node's *title* is and is not. A label is the node's own
-inline text and nothing more; the blocks that follow it are attached to it and
-stay separate. A document whose first heading is followed by a metadata block
-therefore lifts to a node labelled with the title alone, carrying the metadata as
-content — not to a node whose label is the title and the metadata run together.
-The two are never merged in either direction; P-9 forbids the reverse on the way
-out.
+*(Informative)* L-3 also settles what a node's *title* is and is not. A label is
+the node's own inline text and nothing more; the blocks that follow it are
+attached to it and stay separate. A document whose first heading is followed by
+a metadata block therefore lifts to a node labelled with the title alone,
+carrying the metadata as content — not to a node whose label is the title and
+the metadata run together. The two are never merged in either direction; P-9
+forbids the reverse on the way out.
 
-L-8 follows from the determinism L1 already requires (§1.2.4). A tree that
-depended on a network fetch would differ between implementations, between runs of
-the same implementation, and over time as servers change or disappear, and
-conformance would stop being decidable (§1.4.3). It also keeps a parser from
-becoming a network client on behalf of whoever supplied the document. An
-application may of course fetch a referenced image and embed it; that is a
-product behaviour layered on the tree, and L-8 is what stops it from quietly
-becoming part of what the document means.
+*(Informative)* L-8 follows from the determinism L1 already requires (§1.2.4). A
+tree that depended on a network fetch would differ between implementations,
+between runs of the same implementation, and over time as servers change or
+disappear, and conformance would stop being decidable (§1.4.3). It also keeps a
+parser from becoming a network client on behalf of whoever supplied the
+document. An application may of course fetch a referenced image and embed it;
+that is a product behaviour layered on the tree, and L-8 is what stops it from
+quietly becoming part of what the document means.
 
-L-9 resolves a conflict between three rules that would otherwise have no
-consistent reading: E-5 records a block's source as the document has it, P-9
-writes that source back, and P-8 forbids a line ending in whitespace. A
+*(Informative)* L-9 resolves a conflict between three rules that would otherwise
+have no consistent reading: E-5 records a block's source as the document has it,
+P-9 writes that source back, and P-8 forbids a line ending in whitespace. A
 paragraph carrying a two-space hard break satisfies the first two and violates
 the third. Normalising at lift rather than at projection is what keeps mutual
 inversion intact — if the tree kept the spelling and projection changed it, the
@@ -580,23 +580,23 @@ the one canonical form keeps because the other is invisible: a break whose
 meaning is carried by trailing spaces is silently destroyed by editors that trim
 them.
 
-L-10 exists because front matter is not CommonMark, and CommonMark's reading of
-it is not harmless. The opening `---` has nothing before it and is a thematic
-break; the closing `---` follows a paragraph, and a line of hyphens after a
-paragraph is a **setext heading underline**. The fence meant to close the block
-instead promotes the block's contents to a heading, which L-1 then turns into a
-node that is nowhere in the document. Recording the run of lines as one opaque
-block is what stops that, and it is the least this specification can do and still
-satisfy §1.2.4 L1: a rule that discarded the block would leave projection nothing
-to write back, and every document carrying front matter would fail the round-trip
-it was conforming under.
+*(Informative)* L-10 exists because front matter is not CommonMark, and
+CommonMark's reading of it is not harmless. The opening `---` has nothing before
+it and is a thematic break; the closing `---` follows a paragraph, and a line of
+hyphens after a paragraph is a **setext heading underline**. The fence meant to
+close the block instead promotes the block's contents to a heading, which L-1
+then turns into a node that is nowhere in the document. Recording the run of
+lines as one opaque block is what stops that, and it is the least this
+specification can do and still satisfy §1.2.4 L1: a rule that discarded the
+block would leave projection nothing to write back, and every document carrying
+front matter would fail the round-trip it was conforming under.
 
-Removing trailing whitespace at lift resolves the same collision L-9 resolves,
-for the same reason. P-9 writes a recorded source back unchanged and P-8 forbids
-a line ending in whitespace, so a front-matter line with a stray trailing space —
-ordinary in hand-written metadata — would otherwise make the document
-unprojectable. The cost is the same as L-9's: such a document is conforming but
-not canonical, and its bytes settle on the first round-trip.
+*(Informative)* Removing trailing whitespace at lift resolves the same collision
+L-9 resolves, for the same reason. P-9 writes a recorded source back unchanged
+and P-8 forbids a line ending in whitespace, so a front-matter line with a stray
+trailing space — ordinary in hand-written metadata — would otherwise make the
+document unprojectable. The cost is the same as L-9's: such a document is
+conforming but not canonical, and its bytes settle on the first round-trip.
 
 **Nothing in L-10 parses the block.** This specification does not know what YAML
 is, does not require the contents to be valid anything, and says nothing about
@@ -1189,9 +1189,9 @@ anything else would be recording something no reader of the document sees. It is
 not canonical, and its canonical form is a shape nobody would write — which is
 the honest answer for a document whose text and whose meaning disagree.
 
-A label is inline source rather than rendered text, and lift never resolves what
-that source points at (E-4, L-8). The link below is the whole label, brackets and
-URL included, and no request is made for it:
+*(Informative)* A label is inline source rather than rendered text, and lift
+never resolves what that source points at (E-4, L-8). The link below is the
+whole label, brackets and URL included, and no request is made for it:
 
 ````example
 # Links
@@ -1289,8 +1289,8 @@ contains the list.
 half of the Markdown in existence would stop conforming, for no gain, because the
 author's intent in `# A` / `### B` is never ambiguous.
 
-A skipped heading level lifts by nesting, which makes the document conforming but
-not canonical:
+*(Informative)* A skipped heading level lifts by nesting, which makes the
+document conforming but not canonical:
 
 ````example
 # A
@@ -1373,7 +1373,9 @@ fail to be well-formed; S-3 applies to it.
 **S-3.** An implementation MUST reject a tree that is not well-formed, and MUST
 NOT project it by coercing the offending nodes to `item`.
 
-*(Informative)* S-1 and S-2 follow from L0 (§1.2.4) rather than from taste.
+#### 2.4.1 Why a tree must be well-formed, and what that turns away *(Informative)*
+
+S-1 and S-2 follow from L0 (§1.2.4) rather than from taste.
 A heading nested inside a list item is legal CommonMark, but renders as a
 document-level heading and is read as one by every outline extractor — the
 hierarchy does not survive in an unmodified renderer, which L0 forbids. And ATX
@@ -1391,7 +1393,7 @@ lifts to a *different* tree from the one projected, breaking that requirement in
 the one place it is hardest to notice. Refusing is the only behaviour consistent
 with Chapter 1.
 
-*(Informative)* **This is how S-1 has always worked.** `- a` followed by
+**This is how S-1 has always worked.** `- a` followed by
 `␣␣# h` is valid CommonMark and lifts, under L-1 and L-2, to a section inside an
 item. No conforming document can denote that tree, so the document is not
 conforming, and an implementation reports it rather than producing the tree. The
@@ -1521,7 +1523,9 @@ previous item's deepest last descendant MUST be written between the two lists,
 unindented, and not inside the first list; P-7 then decides whether the first list
 is loose from the content it still contains.
 
-*(Informative)* P-5 is doing more work than it appears to. The worst ambiguity in
+#### 2.5.1 Why these rules take the form they do *(Informative)*
+
+P-5 is doing more work than it appears to. The worst ambiguity in
 CommonMark for this specification is that four spaces of indentation may mean an
 indented code block or a continuation of a list item, and the reading depends on
 context several lines away. Banning indented code blocks from canonical form
@@ -1585,10 +1589,12 @@ above. And the restart rule is what makes a numbering restart survive — indent
 the interrupting paragraph would sit inside the first list, the second list would
 merge into it, and 1, 2 would come back as 3, 4.
 
-P-7's blank line is a requirement on **projection**, not on lift. A document that
-runs a heading straight into what follows it is conforming and lifts to the same
-tree as the canonical spelling — it simply is not that spelling, and comes back
-as one:
+#### 2.5.2 Projection worked through
+
+*(Informative)* P-7's blank line is a requirement on **projection**, not on
+lift. A document that runs a heading straight into what follows it is conforming
+and lifts to the same tree as the canonical spelling — it simply is not that
+spelling, and comes back as one:
 
 ````example
 # A
@@ -1607,8 +1613,8 @@ with spaces, a skipped level, a list numbered 1, 1, 1, a label wrapped over two
 lines, a block whose indentation does not match its node's content column — which
 is what makes the ones that do not deviate usable as projection tests.
 
-An item carrying block content makes the list loose (P-7), and that content
-stays a block of its own rather than joining the label:
+*(Informative)* An item carrying block content makes the list loose (P-7), and
+that content stays a block of its own rather than joining the label:
 
 ````example
 - Setup
@@ -1814,10 +1820,10 @@ a setext heading, and neither of them is the thing. Naming it is not filling a
 gap in CommonMark's vocabulary; it is recording that this specification reads
 those lines as one unit where CommonMark reads two.
 
-A link reference definition is the third kind of case, and the sharpest: it is a
-construct CommonMark reads as **no** block at all. The parser consumes it and
-reports nothing, which is why projection used to drop it without any rule saying
-to. Naming it is what gives P-9 something to write back.
+*(Informative)* A link reference definition is the third kind of case, and the
+sharpest: it is a construct CommonMark reads as **no** block at all. The parser
+consumes it and reports nothing, which is why projection used to drop it without
+any rule saying to. Naming it is what gives P-9 something to write back.
 
 **E-6.** `children` MUST be an array of node objects, in document order.
 
@@ -1901,11 +1907,11 @@ would. L-9 normalised the spelling that is invisible and kept the one that is no
 L-10 applied the same test to front matter's trailing whitespace; this is that
 test applied to the one remaining line break this specification had not looked at.
 
-The fold is applied to what is left after the marker and any setext underline are
-removed. Applied earlier it would eat the line break before the underline, and the
-underline would join the label. Which breaks are hard is L-9's question: a run of
-backslashes before a break is a hard break when the run is odd, and an even run is
-an escaped backslash followed by a soft break.
+*(Informative)* The fold is applied to what is left after the marker and any
+setext underline are removed. Applied earlier it would eat the line break before
+the underline, and the underline would join the label. Which breaks are hard is
+L-9's question: a run of backslashes before a break is a hard break when the run
+is odd, and an even run is an escaped backslash followed by a soft break.
 
 *(Informative)* E-2 forbids omitting an empty `content` or `children` because
 allowing it would mean two different JSON texts encode the same tree — an
@@ -1913,22 +1919,23 @@ ambiguity in the one notation whose entire purpose is to remove ambiguity. The
 verbosity is the cheaper of the two costs, and it is paid by a generated file
 rather than by an author.
 
-E-4 and E-5 carry source through as written — normalised only where L-9, L-10,
-L-11 and E-10 say so — so that the encoding is lossless without the suite having
-to model Markdown's inline or block semantics. A label reduced to plain text would
-drop emphasis and links, which would make round-trip untestable at exactly the
-point where it matters.
+*(Informative)* E-4 and E-5 carry source through as written — normalised only
+where L-9, L-10, L-11 and E-10 say so — so that the encoding is lossless without
+the suite having to model Markdown's inline or block semantics. A label reduced
+to plain text would drop emphasis and links, which would make round-trip
+untestable at exactly the point where it matters.
 
-Links are the case where this is asked most often, so it is worth stating
-outright: a node written `- [How to install](https://example.com/)` has that
-whole string as its label, brackets and URL included. The tree does not split it
-into a caption and an address. An application is free to display the caption and
-hang the address off an icon, but splitting it in the *tree* would mean teaching
-the encoding what a link is, and then what a reference link is, an autolink, an
-image, a link with a title attribute — CommonMark's inline grammar, arriving one
-construct at a time through a door §1.1.2 closed on purpose.
+*(Informative)* Links are the case where this is asked most often, so it is
+worth stating outright: a node written
+`- [How to install](https://example.com/)` has that whole string as its label,
+brackets and URL included. The tree does not split it into a caption and an
+address. An application is free to display the caption and hang the address off
+an icon, but splitting it in the *tree* would mean teaching the encoding what a
+link is, and then what a reference link is, an autolink, an image, a link with a
+title attribute — CommonMark's inline grammar, arriving one construct at a time
+through a door §1.1.2 closed on purpose.
 
-Inline markup is carried through untouched (E-4):
+*(Informative)* Inline markup is carried through untouched (E-4):
 
 ````example
 # Guide
@@ -2024,13 +2031,14 @@ convention of this document rather than of the suite — `examples/examples.json
 carries the real characters. CommonMark’s own specification uses the first for
 the same reason.
 
-Identity is not encoded, and this specification does not define it; see §1.1.2
-and [RFC 0016](rfcs/0016-remove-node-identity.md).
+*(Informative)* Identity is not encoded, and this specification does not define
+it; see §1.1.2 and [RFC 0016](rfcs/0016-remove-node-identity.md).
 
-The examples in this chapter are extracted into `examples/examples.json` by
-`tools/extract-examples.mjs`, and that file is the conformance suite for lift.
-Projection is checked the other way round — a tree in, a document out, compared
-byte for byte — and mutual inversion by composing the two.
+*(Informative)* The examples in this chapter are extracted into
+`examples/examples.json` by `tools/extract-examples.mjs`, and that file is the
+conformance suite for lift. Projection is checked the other way round — a tree
+in, a document out, compared byte for byte — and mutual inversion by composing
+the two.
 
 ### 2.7 Effect on round-trip
 
@@ -2045,15 +2053,15 @@ whitespace, marker characters, heading style, heading level, code-fence style,
 the numbers written on an ordered list's later items, and the line breaks inside
 a label. **No heading becomes a bullet and no bullet becomes a heading.**
 
-The two additions to that list are worth naming, because each changes characters
-a reader can see. An ordered list written 1, 1, 1 comes back 1, 2, 3, which is
-what CommonMark already renders it as (L-12). And a label wrapped over two lines
-comes back on one, which is what every renderer already shows it as (E-4). In
-both cases the normalisation moves the text towards what the document already
-meant, rather than away from it.
+*(Informative)* The two additions to that list are worth naming, because each
+changes characters a reader can see. An ordered list written 1, 1, 1 comes back
+1, 2, 3, which is what CommonMark already renders it as (L-12). And a label
+wrapped over two lines comes back on one, which is what every renderer already
+shows it as (E-4). In both cases the normalisation moves the text towards what
+the document already meant, rather than away from it.
 
 ---
 
-*This document is licensed under
+*(Informative)* *This document is licensed under
 [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/). See
 [`LICENSE`](LICENSE) for the licensing of this repository as a whole.*
