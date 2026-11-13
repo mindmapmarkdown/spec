@@ -13,8 +13,22 @@ tests or how a rule is read.
 
 ## Unreleased
 
-**Nothing is released yet.** There is no tag, no version number, and nothing
-conforms. Everything below is the state `main` has reached on the way to 0.1.0.
+Nothing since 0.1.0.
+
+---
+
+## 0.1.0 — 2026-11-14
+
+**The first release.** `v0.1.0` names one state of [`spec.md`](spec.md) together
+with the suite generated from it, which ship as a pair and cannot disagree
+([`VERSIONING.md` §1](VERSIONING.md#1-what-is-versioned)). Everything below is
+what that tag contains, and the record of how it got there.
+
+The number promises no stability. Below 1.0 it identifies a state, and a Breaking
+change bumps MINOR rather than MAJOR ([`VERSIONING.md`
+§3](VERSIONING.md#3-before-10)). What it buys is naming: an implementation can
+say what it built against and a bug report can say what it read, neither of which
+is possible against a moving `main`.
 
 ### Added
 
@@ -22,7 +36,7 @@ conforms. Everything below is the state `main` has reached on the way to 0.1.0.
   conformance ladder, terminology, and the design constraints the rest of the
   specification is held to.
 - **Chapter 2** — the rules that decide which tree a document denotes and which
-  document a tree denotes: 43 rules labelled `L-`, `S-`, `P-`, and `E-`.
+  document a tree denotes: 44 rules labelled `L-`, `S-`, `P-`, and `E-`.
 - **The tree encoding used by examples** (§2.6). Examples state an expected tree,
   and the notation they state it in has to be specified or two implementations
   read the same suite differently.
@@ -556,7 +570,13 @@ than another fortnight.
 Both files keep their full text, their measurements and their `Rejected` status.
 A rejected proposal that is deleted cannot be argued with later.
 
-### Deferred past 0.1.0
+### Deferred past 0.1.0 — both deferrals were withdrawn
+
+**Nothing is deferred out of 0.1.0.** Two things were, and both are in the
+release: `S-7` (withdrawn 2026-10-30, below) and
+[#40](https://github.com/mindmapmarkdown/spec/issues/40) (withdrawn 2026-09-29,
+at the end of this section). The record of each deferral stands as written,
+because the reasons for deferring were the reasons the questions got answered.
 
 **`S-7` — RFC [0043](rfcs/0043-well-formed-round-trip.md)'s rule. Deferred
 2026-10-02.** The RFC is accepted and stays accepted; what is deferred is writing
