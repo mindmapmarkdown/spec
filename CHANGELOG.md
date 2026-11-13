@@ -570,7 +570,13 @@ than another fortnight.
 Both files keep their full text, their measurements and their `Rejected` status.
 A rejected proposal that is deleted cannot be argued with later.
 
-### Deferred past 0.1.0
+### Deferred past 0.1.0 — both deferrals were withdrawn
+
+**Nothing is deferred out of 0.1.0.** Two things were, and both are in the
+release: `S-7` (withdrawn 2026-10-30, below) and
+[#40](https://github.com/mindmapmarkdown/spec/issues/40) (withdrawn 2026-09-29,
+at the end of this section). The record of each deferral stands as written,
+because the reasons for deferring were the reasons the questions got answered.
 
 **`S-7` — RFC [0043](rfcs/0043-well-formed-round-trip.md)'s rule. Deferred
 2026-10-02.** The RFC is accepted and stays accepted; what is deferred is writing
