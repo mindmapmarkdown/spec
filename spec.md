@@ -618,17 +618,19 @@ The three spellings are CommonMark's own (§2.1), adopted rather than invented s
 that this specification cannot disagree with the parser underneath it.
 
 *(Informative)* The cost is the one L-9 and L-10 already pay, and it is worth
-naming twice rather than discovering: a CRLF document is conforming and **not
-canonical**, so its bytes settle to line feeds on the first round trip —
-including inside a code block that carried them deliberately, where those bytes
-may have been the content. Exempting a code block would leave exactly the trees
-this rule exists to make writable, so the trade is taken in the open. **No
-example is given for L-14.** The examples in this chapter are extracted from
-this file, and no Markdown file can carry one line ending in one example and a
-different one in the next without the tooling that reads it normalising them;
-§1.4.3 asks for a decidable test, and L-14's is decidable from the document's
-bytes. The gap is recorded here rather than papered over, as §2.4.1 records the
-same kind of gap for the S-rules.
+naming rather than discovering: a CRLF document is conforming and **not
+canonical**, so its bytes settle to line feeds on the first round trip. What
+the rule does not take is a code block's content. L-11 records that content as
+CommonMark defines it, and CommonMark settles line endings before any block
+structure exists, so a carriage return inside a code block reaches no recorded
+string, with this rule or without it. Only E-4 and E-5, which take their text
+from the source by line and column, ever carried one through, which is why one
+sentence at lift is enough. **No example is given for L-14.** The examples in
+this chapter are extracted from this file, and no Markdown file can carry one
+line ending in one example and a different one in the next without the tooling
+that reads it normalising them; §1.4.3 asks for a decidable test, and L-14's is
+decidable from the document's bytes. The gap is recorded here rather than
+papered over, as §2.4.1 records the same kind of gap for the S-rules.
 
 **Nothing in L-10 parses the block.** This specification does not know what YAML
 is, does not require the contents to be valid anything, and says nothing about

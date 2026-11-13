@@ -183,7 +183,7 @@ it afterwards makes it Breaking rather than Normative.
 | [#83](https://github.com/mindmapmarkdown/spec/issues/83) — an empty-labelled item's content is projected after `P-7`'s blank line, outside the item, and `P-4`'s indentation then counts from column 0. `-` ⏎ `>` ⏎ `␣␣> q` fails on `main` today; one member appears only with RFC 0058's revision. Found 2026-10-07 | **None** | **Not open** |
 | [#84](https://github.com/mindmapmarkdown/spec/issues/84) — a definition can leave a label that is a list marker (`1) [x]:x` ⏎ `␣␣␣2)`), which fails on `main` today; and RFC 0058 moves a paragraph that had a blank line before it up against a definition, which breaks a document that round-trips without 0058. Found 2026-10-07 | **None** | **Not open.** RFC 0058 was **rejected 2026-10-29**, so part 2 round-trips again — measured that day on `rfc/0085-on-accepted`, canonical and stable. Part 1 is a document with no tree, which RFC 0085 makes non-conforming, and it is the member 0058 named as the condition for its own replacement |
 | What 0.1.0 does with the documents in #74's family that have no answer — #81 to #84 and the #79 counterexample, which make §1.2.4 L1 unsatisfiable for documents §1.2.3 accepts. **Added 2026-10-15** | RFC 0085 ([#85](https://github.com/mindmapmarkdown/spec/pull/85)) — a document whose tree is not well-formed does not conform, and `S-7` lands | **Accepted 2026-10-29** — **on the day its own period ended**, the only one of the six decided on time. Every ill-formed tree becomes a non-conforming document and nothing else moves: 792 + 1559 = 2351 on seed 1234567, and the same equality on the other two. 770 real files, 8.4 MB, **nothing refused**, re-run that day both with RFC 0057 Part 1 and without it. **`S-7` lands with it**, after being deferred past 0.1.0 on 2026-10-02 |
-| [#89](https://github.com/mindmapmarkdown/spec/issues/89) — `spec.md` says nothing about line endings, and a carriage return reaches `source`, where `P-8` forbids it. **186 of 770 real files — 24% — carry one**, and under RFC 0067 they crash the round trip, which is how the gap was found. Filed 2026-10-23, **added to this table 2026-10-29** | **None.** The reference implementation normalises in one line on `fix/crlf`, and every figure in the rows above includes it — but the specification says nothing, so two implementations may disagree about the same bytes | **Open.** Normative, so by the rule at the top of this table it holds 0.1.0 and needs an RFC of its own. It bears on no decision above: a CRLF document is conforming either way |
+| [#89](https://github.com/mindmapmarkdown/spec/issues/89) — `spec.md` says nothing about line endings, and a carriage return reaches `source`, where `P-8` forbids it. **186 of 770 real files — 24% — carry one**, and under RFC 0067 they crash the round trip, which is how the gap was found. Filed 2026-10-23, **added to this table 2026-10-29** | RFC 0091 ([#91](https://github.com/mindmapmarkdown/spec/pull/91)) — `L-14`: a line ending is the three spellings CommonMark defines, lift records every one as a single line feed, and no `label` and no `source` may contain a carriage return. One sentence, at lift, adopting the definition of the parser underneath rather than writing another | **Accepted 2026-11-13**, by lazy consensus with no objection. Measured again on the day rather than quoted: of 784 real files, **103 are refused without the rule and none with it**, so it only widens what conforms. The drawback the RFC named did not survive the check — a code block's carriage return reaches no recorded string with the rule or without it, because `L-11` records that content as CommonMark defines it (measured 2026-11-10) — so the decision and `spec.md` state the cost as measured |
 
 **As of 2026-10-13, four proposals are decided** — RFC 0039, RFC 0046, and that
 day RFC 0048 and RFC 0051. **Five are open with periods**: RFC 0057 Parts 1 and 2
@@ -219,6 +219,17 @@ which makes L1 hold by definition and lets `S-7` land. Every later answer to a
 member of the family then extends what conforms, and that is Normative. Measured
 over 747 real Markdown files, it turns none of them away in the 0.1.0
 configuration.
+
+**Update, 2026-11-13: #89 is answered, and nothing in the table above is open.**
+RFC [0091](https://github.com/mindmapmarkdown/spec/pull/91) is accepted and
+`L-14` lands with it; see *Added* above. The corpus was measured again on the
+day of the decision rather than quoted — 103 of 784 real files are refused
+without the rule and none with it — and the drawback the RFC named did not
+survive the check: a code block's carriage return reaches no recorded string
+with the rule or without it, because `L-11` records that content as CommonMark
+defines it. The decision records the cost as measured and `spec.md` states it
+that way. What remains before the tag is the release edit itself, not a
+question.
 
 **The release followed 2026-10-29, and that date has now passed.** All six open
 proposals were decided on it — RFC 0057 Parts 1 and 2, RFC 0067, RFC 0072, RFC
