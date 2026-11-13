@@ -2,17 +2,20 @@
 
 | | |
 |---|---|
-| **Version** | unversioned draft |
+| **Version** | 0.1.0 |
 | **Status** | Draft |
-| **Last updated** | 2026-11-13 |
+| **Last updated** | 2026-11-14 |
 | **Latest text** | <https://github.com/mindmapmarkdown/spec/blob/main/spec.md> |
 | **Licence** | CC-BY-4.0 (see [`LICENSE`](LICENSE)) |
 
 ## Status of this document
 
-This is a working draft. It has no version number because nothing has been
-released, and no implementation conforms to it, because the requirements it
-states are still expected to change.
+This is a working draft, released as **0.1.0**. The number names one state of
+this file together with the suite generated from it, so that an implementation
+can say what it built against and a bug report can say what it read. It promises
+no stability: below 1.0 the number identifies a state, and a Breaking change
+bumps MINOR ([`VERSIONING.md` §3](VERSIONING.md#3-before-10)). The requirements
+stated here are still expected to change.
 
 Chapters 1 and 2 exist. Together they are enough to build a reader and a writer:
 Chapter 1 fixes the vocabulary and the conformance levels, and Chapter 2 says

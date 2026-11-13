@@ -13,8 +13,22 @@ tests or how a rule is read.
 
 ## Unreleased
 
-**Nothing is released yet.** There is no tag, no version number, and nothing
-conforms. Everything below is the state `main` has reached on the way to 0.1.0.
+Nothing since 0.1.0.
+
+---
+
+## 0.1.0 — 2026-11-14
+
+**The first release.** `v0.1.0` names one state of [`spec.md`](spec.md) together
+with the suite generated from it, which ship as a pair and cannot disagree
+([`VERSIONING.md` §1](VERSIONING.md#1-what-is-versioned)). Everything below is
+what that tag contains, and the record of how it got there.
+
+The number promises no stability. Below 1.0 it identifies a state, and a Breaking
+change bumps MINOR rather than MAJOR ([`VERSIONING.md`
+§3](VERSIONING.md#3-before-10)). What it buys is naming: an implementation can
+say what it built against and a bug report can say what it read, neither of which
+is possible against a moving `main`.
 
 ### Added
 
@@ -22,7 +36,7 @@ conforms. Everything below is the state `main` has reached on the way to 0.1.0.
   conformance ladder, terminology, and the design constraints the rest of the
   specification is held to.
 - **Chapter 2** — the rules that decide which tree a document denotes and which
-  document a tree denotes: 43 rules labelled `L-`, `S-`, `P-`, and `E-`.
+  document a tree denotes: 44 rules labelled `L-`, `S-`, `P-`, and `E-`.
 - **The tree encoding used by examples** (§2.6). Examples state an expected tree,
   and the notation they state it in has to be specified or two implementations
   read the same suite differently.
