@@ -6,7 +6,7 @@ and the decision recorded below is made against this file.
 
 | | |
 |---|---|
-| **Status** | Draft |
+| **Status** | Accepted |
 | **Class** | Normative |
 | **Author(s)** | 정제영 `<ok@baro.pro>` |
 | **Created** | 2026-10-30 |
@@ -265,4 +265,119 @@ forgotten.
 
 ## Decision and rationale
 
-<!-- LEAVE THIS EMPTY UNTIL THE COMMENT PERIOD HAS ENDED. -->
+**Accepted**, 2026-11-13, by lazy consensus at the end of the fourteen-day
+period this RFC announced when it was filed on 2026-10-30. No objection was
+raised.
+
+**One comment was posted**, on 2026-10-30, the day of filing, by the author:
+the rule's label moved from `L-12` to `L-14`, because RFC
+[0039](0039-ordered-lists.md) holds `L-12` and RFC
+[0051](0051-link-reference-definitions.md) holds `L-13`, and neither is in
+`spec.md` yet to show those numbers in use. The rule being proposed did not
+change. The RFC records the move rather than being corrected quietly, which is
+why it is named here too. Nobody else wrote.
+
+### Why this outcome
+
+Three rules already in this specification cannot all hold for a document
+written with CRLF. `E-5` records a block's source as the document has it, `P-9`
+writes that source back unchanged, and `P-8` forbids a line ending in
+whitespace — and a carriage return is whitespace. Such a document has no
+canonical projection, and since RFC [0085](0085-well-formed-or-not-conforming.md)
+that is a verdict on the document rather than a property of its tree.
+
+`L-14` resolves the collision at the input side, where `L-9`, `L-10` and `L-11`
+resolved the same collision before it. Three things carried the decision, each
+checkable rather than argued:
+
+- **It is a pure expansion.** 103 real documents become conforming and none
+  stops being conforming. A rule that only widens what conforms cannot change
+  the behaviour of an implementation that already conforms.
+- **It invents nothing.** The three spellings are CommonMark's own (§2.1),
+  adopted rather than written, so this specification cannot drift from the
+  parser it is layered on.
+- **The implementation was already there.** `mindmapmd` has normalised line
+  endings since before this RFC was filed. What the decision changes is that
+  the line stops being undocumented behaviour and becomes a citation.
+
+### Measured again on the day, not quoted
+
+*How far it reaches* was measured on 2026-10-30 against 782 files. The corpus
+and the reference implementation have both moved since, so the table was taken
+again on 2026-11-09 rather than quoted:
+
+| | files | refused |
+|---|---|---|
+| normalising, as `L-14` requires | 784 | **0** |
+| as `spec.md` has it today | 784 | **103 — 13.1%** |
+
+186 of the 784 contain a carriage return (23.7%). Of the 103 refused, 102 are
+refused because the projection cannot be lifted again and one because it lifts
+to a different tree; both are `S-7`. No file contains a lone carriage return.
+The count did not move across three merges of the reference implementation,
+which is the stability this RFC claimed for it.
+
+### The honest cost is smaller than this RFC states
+
+*The honest cost* names a fenced code block that deliberately carried CRLF and
+says `L-14` takes those bytes. Measured on 2026-11-10, it does not.
+
+`L-11` records a code block's content as CommonMark defines it, and CommonMark
+normalises line endings before any block structure exists; only `E-4` and
+`E-5`, which take their text from the source by line and column, ever carried
+one through. Lifting with normalisation disabled — the state `spec.md` requires
+today — a document whose prose is LF and whose fenced code block is CRLF
+records
+
+    code_block: "```\nGET / HTTP/1.1\nHost: x\n```"
+
+with no carriage return in it. What `L-14` takes there is nothing, because the
+layer underneath has taken it already.
+
+For a document written entirely in CRLF the comparison is not *preserved*
+against *lost*. Without the rule that document has no canonical projection at
+all; with it there is one, and it writes line feeds. Either way no conforming
+implementation can write that code block's bytes back.
+
+The trade in *The honest cost* was therefore accepted on a worse account than
+the real one. This RFC's text stands as filed, because it records what was
+proposed; the informative paragraph that lands in `spec.md` states the cost as
+measured here.
+
+### The unresolved questions
+
+**§1.2.3's definition of *document*.** Taken, as editorial. The term is defined
+in §1.3, and that entry now says a document's line endings are the three
+CommonMark defines and that lift records each as one line feed.
+
+**A code block that deliberately carries CRLF.** Settled twice over: by the
+measurement above, which finds nothing there for the rule to take, and by a
+census. No file of the 784 has LF prose with a CRLF code block — the one shape
+in which a carriage return inside a code block is evidence of an author's
+intent rather than of the editor that saved the file. In a file whose every
+line ends CRLF the code block's carriage returns are the editor's, and say
+nothing. [#35](https://github.com/mindmapmarkdown/spec/issues/35) still
+applies: a reported document of that shape reopens this.
+
+**The measurement switch.** `MMD_CRLF` was never on `mindmapmd`'s `main`; it
+exists on the prototype branch, whose purpose ends with this decision. What
+[#23](https://github.com/mindmapmarkdown/mindmapmd/issues/23) leaves on `main`
+is the last `PROTOTYPE (spec#89)` marker in `src/lift.js`, which becomes a
+citation of `L-14`, and a comment in `test/soft-break-isolated.test.js` that
+still names `MMD_P1=0`.
+
+### Where it lands
+
+`spec.md` gains `L-14` in §2.2, the cross reference in §1.3, and an informative
+paragraph stating the cost as measured here. **No example is given**, and the
+gap is recorded in the text rather than papered over, as §2.4.1 records the
+same kind of gap for the S-rules. `CHANGELOG.md` gains an *Added* entry and the
+verdict in [#89](https://github.com/mindmapmarkdown/spec/issues/89)'s row of
+*Open before 0.1.0*. In `mindmapmd` the marker becomes a citation and the
+conformance fixture is re-pinned to the landing commit.
+[#89](https://github.com/mindmapmarkdown/spec/issues/89) closes with this, and
+0.1.0 has no open question left.
+
+The class is **Normative**, as filed. Under VERSIONING §2 that is a MINOR bump,
+and because it lands before the first tag, 0.1.0 carries it.
+
