@@ -13,7 +13,35 @@ tests or how a rule is read.
 
 ## Unreleased
 
-Nothing since 0.1.0.
+### Changed
+
+- **`tools/check-last-updated.mjs` can tell a second change on the same day
+  from a forgotten date.** It could not, and the gap was not theoretical: the
+  question it can fail on is *did the text change without the date changing?*,
+  which is the same answer in both cases. It stopped the 0.1.0 release edit on
+  2026-11-14 and the first batch of
+  [#97](https://github.com/mindmapmarkdown/spec/issues/97) straight after it,
+  and what it amounted to was a rule nobody decided — that `spec.md` may be
+  changed once a day.
+
+  When the row did not move, the check now reads **one** date from the
+  repository: the date on which the base last changed `spec.md`. A row no older
+  than that date is a second change on the same day and is accepted, with the
+  reason printed.
+
+  **The asymmetry is the whole design.** That date can only ever *excuse*; it
+  can never cause a failure. Using a timestamp to excuse costs one stale date in
+  a rare case, and using one to fail costs the credibility of every red build —
+  which is the trade this tool's header has always named, and it is why the
+  clock was kept out in the first place. If git cannot answer, the rule stands
+  exactly as it did before.
+
+  **What it gives up, measured on the failure it was written for.** `spec.md`
+  said `2026-07-27` for three months and survived seven commits. Under this rule
+  it survives **one**: the changes on 2026-08-11 and 2026-08-26 are the test, and
+  the first is excused while the second fails, because by then the base's own
+  date has moved past the row. Six tests pin that direction, including that a
+  missing or malformed row is never excused into passing.
 
 ---
 
