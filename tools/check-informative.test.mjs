@@ -15,11 +15,19 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import { blocksOf, runs, findings, measure } from './check-informative.mjs'
+import {
+  blocksOf,
+  runs,
+  findings,
+  measure,
+  uncarried,
+  UNREAD_PIN,
+} from './check-informative.mjs'
 
 const md = (...l) => l.join('\n')
 const carried = (source) => runs(blocksOf(source)).flatMap((r) => r.run).length
 const reported = (source) => findings(blocksOf(source)).length
+const unreached = (source) => uncarried(blocksOf(source)).length
 
 test('a marking whose paragraph is the whole of it carries nothing', () => {
   assert.equal(carried(md('*(Informative)* Why the rule exists.', '')), 0)
@@ -133,4 +141,70 @@ test('spec.md itself passes, which is what CI runs', async () => {
   const { fileURLToPath } = await import('node:url')
   const spec = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'spec.md')
   assert.equal(findings(blocksOf(readFileSync(spec, 'utf8'))).length, 0)
+})
+
+// ── the second job: the set no marking reaches (#97) ──
+//
+// The first job asks whether a marking reaches too far. This one asks what no
+// marking reaches at all, and the cases below pin each exclusion separately,
+// because every one of them is a reason a block is NOT a candidate for a
+// marking, and getting one wrong either hides informative prose or invites a
+// requirement to be withdrawn.
+
+test('prose after a fence is in the set, which is the shape #97 is about', () => {
+  const s = md('```example', 'in', '```', '', 'Why the rule reads that way.', '')
+  // No marking reaches it: a run would have stopped at the fence anyway.
+  assert.equal(reported(s), 0)
+  assert.equal(unreached(s), 1)
+})
+
+test('a block a run carries is the first job, not this one', () => {
+  const s = md('*(Informative)* Why.', '', 'And more.', '')
+  assert.equal(reported(s), 1)
+  assert.equal(unreached(s), 0)
+})
+
+test('a marked block is not in the set', () => {
+  assert.equal(unreached(md('*(Informative)* Why.', '')), 0)
+})
+
+test('a heading marking covers everything beneath it', () => {
+  const s = md('## Why *(Informative)*', '', 'One.', '', 'Two.', '')
+  assert.equal(unreached(s), 0)
+})
+
+test('a heading marking stops at the next heading of its depth or above', () => {
+  const s = md(
+    '## Why *(Informative)*', '', 'Covered.', '',
+    '### Still under it', '', 'Also covered.', '',
+    '## A new section', '', 'Not covered.', ''
+  )
+  assert.equal(unreached(s), 1)
+  assert.equal(uncarried(blocksOf(s))[0].lines[0], 'Not covered.')
+})
+
+test('a rule and a §1.3 term are normative by their form', () => {
+  assert.equal(unreached(md('**L-14.** A line ending is a line feed.', '')), 0)
+  assert.equal(unreached(md('**document** — A sequence of code points.', '')), 0)
+  // A bold lead-in that is neither is in the set -- it is exactly the shape
+  // RFC 0093's *Alternatives* says no formatting test can classify.
+  assert.equal(unreached(md('**Why the two cases differ.** Because of E-10.', '')), 1)
+})
+
+test('a heading, a list, a table and a thematic break are not prose', () => {
+  assert.equal(unreached(md('## A heading', '')), 0)
+  assert.equal(unreached(md('- an item', '')), 0)
+  assert.equal(unreached(md('| a | table |', '|---|---|', '')), 0)
+  assert.equal(unreached(md('---', '')), 0)
+})
+
+test('spec.md sits at the pin, so the number in the tool is the document', async () => {
+  const { readFileSync } = await import('node:fs')
+  const { dirname, resolve } = await import('node:path')
+  const { fileURLToPath } = await import('node:url')
+  const spec = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'spec.md')
+  const m = measure(blocksOf(readFileSync(spec, 'utf8')))
+  // Equal, not "at most": a count that has fallen is a pin to lower in the
+  // same commit, which is the whole reason the number lives in the source.
+  assert.equal(m.unread, UNREAD_PIN)
 })

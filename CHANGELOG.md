@@ -15,6 +15,51 @@ tests or how a rule is read.
 
 ### Changed
 
+- **Chapter 1's informative prose carries a marking, and the rest of Chapter 1
+  is recorded as normative.** The first batch of
+  [#97](https://github.com/mindmapmarkdown/spec/issues/97), which is the set RFC
+  0093 did not reach: prose that no `*(Informative)*` marking ever carried,
+  because a run stops at a fence and most explanation in this specification sits
+  just after a fenced example. 26 blocks read, one at a time, against §1.2.2's
+  content test — *does anything here create an obligation an implementation
+  could be found non-conformant against?*
+
+  **Eight became informative.** *Status of this document* takes the marking on
+  its heading, which covers all four of its blocks: the section says what state
+  the document is in and nothing an implementation does. Four paragraphs take
+  their own marking — §1.1.1 on why constraining both directions is the point,
+  §1.2.4 on what L2 makes possible, §1.3 on how to read the entries below it,
+  and §1.4 on why each principle is stated with a consequence.
+
+  **Eighteen stay unmarked, which is a result and not a gap.** Three reasons did
+  the work, and each is the reason a formatting test cannot do this:
+
+  | Block | Why it is normative |
+  |---|---|
+  | §1.1.2's lead-in | It **grants a permission** — implementations "are free to" do what is out of scope, and "doing so does not affect conformance". Marking it would withdraw the permission, which narrows what conforms |
+  | §1.2.3's opening | "a conforming implementation **is required to** handle documents that do not conform" — an obligation with no BCP 14 keyword in it, which is exactly the shape RFC 0093's *Alternatives* warned about |
+  | §1.4.1, §1.4.2, §1.4.3, §1.4.4 | Each principle is one unit with the *Consequence* beside it, and §1.4's own lead-in says so: each "is stated with the consequence that makes it checkable". #97 already classifies §1.4.2's *Consequence* as normative, and its three siblings do identical work |
+
+  The §1.4 verdict was **measured rather than argued**: marking §1.4.1's
+  principle makes its run reach the *Consequence* at the next paragraph — a
+  `*Consequence:*` lead-in is italic, so it stops no run — and
+  `check-informative.mjs` then reports it. The only way to satisfy the check
+  would be to mark the *Consequence* too, which withdraws a requirement. The
+  attempt to mark the principle is the proof that it should not be marked.
+
+  The remaining blocks are definitions (§1.2.3's *conforming document* and
+  *canonical document*), scope statements (§1.1.1's two, §1.1.2 on HTML), and
+  §1.2.2 itself, which is the rule about markings.
+
+- **`tools/check-informative.mjs` pins the set it cannot classify.** It gains a
+  second job: count the unmarked prose blocks that no marking reaches and fail
+  when the count **rises**. It does not classify them, for the reason #97 gives
+  — this specification states requirements as plain facts, so no formatting test
+  separates a rule from rationale, and marking a rule withdraws it. The pin is
+  `UNREAD_PIN`, **96** after this batch, down from 104; a count that falls is a
+  pin to lower in the same commit, so the number in the tool is always the
+  number in the document. Eight more tests, 72 in all.
+
 - **`tools/check-last-updated.mjs` can tell a second change on the same day
   from a forgotten date.** It could not, and the gap was not theoretical: the
   question it can fail on is *did the text change without the date changing?*,

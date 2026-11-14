@@ -8,7 +8,7 @@
 | **Latest text** | <https://github.com/mindmapmarkdown/spec/blob/main/spec.md> |
 | **Licence** | CC-BY-4.0 (see [`LICENSE`](LICENSE)) |
 
-## Status of this document
+## Status of this document *(Informative)*
 
 This is a working draft, released as **0.1.0**. The number names one state of
 this file together with the suite generated from it, so that an implementation
@@ -54,10 +54,10 @@ The correspondence is between a document and a **tree**. It is not a
 correspondence between a document and a mindmap. A mindmap is one of many
 projections of a tree, and is out of scope; see §1.1.2.
 
-Both directions are constrained. A specification that defined only lift would
-permit any number of Markdown texts for one tree, and structural change would
-remain indistinguishable from reformatting — which is the problem this
-specification exists to solve.
+*(Informative)* Both directions are constrained. A specification that defined
+only lift would permit any number of Markdown texts for one tree, and structural
+change would remain indistinguishable from reformatting — which is the problem
+this specification exists to solve.
 
 #### 1.1.2 What this specification does not define
 
@@ -203,9 +203,10 @@ required to preserve anything about a document.
 - lift and project a proper subtree without access to the document that contains
   it.
 
-L2 is what makes concurrent editing and partial exchange possible: a tool, or a
-model, can be handed one branch of a large document, work on it, and have the
-result reinserted without the rest of the document ever being transmitted.
+*(Informative)* L2 is what makes concurrent editing and partial exchange
+possible: a tool, or a model, can be handed one branch of a large document, work
+on it, and have the result reinserted without the rest of the document ever
+being transmitted.
 
 *(Informative)* Each of the three requires deciding which node in one tree
 corresponds to which in another. This specification defines no identity to key
@@ -217,11 +218,11 @@ generated from the normative examples in this document; see §1.4.3.
 
 ### 1.3 Terminology
 
-Terms are defined in dependency order: no definition below uses a term defined
-after it. A term printed in **bold** at the start of a paragraph is being
-defined there; elsewhere, defined terms are used in their ordinary type. The last
-two entries are pointers rather than definitions — both terms are defined in
-§1.2, above.
+*(Informative)* Terms are defined in dependency order: no definition below uses
+a term defined after it. A term printed in **bold** at the start of a paragraph
+is being defined there; elsewhere, defined terms are used in their ordinary
+type. The last two entries are pointers rather than definitions — both terms are
+defined in §1.2, above.
 
 **document** — A sequence of Unicode code points forming a valid CommonMark
 document, whose line endings are the three CommonMark defines and which lift
@@ -286,9 +287,9 @@ claims.
 
 ### 1.4 Design principles
 
-These principles are the reasons behind the requirements in the chapters that
-follow. Each is stated with the consequence that makes it checkable, because a
-principle that cannot be violated is decoration.
+*(Informative)* These principles are the reasons behind the requirements in the
+chapters that follow. Each is stated with the consequence that makes it
+checkable, because a principle that cannot be violated is decoration.
 
 #### 1.4.1 Backward compatibility is a requirement, not a courtesy
 
