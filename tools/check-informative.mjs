@@ -59,7 +59,7 @@ const MARKING_ANYWHERE = /\*\(Informative\)\*/
 // Unmarked, uncarried prose blocks still awaiting a reading under
 // https://github.com/mindmapmarkdown/spec/issues/97. Lower it in the commit
 // that reads a section down; it may never be raised without one.
-export const UNREAD_PIN = 96
+export const UNREAD_PIN = 82
 const KEYWORD =
   /\b(MUST NOT|MUST|SHALL NOT|SHALL|SHOULD NOT|SHOULD|NOT RECOMMENDED|RECOMMENDED|REQUIRED|MAY|OPTIONAL)\b/
 
