@@ -80,7 +80,7 @@ of claim and are not interchangeable.
 | [`spec.md`](spec.md) | The specification, with its normative examples written inline | Chapters 1–2 |
 | [`examples/examples.json`](examples/examples.json) | Conformance test cases, **generated** from the examples in `spec.md` and never hand-edited | 54 examples |
 | [`rfcs/`](rfcs/) | Proposals for normative change, including rejected ones | |
-| [`docs/`](docs/) | Informative material — an [overview](docs/overview.md) of how the pieces fit together, a [glossary](docs/glossary.md), and a guide to [reading a worked example](docs/reading-examples.md) | |
+| [`docs/`](docs/) | Informative material — an [overview](docs/overview.md) of how the pieces fit together, a [glossary](docs/glossary.md), a guide to [reading a worked example](docs/reading-examples.md), and [how languages are handled](docs/i18n.md) | |
 | [`tools/`](tools/) | The generator that extracts `examples.json`, the link checker, and their tests | |
 | [`VERSIONING.md`](VERSIONING.md) | What a version number means, when it changes, and what 1.0 would require | |
 | [`CHANGELOG.md`](CHANGELOG.md) | What changed, and in which release | 0.1.0 — 2026-11-14 |
@@ -173,7 +173,9 @@ Dual-licensed, as is normal for an open specification. See [`LICENSE`](LICENSE).
 | Specification text and prose — `spec.md`, `rfcs/**`, `docs/**`, this file | **CC-BY-4.0** |
 | Code, tooling, and test data — `tools/**`, `examples/**`, workflows | **Apache-2.0** |
 
-Translations and derivative specifications are explicitly welcome. Apache-2.0
+Translations and derivative specifications are explicitly welcome —
+[`docs/i18n.md`](docs/i18n.md) says which text is authoritative when two
+languages disagree, and what is never translated. Apache-2.0
 carries the patent grant that implementers need; the licences permit anyone to
 fork and continue this work without asking, which is deliberate and is part of
 the succession story in [`GOVERNANCE.md`](GOVERNANCE.md).
@@ -184,6 +186,7 @@ the succession story in [`GOVERNANCE.md`](GOVERNANCE.md).
 - [`docs/overview.md`](docs/overview.md) — how documents, trees, and views are layered, and why the boundary is where it is
 - [`docs/glossary.md`](docs/glossary.md) — the vocabulary, in plain language, for a first-time reader
 - [`docs/reading-examples.md`](docs/reading-examples.md) — how to read a worked example and the JSON tree it expects, from no prior JSON
+- [`docs/i18n.md`](docs/i18n.md) — which text is authoritative, how a translation is written, and why no runtime translation widget is used
 - [`GOVERNANCE.md`](GOVERNANCE.md) — roles, change classes, RFC process, phase transitions, succession
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — how to work on the specification
 - [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) — participation
