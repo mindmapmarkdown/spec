@@ -4,7 +4,7 @@
 |---|---|
 | **Version** | 0.1.0 |
 | **Status** | Draft |
-| **Last updated** | 2026-11-14 |
+| **Last updated** | 2026-11-15 |
 | **Latest text** | <https://github.com/mindmapmarkdown/spec/blob/main/spec.md> |
 | **Licence** | CC-BY-4.0 (see [`LICENSE`](LICENSE)) |
 
@@ -724,9 +724,9 @@ Node.js 20 or later.
    "children":[]}]}
 ````
 
-A block that is not a paragraph gives no label, and is content where it stands
-(L-2). An unlabelled bullet carrying a quotation is a node with no name, not a
-node called `> q`:
+*(Informative)* A block that is not a paragraph gives no label, and is content
+where it stands (L-2). An unlabelled bullet carrying a quotation is a node with
+no name, not a node called `> q`:
 
 ````example
 -
@@ -739,8 +739,8 @@ node called `> q`:
    "children":[]}]}
 ````
 
-The same for a thematic break, which is the case that could not be written back
-at all — `- ---` is itself a thematic break:
+*(Informative)* The same for a thematic break, which is the case that could not
+be written back at all — `- ---` is itself a thematic break:
 
 ````example
 -
@@ -753,8 +753,8 @@ at all — `- ---` is itself a thematic break:
    "children":[]}]}
 ````
 
-Content before the first node attaches to the root, which is why the root
-carries `content` (E-1):
+*(Informative)* Content before the first node attaches to the root, which is why
+the root carries `content` (E-1):
 
 ````example
 Some prose.
@@ -765,9 +765,9 @@ Some prose.
   {"kind":"section","label":"A","content":[],"children":[]}]}
 ````
 
-A setext heading produces a node exactly as an ATX heading does (L-1), and its
-label is the text alone. Canonical form writes every heading as ATX (P-6), so
-this is a conforming document that is not a canonical one:
+*(Informative)* A setext heading produces a node exactly as an ATX heading does
+(L-1), and its label is the text alone. Canonical form writes every heading as
+ATX (P-6), so this is a conforming document that is not a canonical one:
 
 ````example
 Install
@@ -781,9 +781,9 @@ Requirements
     {"kind":"section","label":"Requirements","content":[],"children":[]}]}]}
 ````
 
-That setext reading is what front matter runs into, and L-10 takes the whole
-block out of its way. The block produces no node; it is one entry of the root's
-content, both fences included:
+*(Informative)* That setext reading is what front matter runs into, and L-10
+takes the whole block out of its way. The block produces no node; it is one
+entry of the root's content, both fences included:
 
 ````example
 ---
@@ -797,9 +797,10 @@ title: Deploy
    {"kind":"section","label":"Preparation","content":[],"children":[]}]}
 ````
 
-L-10 needs a closing fence, and this is the case it must not swallow. With no
-later line of three hyphens, the first line is read as CommonMark reads it — an
-ordinary thematic break, which L-3 attaches to the root:
+*(Informative)* L-10 needs a closing fence, and this is the case it must not
+swallow. With no later line of three hyphens, the first line is read as
+CommonMark reads it — an ordinary thematic break, which L-3 attaches to the
+root:
 
 ````example
 ---
@@ -810,9 +811,9 @@ ordinary thematic break, which L-3 attaches to the root:
  "children":[{"kind":"section","label":"A","content":[],"children":[]}]}
 ````
 
-L-10 needs the line after the opening fence to be non-blank, and this is the
-other case it must not swallow — a note that opens with a horizontal rule and
-carries a later one. Every line of it is ordinary content of the root:
+*(Informative)* L-10 needs the line after the opening fence to be non-blank, and
+this is the other case it must not swallow — a note that opens with a horizontal
+rule and carries a later one. Every line of it is ordinary content of the root:
 
 ````example
 ---
@@ -831,8 +832,8 @@ More text.
  "children":[]}
 ````
 
-Front matter as the tools that write it write it opens on its first key, so the
-condition does not reach it:
+*(Informative)* Front matter as the tools that write it write it opens on its
+first key, so the condition does not reach it:
 
 ````example
 ---
@@ -847,8 +848,8 @@ title: A note
   {"kind":"section","label":"Heading","content":[],"children":[]}]}
 ````
 
-Every other block is content too, and a section with a quotation and a code
-block beneath it has one node rather than three:
+*(Informative)* Every other block is content too, and a section with a quotation
+and a code block beneath it has one node rather than three:
 
 ````example
 # Install
@@ -867,9 +868,9 @@ npm i
    "children":[]}]}
 ````
 
-An indented code block is recorded fenced, so its source does not depend on how
-it was written (L-11). Canonical form writes it fenced (P-5), so this document
-is conforming and not canonical:
+*(Informative)* An indented code block is recorded fenced, so its source does
+not depend on how it was written (L-11). Canonical form writes it fenced (P-5),
+so this document is conforming and not canonical:
 
 ````example
 # Build
@@ -882,7 +883,7 @@ is conforming and not canonical:
    "children":[]}]}
 ````
 
-A tilde fence is recorded with backticks, for the same reason:
+*(Informative)* A tilde fence is recorded with backticks, for the same reason:
 
 ````example
 # Run
@@ -897,10 +898,10 @@ print(1)
    "children":[]}]}
 ````
 
-A block inside a list item carries none of the item's indentation (E-5, E-10), on
-any of its lines. Both of E-10's numbers are two here — the columns the block's
-first line gave up, and the columns P-4 will write back — so two is what every
-later line loses:
+*(Informative)* A block inside a list item carries none of the item's
+indentation (E-5, E-10), on any of its lines. Both of E-10's numbers are two
+here — the columns the block's first line gave up, and the columns P-4 will
+write back — so two is what every later line loses:
 
 ````example
 - Install
@@ -920,10 +921,11 @@ later line loses:
    "children":[]}]}
 ````
 
-The two numbers come apart in two ways, and each has a document behind it. A
-block attached to the root gave up columns that P-4 will not replace, so nothing
-is removed from its later lines; canonical form writes the block at the root's
-content column, which is zero, and this document is conforming and not canonical:
+*(Informative)* The two numbers come apart in two ways, and each has a document
+behind it. A block attached to the root gave up columns that P-4 will not
+replace, so nothing is removed from its later lines; canonical form writes the
+block at the root's content column, which is zero, and this document is
+conforming and not canonical:
 
 ````example
 ␣␣cont
@@ -932,14 +934,14 @@ content column, which is zero, and this document is conforming and not canonical
 {"content":[{"block":"paragraph","source":"cont\n    - n3"}],"children":[]}
 ````
 
-Had the two columns been removed, `- n3` would have come back at two columns,
-where a list marker interrupts a paragraph — and the projection would hold a node
-the tree does not.
+*(Informative)* Had the two columns been removed, `- n3` would have come back at
+two columns, where a list marker interrupts a paragraph — and the projection
+would hold a node the tree does not.
 
-The other way round, a block written at column 0 and attached to an item by L-3
-gave up no columns at all, and P-4 will add the item's two. No line loses more
-than it gave up, so the block quote's continuation line keeps all four of its
-columns and projection writes it six columns in:
+*(Informative)* The other way round, a block written at column 0 and attached to
+an item by L-3 gave up no columns at all, and P-4 will add the item's two. No
+line loses more than it gave up, so the block quote's continuation line keeps
+all four of its columns and projection writes it six columns in:
 
 ````example
 - a
@@ -953,8 +955,8 @@ columns and projection writes it six columns in:
    "children":[]}]}
 ````
 
-Trailing whitespace inside a code block is content, and a canonical document keeps
-it (P-8). Shown here as `␣`:
+*(Informative)* Trailing whitespace inside a code block is content, and a
+canonical document keeps it (P-8). Shown here as `␣`:
 
 ````example
 # Patch
@@ -970,9 +972,9 @@ it (P-8). Shown here as `␣`:
    "children":[]}]}
 ````
 
-A table has no block type of its own — CommonMark defines none — so it is
-recorded as the paragraph it parses to, with its source intact. That is what
-lets P-9 write it back as a table instead of folding it onto one line:
+*(Informative)* A table has no block type of its own — CommonMark defines none —
+so it is recorded as the paragraph it parses to, with its source intact. That is
+what lets P-9 write it back as a table instead of folding it onto one line:
 
 ````example
 # Platforms
@@ -989,9 +991,9 @@ lets P-9 write it back as a table instead of folding it onto one line:
    "children":[]}]}
 ````
 
-A hard line break lifts to the same tree whichever way it is spelled (L-9).
-Written with trailing spaces, shown here as `␣` because they would not otherwise
-survive an editor:
+*(Informative)* A hard line break lifts to the same tree whichever way it is
+spelled (L-9). Written with trailing spaces, shown here as `␣` because they
+would not otherwise survive an editor:
 
 ````example
 # Note
@@ -1005,7 +1007,7 @@ second line
    "children":[]}]}
 ````
 
-and written with a backslash, which is the form the tree keeps:
+*(Informative)* and written with a backslash, which is the form the tree keeps:
 
 ````example
 # Note
@@ -1019,9 +1021,10 @@ second line
    "children":[]}]}
 ````
 
-Trailing whitespace that is *not* a hard break is not recorded at all, so a stray
-space at the end of a paragraph does not leave a tree that cannot be written back
-(E-10). Shown here as `␣`, and this document is conforming and not canonical:
+*(Informative)* Trailing whitespace that is *not* a hard break is not recorded
+at all, so a stray space at the end of a paragraph does not leave a tree that
+cannot be written back (E-10). Shown here as `␣`, and this document is
+conforming and not canonical:
 
 ````example
 # Note
@@ -1034,9 +1037,9 @@ para␣␣
    "children":[]}]}
 ````
 
-A link reference definition produces no node and is recorded whole (L-13). At the
-top of a document it attaches to the root, like any other block that precedes
-every node:
+*(Informative)* A link reference definition produces no node and is recorded
+whole (L-13). At the top of a document it attaches to the root, like any other
+block that precedes every node:
 
 ````example
 [x]: https://example.com
@@ -1052,8 +1055,8 @@ See [the guide][x].
     {"block":"paragraph","source":"See [the guide][x]."}],"children":[]}]}
 ````
 
-and elsewhere it attaches as L-3 attaches anything else — to the nearest node
-preceding it, in the position it occupies:
+*(Informative)* and elsewhere it attaches as L-3 attaches anything else — to the
+nearest node preceding it, in the position it occupies:
 
 ````example
 # Guide
@@ -1069,7 +1072,8 @@ Text.
    "children":[]}]}
 ````
 
-including inside a list item, where it takes none of the item's indentation:
+*(Informative)* including inside a list item, where it takes none of the item's
+indentation:
 
 ````example
 - a
@@ -1085,12 +1089,12 @@ including inside a list item, where it takes none of the item's indentation:
   {"kind":"item","label":"b","content":[],"children":[]}]}
 ````
 
-A definition is the one block CommonMark does not report, which is why it alone
-can sit between a bare marker and a nested list without becoming that node's
-label. An empty label's first content entry is written on the line below the
-marker when the node has children (P-7): a blank line there would leave two in a
-row once the definition is read out again, and two blank lines end the item, so
-the child below would come back as a sibling.
+*(Informative)* A definition is the one block CommonMark does not report, which
+is why it alone can sit between a bare marker and a nested list without becoming
+that node's label. An empty label's first content entry is written on the line
+below the marker when the node has children (P-7): a blank line there would
+leave two in a row once the definition is read out again, and two blank lines
+end the item, so the child below would come back as a sibling.
 
 ````example
 -
@@ -1105,8 +1109,8 @@ the child below would come back as a sibling.
      {"kind":"item","label":"b","content":[],"children":[]}]}]}
 ````
 
-With no children there is one blank line to leave behind and the item survives
-it, so P-7 is unchanged:
+*(Informative)* With no children there is one blank line to leave behind and the
+item survives it, so P-7 is unchanged:
 
 ````example
 -
@@ -1119,7 +1123,8 @@ it, so P-7 is unchanged:
    "children":[]}]}
 ````
 
-and a label of its own puts the content back where P-7 always had it:
+*(Informative)* and a label of its own puts the content back where P-7 always
+had it:
 
 ````example
 - a
@@ -1135,7 +1140,7 @@ and a label of its own puts the content back where P-7 always had it:
      {"kind":"item","label":"b","content":[],"children":[]}]}]}
 ````
 
-An ordered item records its number and its delimiter (L-12):
+*(Informative)* An ordered item records its number and its delimiter (L-12):
 
 ````example
 # Setup
@@ -1151,7 +1156,7 @@ An ordered item records its number and its delimiter (L-12):
      "content":[],"children":[]}]}]}
 ````
 
-A list that starts at 3 keeps its start:
+*(Informative)* A list that starts at 3 keeps its start:
 
 ````example
 # Steps
@@ -1167,9 +1172,9 @@ A list that starts at 3 keeps its start:
      "content":[],"children":[]}]}]}
 ````
 
-CommonMark does not read the numbers written on later items, and neither does
-lift. Canonical form writes them in order, so this document is conforming and not
-canonical:
+*(Informative)* CommonMark does not read the numbers written on later items, and
+neither does lift. Canonical form writes them in order, so this document is
+conforming and not canonical:
 
 ````example
 # Steps
@@ -1188,7 +1193,7 @@ canonical:
      "content":[],"children":[]}]}]}
 ````
 
-The delimiter is recorded as written:
+*(Informative)* The delimiter is recorded as written:
 
 ````example
 # Steps
@@ -1204,8 +1209,8 @@ The delimiter is recorded as written:
      "content":[],"children":[]}]}]}
 ````
 
-A line that begins with a date is three nested ordered lists to CommonMark, and
-every number is kept:
+*(Informative)* A line that begins with a date is three nested ordered lists to
+CommonMark, and every number is kept:
 
 ````example
 # Log
