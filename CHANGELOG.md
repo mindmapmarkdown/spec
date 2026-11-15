@@ -15,6 +15,39 @@ tests or how a rule is read.
 
 ### Changed
 
+- **§2.2's example lead-ins carry a marking.** The third batch of
+  [#97](https://github.com/mindmapmarkdown/spec/issues/97): the 31 sentences
+  that introduce §2.2's examples, all of them informative. This is the batch
+  that is one pattern rather than 31 readings — every one of them says what the
+  example below it demonstrates, and the requirement it demonstrates is stated
+  in a rule.
+
+  **Twenty cite the rule outright**, in parentheses — `(L-2)`, `(L-11)`,
+  `(E-5, E-10)`, `(P-7)`. The other eleven carry no identifier because they
+  continue the block above them in the same series (*"The same for a thematic
+  break"*, *"and written with a backslash"*, *"A tilde fence is recorded with
+  backticks, for the same reason"*, *"including inside a list item"*), or are an
+  observation about the example rather than a claim about lift (*"Had the two
+  columns been removed, `- n3` would have come back at two columns"*).
+
+  Four needed checking against the rule they defer to, because each states
+  something that reads like a requirement: the indentation arithmetic
+  (E-10's *"no line of it keeps more leading whitespace than its first line gave
+  up"*), a table's block name (E-5's *"the CommonMark block type name"*),
+  trailing whitespace that is not a hard break (E-10's last paragraph), and an
+  empty label's first content entry (P-7's last sentence, word for word). All
+  four are stated normatively; the lead-ins restate them.
+
+  **No run overreached**, which is the useful fact about marking 31 adjacent
+  blocks: a fenced example sits between almost all of them, and where two are
+  adjacent both are marked.
+
+  `UNREAD_PIN` 82 → **51**. §2.2 is finished apart from L-11's three definition
+  paragraphs, which the previous batch recorded as the rule's own body.
+
+- **`spec.md` says 2026-11-15.** The row moves because the day did, so no
+  same-day acceptance was needed for this change.
+
 - **§2's chapter lead-ins, §2.1, and §2.2's rationale are marked; five blocks
   stay normative.** The second batch of
   [#97](https://github.com/mindmapmarkdown/spec/issues/97): 19 blocks, split
