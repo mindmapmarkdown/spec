@@ -15,6 +15,46 @@ tests or how a rule is read.
 
 ### Changed
 
+- **§2's chapter lead-ins, §2.1, and §2.2's rationale are marked; five blocks
+  stay normative.** The second batch of
+  [#97](https://github.com/mindmapmarkdown/spec/issues/97): 19 blocks, split
+  from the rest of §2.2 by the kind of decision rather than by position — these
+  are the ones where the answer differs block by block, and the 32 example
+  lead-ins that remain are one pattern.
+
+  **Fourteen became informative.** The two §2 lead-ins say what the chapter does
+  and how rules are labelled. §2.1's four are an example lead-in, a comparison
+  of the two trees that follow, a permission already given by S-1's silence, and
+  a pointer to §2.4. §2.2's eight are rationale for L-10 through L-13 — the
+  reasons the rules read as they do, each citing the rule it explains.
+
+  **The flagship case is two sentences ten lines apart.** `*(Informative)*
+  Sections nest by heading level:` has carried a marking since RFC 0093, and
+  `Items nest by indentation:` directly below it did not — same job, same
+  section, and the only difference between them is that a fenced example sits in
+  between, where a run stops. That pair is what #97 is, in two lines of the
+  document.
+
+  **Five stay normative.** §2.1's first two define what a kind is and that it
+  distinguishes trees, which E-3 and E-7 encode but neither states. The other
+  three are the definitions of **content**, **info string** and **fence** — they
+  are L-11's own body, split into separate paragraphs, so the rule's `**L-11.**`
+  opening does not reach them and the tool counted them as prose. Marking any
+  one would leave L-11 with three undefined terms.
+
+  **Two verdicts were overturned by the checker, not by argument.** Marking the
+  L-2 rationale made its run reach the L-10 blank-line paragraph, and marking
+  the L-13 rationale reached the first example lead-in of §2.2. The second was a
+  batch boundary drawn one block too early. The first was a classification
+  error: the L-10 paragraph defines *blank*, which L-10 itself does not, so it
+  looked normative — but `blank` is used **ten times across six rules** (L-10,
+  L-13, P-4, P-7, P-11, P-12), none of them inside this paragraph, and eight in
+  rules it says nothing about. Either the deferral to CommonMark is tacit
+  everywhere, or the specification has eight undefined uses. It is tacit, so the
+  sentence is a reminder and the paragraph is informative.
+
+  `UNREAD_PIN` 96 → **82**.
+
 - **Chapter 1's informative prose carries a marking, and the rest of Chapter 1
   is recorded as normative.** The first batch of
   [#97](https://github.com/mindmapmarkdown/spec/issues/97), which is the set RFC

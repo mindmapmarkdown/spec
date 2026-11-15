@@ -405,14 +405,15 @@ data. A document can reasonably contain both.
 
 ## 2. Canonical hierarchy
 
-Markdown can express one hierarchy in more than one way — as nested headings, as
-a nested list, or as a mixture. This chapter fixes which tree a document
-denotes, which document a tree denotes, and what must be true of a tree for the
-second question to have an answer at all.
+*(Informative)* Markdown can express one hierarchy in more than one way — as
+nested headings, as a nested list, or as a mixture. This chapter fixes which
+tree a document denotes, which document a tree denotes, and what must be true of
+a tree for the second question to have an answer at all.
 
-Rules are labelled by what they govern: **L** for lift, **S** for the trees lift
-can produce, **P** for canonical projection, and **E** for the encoding the
-examples are written in. The labels are stable and may be cited.
+*(Informative)* Rules are labelled by what they govern: **L** for lift, **S**
+for the trees lift can produce, **P** for canonical projection, and **E** for
+the encoding the examples are written in. The labels are stable and may be
+cited.
 
 ### 2.1 Node kind
 
@@ -448,7 +449,7 @@ written differently because they were meant differently.
     {"kind":"section","label":"Install","content":[],"children":[]}]}]}
 ````
 
-Items nest by indentation:
+*(Informative)* Items nest by indentation:
 
 ````example
 - Project
@@ -459,11 +460,11 @@ Items nest by indentation:
     {"kind":"item","label":"Install","content":[],"children":[]}]}]}
 ````
 
-Those two describe the same shape and are **different trees**, because their
-nodes differ in kind. Both are canonical documents, and neither is rewritten
-into the other.
+*(Informative)* Those two describe the same shape and are **different trees**,
+because their nodes differ in kind. Both are canonical documents, and neither is
+rewritten into the other.
 
-A document may use both, with sections above items:
+*(Informative)* A document may use both, with sections above items:
 
 ````example
 # Install
@@ -477,8 +478,8 @@ A document may use both, with sections above items:
     {"kind":"item","label":"pnpm","content":[],"children":[]}]}]}
 ````
 
-The reverse — an `item` containing a `section` — is not a well-formed tree; see
-[§2.4](#24-well-formed-trees).
+*(Informative)* The reverse — an `item` containing a `section` — is not a
+well-formed tree; see [§2.4](#24-well-formed-trees).
 
 ### 2.2 What becomes a node
 
@@ -636,79 +637,81 @@ that reads it normalising them; §1.4.3 asks for a decidable test, and L-14's is
 decidable from the document's bytes. The gap is recorded here rather than
 papered over, as §2.4.1 records the same kind of gap for the S-rules.
 
-**Nothing in L-10 parses the block.** This specification does not know what YAML
-is, does not require the contents to be valid anything, and says nothing about
-what a key means. The block is opaque text occupying a known position, which is
-all that is needed to stop it becoming a node and the most that can be said
-without acquiring a metadata format this specification would then have to
-maintain (§1.1.2). Nor does L-10 weaken L0: front matter expresses no
-parent-child relationship, so the rule L0 states is not engaged. A plain renderer
-does show the block as a heading where a conforming implementation shows no node
-— that divergence belongs to front matter itself, and exists whatever this
-specification says about it.
+*(Informative)* **Nothing in L-10 parses the block.** This specification does
+not know what YAML is, does not require the contents to be valid anything, and
+says nothing about what a key means. The block is opaque text occupying a known
+position, which is all that is needed to stop it becoming a node and the most
+that can be said without acquiring a metadata format this specification would
+then have to maintain (§1.1.2). Nor does L-10 weaken L0: front matter expresses
+no parent-child relationship, so the rule L0 states is not engaged. A plain
+renderer does show the block as a heading where a conforming implementation
+shows no node — that divergence belongs to front matter itself, and exists
+whatever this specification says about it.
 
-L-11 does for a code block what L-9 does for a hard break: it records what the
-construct means rather than how it was spelled. CommonMark already defines a code
-block's content independently of whether the block was fenced or indented, and a
-conforming renderer emits the same code element for either; L-11 records that
-content and discards the rest — the fence character, its length, how far it was
-indented, the item it sat in. Without it, two documents holding identical code
-lift to different trees, and one spelling — a fence indented two spaces —
-survives the round-trip while the code inside it changes, which is a failure no
-suite of trees can see.
+*(Informative)* L-11 does for a code block what L-9 does for a hard break: it
+records what the construct means rather than how it was spelled. CommonMark
+already defines a code block's content independently of whether the block was
+fenced or indented, and a conforming renderer emits the same code element for
+either; L-11 records that content and discards the rest — the fence character,
+its length, how far it was indented, the item it sat in. Without it, two
+documents holding identical code lift to different trees, and one spelling — a
+fence indented two spaces — survives the round-trip while the code inside it
+changes, which is a failure no suite of trees can see.
 
-The exception P-8 makes is the mirror image. L-9 and L-10 both resolve their
-collision with P-8 by removing whitespace at lift, and for a paragraph or a
-front-matter line that costs nothing a reader can see. In a code block the
-trailing spaces **are** the code — a patch that changes whitespace, a Markdown
-sample demonstrating a hard break, a language where it is syntax — so removing
-them is the silent change to content L-11 exists to prevent. The cost is that a
-canonical document may carry trailing whitespace, and an editor that trims on
-save will change that document; the same editor changes the code in any Markdown
-file, and what this specification can do is not be the thing that changes it.
+*(Informative)* The exception P-8 makes is the mirror image. L-9 and L-10 both
+resolve their collision with P-8 by removing whitespace at lift, and for a
+paragraph or a front-matter line that costs nothing a reader can see. In a code
+block the trailing spaces **are** the code — a patch that changes whitespace, a
+Markdown sample demonstrating a hard break, a language where it is syntax — so
+removing them is the silent change to content L-11 exists to prevent. The cost
+is that a canonical document may carry trailing whitespace, and an editor that
+trims on save will change that document; the same editor changes the code in any
+Markdown file, and what this specification can do is not be the thing that
+changes it.
 
-The word doing the work in L-2's third sentence is **inline**. A heading's label
-is its heading text and an item's is its first paragraph's text; a thematic
-break, a block quote, a fenced block, a table and an HTML block have no inline
-content of their own to lend. They were never labels — L-2 did not say so, and
-lift took whatever first block it was given. An item opening with a thematic
-break then had the label `---`, and `- ---` is itself a thematic break, so that
-node could not be written down at all. An item opening with a quotation was worse
-for being writable: it lifted to a node *named* `> q`, which is not what the
-document says.
+*(Informative)* The word doing the work in L-2's third sentence is **inline**. A
+heading's label is its heading text and an item's is its first paragraph's text;
+a thematic break, a block quote, a fenced block, a table and an HTML block have
+no inline content of their own to lend. They were never labels — L-2 did not say
+so, and lift took whatever first block it was given. An item opening with a
+thematic break then had the label `---`, and `- ---` is itself a thematic break,
+so that node could not be written down at all. An item opening with a quotation
+was worse for being writable: it lifted to a node *named* `> q`, which is not
+what the document says.
 
-L-10's second condition — that the line after the opening fence is not blank —
-keeps the rule from swallowing a document that opens with a thematic break and
-carries a later one. That is a note beginning with a horizontal rule, which is
-how some people write every note, and without the condition its whole first
-section became opaque front matter. The condition costs real front matter
-nothing: it opens on its first key, in every tool this rule exists to
-accommodate, and Pandoc requires the same thing. A line is blank when it is empty
-or contains only spaces and tabs, as CommonMark defines it. An empty block is
-unaffected — `---` immediately followed by `---` has a non-blank line after it,
-its own closing fence.
+*(Informative)* L-10's second condition — that the line after the opening fence
+is not blank — keeps the rule from swallowing a document that opens with a
+thematic break and carries a later one. That is a note beginning with a
+horizontal rule, which is how some people write every note, and without the
+condition its whole first section became opaque front matter. The condition
+costs real front matter nothing: it opens on its first key, in every tool this
+rule exists to accommodate, and Pandoc requires the same thing. A line is blank
+when it is empty or contains only spaces and tabs, as CommonMark defines it. An
+empty block is unaffected — `---` immediately followed by `---` has a non-blank
+line after it, its own closing fence.
 
-L-12 records an ordered list's numbers because they are meaning rather than
-spelling. A reader who writes `3.` is saying *third*, and a tool that renumbers
-it to 1 has changed the document's content, not its formatting. CommonMark reads
-a list's start from its **first** item only, so the number written on any later
-item is not recorded: a list written 1, 1, 1 lifts to 1, 2, 3 and comes back
-written that way. A new list begins where CommonMark begins one — a change of
-delimiter, a change between bullet and ordered, or a block that interrupts the
-list. Blank lines alone do not. And L-3 is unchanged by this, but worth reading
-once more with numbers in mind: a block that follows a list attaches to the
-nearest node preceding it, which is the list's **deepest last item**, and P-12 is
-what writes it back where the numbering needs it.
+*(Informative)* L-12 records an ordered list's numbers because they are meaning
+rather than spelling. A reader who writes `3.` is saying *third*, and a tool
+that renumbers it to 1 has changed the document's content, not its formatting.
+CommonMark reads a list's start from its **first** item only, so the number
+written on any later item is not recorded: a list written 1, 1, 1 lifts to 1, 2,
+3 and comes back written that way. A new list begins where CommonMark begins one
+— a change of delimiter, a change between bullet and ordered, or a block that
+interrupts the list. Blank lines alone do not. And L-3 is unchanged by this, but
+worth reading once more with numbers in mind: a block that follows a list
+attaches to the nearest node preceding it, which is the list's **deepest last
+item**, and P-12 is what writes it back where the numbering needs it.
 
-L-13 records a definition rather than parsing it, and takes the run rule L-10
-already takes for front matter, for the same reason: telling one definition from
-the next means parsing them. A blank line between two definitions makes two
-entries. Before this rule projection dropped every definition, so a document's
-reference links rendered as links in the text that was read and as literal
-brackets in the text that came back — a change to what the document says that no
-comparison of trees can detect, because both documents lift to the same tree.
+*(Informative)* L-13 records a definition rather than parsing it, and takes the
+run rule L-10 already takes for front matter, for the same reason: telling one
+definition from the next means parsing them. A blank line between two
+definitions makes two entries. Before this rule projection dropped every
+definition, so a document's reference links rendered as links in the text that
+was read and as literal brackets in the text that came back — a change to what
+the document says that no comparison of trees can detect, because both documents
+lift to the same tree.
 
-A paragraph is content, not a node:
+*(Informative)* A paragraph is content, not a node:
 
 ````example
 # Install
