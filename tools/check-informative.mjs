@@ -21,9 +21,16 @@
 // specification states requirements as plain facts, so no formatting test
 // separates a rule from rationale, and marking a rule WITHDRAWS it, which
 // narrows what conforms. So this check does not classify them. It counts them
-// and fails when the count RISES, which pins the set while #97 reads it down
+// and fails when the count RISES, which pinned the set while #97 read it down
 // one section at a time. A count that falls is a prompt to lower the pin in the
 // same commit, so the number in this file is always the number in the document.
+//
+// #97 finished on 2026-11-15, and the pin is at its floor: every block left in
+// the count is one a reading settled as NORMATIVE. So the number no longer
+// measures a backlog. What it now catches is a new block of prose that no
+// marking reaches — which is either informative, and wants a marking, or a
+// requirement stated as a plain fact, and wants the pin raised in the same
+// commit with the reason in the message.
 //
 // What a finding means: the paragraph is either informative, and needs its own
 // marking or a heading-level one above it, or it is normative, and should say so
@@ -56,10 +63,12 @@ const RULE = /^\*\*[LSPE]-\d+\.\*\*/
 const TERM = /^\*\*[^*]+\*\* — /
 const MARKING_ANYWHERE = /\*\(Informative\)\*/
 
-// Unmarked, uncarried prose blocks still awaiting a reading under
-// https://github.com/mindmapmarkdown/spec/issues/97. Lower it in the commit
-// that reads a section down; it may never be raised without one.
-export const UNREAD_PIN = 51
+// Unmarked, uncarried prose blocks, all of them read and recorded normative
+// under https://github.com/mindmapmarkdown/spec/issues/97. Four are rule text a
+// paragraph break separated from its rule (L-11's three definitions, E-10's
+// last paragraph); the rest are definitions, scope statements and the §1.4
+// principles. It may be raised only with a reason in the commit message.
+export const UNREAD_PIN = 25
 const KEYWORD =
   /\b(MUST NOT|MUST|SHALL NOT|SHALL|SHOULD NOT|SHOULD|NOT RECOMMENDED|RECOMMENDED|REQUIRED|MAY|OPTIONAL)\b/
 
