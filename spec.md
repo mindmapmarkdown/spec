@@ -1348,11 +1348,12 @@ document conforming but not canonical:
     {"kind":"section","label":"B","content":[],"children":[]}]}]}
 ````
 
-Projecting that tree yields `# A` / `## B`, which lifts to the same tree. The
-round-trip is stable at the second pass, and idempotent thereafter.
+*(Informative)* Projecting that tree yields `# A` / `## B`, which lifts to the
+same tree. The round-trip is stable at the second pass, and idempotent
+thereafter.
 
-A heading at or below the level of the open section closes it, so the next
-section becomes a sibling rather than a child:
+*(Informative)* A heading at or below the level of the open section closes it,
+so the next section becomes a sibling rather than a child:
 
 ````example
 # A
@@ -1367,8 +1368,8 @@ section becomes a sibling rather than a child:
   {"kind":"section","label":"C","content":[],"children":[]}]}
 ````
 
-An item's depth is its nesting within the list, counted from the node that
-contains the list rather than from the document (L-7):
+*(Informative)* An item's depth is its nesting within the list, counted from the
+node that contains the list rather than from the document (L-7):
 
 ````example
 # Menu
@@ -1412,9 +1413,9 @@ is read only for a tree that satisfies the other six; a tree that fails one of
 them is not well-formed, whatever its projection would do. *Yield that tree*
 means equal under E-7.
 
-A document whose tree would not be well-formed is not a conforming document
-(§1.2.3), and lift assigns it no tree. A tree constructed programmatically can
-fail to be well-formed; S-3 applies to it.
+*(Informative)* A document whose tree would not be well-formed is not a
+conforming document (§1.2.3), and lift assigns it no tree. A tree constructed
+programmatically can fail to be well-formed; S-3 applies to it.
 
 **S-3.** An implementation MUST reject a tree that is not well-formed, and MUST
 NOT project it by coercing the offending nodes to `item`.
@@ -1676,9 +1677,9 @@ that content stays a block of its own rather than joining the label:
   {"kind":"item","label":"Verify","content":[],"children":[]}]}
 ````
 
-A blank line goes between a label and an empty first child, and nowhere else
-(P-7). This is canonical, and the only spelling of this tree that lifts back to
-it:
+*(Informative)* A blank line goes between a label and an empty first child, and
+nowhere else (P-7). This is canonical, and the only spelling of this tree that
+lifts back to it:
 
 ````example
 - a
@@ -1690,8 +1691,9 @@ it:
     {"kind":"item","label":"","content":[],"children":[]}]}]}
 ````
 
-An item that begins with a blank line has its content measured from column 0, so
-P-4 writes three columns where four would be an indented code block:
+*(Informative)* An item that begins with a blank line has its content measured
+from column 0, so P-4 writes three columns where four would be an indented code
+block:
 
 ````example
 10. a
@@ -1708,8 +1710,8 @@ P-4 writes three columns where four would be an indented code block:
    "children":[]}]}
 ````
 
-A label of its own puts the content back at the content column, because the item
-does not begin with a blank line:
+*(Informative)* A label of its own puts the content back at the content column,
+because the item does not begin with a blank line:
 
 ````example
 10. a
@@ -1722,8 +1724,8 @@ does not begin with a blank line:
    "children":[]}]}
 ````
 
-A nested list is indented to the content column of the item it sits under, which
-is the width of that item's marker plus one (P-4):
+*(Informative)* A nested list is indented to the content column of the item it
+sits under, which is the width of that item's marker plus one (P-4):
 
 ````example
 # Steps
@@ -1743,9 +1745,9 @@ is the width of that item's marker plus one (P-4):
        {"kind":"item","label":"Swap","content":[],"children":[]}]}]}]}
 ````
 
-A paragraph between two items interrupts the list in CommonMark, and the numbering
-continues across it. The paragraph is content of the item before it (L-3), and
-canonical form writes it inside that item, as one list:
+*(Informative)* A paragraph between two items interrupts the list in CommonMark,
+and the numbering continues across it. The paragraph is content of the item
+before it (L-3), and canonical form writes it inside that item, as one list:
 
 ````example
 1. Overview
@@ -1762,8 +1764,9 @@ Overview text.
    "content":[],"children":[]}]}
 ````
 
-When the numbering restarts, canonical form keeps the interrupting paragraph
-between the two lists, unindented, so that the restart survives (P-12):
+*(Informative)* When the numbering restarts, canonical form keeps the
+interrupting paragraph between the two lists, unindented, so that the restart
+survives (P-12):
 
 ````example
 # Rollout
@@ -1789,15 +1792,15 @@ Then, on each server:
      "content":[],"children":[]}]}]}
 ````
 
-P-10 states what L-3 already implies, because the failure it prevents is silent.
-L-3 attaches a block to the *nearest node preceding it in document order*, so
-content written after a child would lift back attached to that child instead —
-a different tree, from output that is a perfectly ordinary Markdown document.
-Both orderings satisfy every other rule in this section, which is why the
-requirement has to be stated rather than derived.
+*(Informative)* P-10 states what L-3 already implies, because the failure it
+prevents is silent. L-3 attaches a block to the *nearest node preceding it in
+document order*, so content written after a child would lift back attached to
+that child instead — a different tree, from output that is a perfectly ordinary
+Markdown document. Both orderings satisfy every other rule in this section,
+which is why the requirement has to be stated rather than derived.
 
-A node with both content and children projects in that order, and lifts back
-unchanged:
+*(Informative)* A node with both content and children projects in that order,
+and lifts back unchanged:
 
 ````example
 # Install
@@ -1818,15 +1821,17 @@ Node.js 20 or later.
 
 ### 2.6 The tree encoding used by examples
 
-A tree is an abstract structure. It has no format, and this specification blesses
-none — a Markdown document is one projection of a tree and the only one specified
-(§1.1.2). But an example has to state its expected tree *in something*, and
-whatever that notation is, it has to be specified: two implementations reading
-the same suite differently is exactly the undecidable conformance §1.4.3 forbids.
+*(Informative)* A tree is an abstract structure. It has no format, and this
+specification blesses none — a Markdown document is one projection of a tree and
+the only one specified (§1.1.2). But an example has to state its expected tree
+*in something*, and whatever that notation is, it has to be specified: two
+implementations reading the same suite differently is exactly the undecidable
+conformance §1.4.3 forbids.
 
-**This is a test fixture encoding and nothing more.** It is not an interchange
-format, not a serialisation implementations are expected to read or write outside
-the suite, and not a second format this specification undertakes to maintain.
+*(Informative)* **This is a test fixture encoding and nothing more.** It is not
+an interchange format, not a serialisation implementations are expected to read
+or write outside the suite, and not a second format this specification
+undertakes to maintain.
 
 **E-1.** A tree MUST be encoded as a JSON object with exactly two members,
 `content` and `children`. `content` holds the blocks that precede every node
@@ -1906,42 +1911,45 @@ sentence in E-4 and another in E-5. The two were written separately and they do
 not give the same number; stating them together is what keeps that difference
 deliberate and in one place, instead of discovered later in two.
 
-**Why the two cases differ.** Two numbers meet on a recorded string's later
-lines: the indentation its first line gave to whatever contains it, and the
-indentation canonical projection will write back in front of it. They agree
-whenever the text begins at the content column of the node it belongs to, which is
-almost always. For a `label` they *always* agree — a label is the inline content
-of the node's own first block, so it begins inside the node that holds it, and P-1
-writes its later lines back where its first line began. One number, so there is
-nothing to take a minimum of.
+*(Informative)* **Why the two cases differ.** Two numbers meet on a recorded
+string's later lines: the indentation its first line gave to whatever contains
+it, and the indentation canonical projection will write back in front of it.
+They agree whenever the text begins at the content column of the node it belongs
+to, which is almost always. For a `label` they *always* agree — a label is the
+inline content of the node's own first block, so it begins inside the node that
+holds it, and P-1 writes its later lines back where its first line began. One
+number, so there is nothing to take a minimum of.
 
-A block's `source` is different because L-3 can attach a block to a node the block
-was **not written inside**, and then the two numbers come apart in both
-directions. A block at the top level attached to the root gave up columns that
-P-4 will not replace — remove them and a line can come back nearer the left margin
-than it began, where a list marker or a setext underline means something it did
-not mean before. A block written at column 0 and attached by L-3 to a list item
-gave up no columns at all, and P-4 will add the item's — remove the item's and the
-line comes back *further* from the content column than it should.
+*(Informative)* A block's `source` is different because L-3 can attach a block
+to a node the block was **not written inside**, and then the two numbers come
+apart in both directions. A block at the top level attached to the root gave up
+columns that P-4 will not replace — remove them and a line can come back nearer
+the left margin than it began, where a list marker or a setext underline means
+something it did not mean before. A block written at column 0 and attached by
+L-3 to a list item gave up no columns at all, and P-4 will add the item's —
+remove the item's and the line comes back *further* from the content column than
+it should.
 
-The lesser of the two is the number that is safe in both directions, and it is the
-only one that is: removing more than the first line gave up takes whitespace that
-was never the container's to take, and removing more than P-4 restores loses
-whitespace the author wrote. Both documents are in §2.2.
+*(Informative)* The lesser of the two is the number that is safe in both
+directions, and it is the only one that is: removing more than the first line
+gave up takes whitespace that was never the container's to take, and removing
+more than P-4 restores loses whitespace the author wrote. Both documents are in
+§2.2.
 
-**Why no line may end in whitespace.** P-8 forbids a line ending in whitespace
-outside a code block, and P-9 writes a recorded source back as it stands, so a
-recorded string whose line ends in whitespace would have no canonical projection
-at all — the P-rules would be unsatisfiable for that tree, and one stray space at
-the end of a paragraph is enough. This is the collision L-9 resolved for hard
-breaks and L-10 for front matter, resolved for everything else. L-9 has already
-taken the one spelling of trailing whitespace that a reader can see and recorded
-it as a backslash before this rule is reached.
+*(Informative)* **Why no line may end in whitespace.** P-8 forbids a line ending
+in whitespace outside a code block, and P-9 writes a recorded source back as it
+stands, so a recorded string whose line ends in whitespace would have no
+canonical projection at all — the P-rules would be unsatisfiable for that tree,
+and one stray space at the end of a paragraph is enough. This is the collision
+L-9 resolved for hard breaks and L-10 for front matter, resolved for everything
+else. L-9 has already taken the one spelling of trailing whitespace that a
+reader can see and recorded it as a backslash before this rule is reached.
 
-The honest cost: an HTML block's trailing whitespace goes too, and inside a
-`<pre>` it was significant to a browser. Exempting `html_block` would leave that
-block's tree with no canonical projection, which is the defect being fixed; a
-document that needs those spaces can carry a code block, which keeps them.
+*(Informative)* The honest cost: an HTML block's trailing whitespace goes too,
+and inside a `<pre>` it was significant to a browser. Exempting `html_block`
+would leave that block's tree with no canonical projection, which is the defect
+being fixed; a document that needs those spaces can carry a code block, which
+keeps them.
 
 *(Informative)* E-4's fold of a soft line break rests on the same test L-9
 applied. Checked against CommonMark's own reference renderer, a heading written
@@ -1993,10 +2001,10 @@ through a door §1.1.2 closed on purpose.
     {"kind":"section","label":"**Fast** start","content":[],"children":[]}]}]}
 ````
 
-A heading written over two lines is one line of text: the break between them is a
-soft break, which every renderer shows as a space, so the label holds a space
-(E-4). Canonical form writes it as one ATX heading, so this document is
-conforming and not canonical:
+*(Informative)* A heading written over two lines is one line of text: the break
+between them is a soft break, which every renderer shows as a space, so the
+label holds a space (E-4). Canonical form writes it as one ATX heading, so this
+document is conforming and not canonical:
 
 ````example
 Head
@@ -2007,8 +2015,8 @@ more
   {"kind":"section","label":"Head more","content":[],"children":[]}]}
 ````
 
-The same inside a list item, where E-10 takes the item's indentation off the
-second line first and the break then folds:
+*(Informative)* The same inside a list item, where E-10 takes the item's
+indentation off the second line first and the break then folds:
 
 ````example
 - x
@@ -2020,10 +2028,10 @@ second line first and the break then folds:
     {"kind":"item","label":"a b","content":[],"children":[]}]}]}
 ````
 
-A line indented further than the first keeps what is left over, as a content
-block does, and the fold leaves that leftover where it is. Here the first line
-gives up two columns and the second has four, written with a tab, so one space
-from the fold and two columns left over make three:
+*(Informative)* A line indented further than the first keeps what is left over,
+as a content block does, and the fold leaves that leftover where it is. Here the
+first line gives up two columns and the second has four, written with a tab, so
+one space from the fold and two columns left over make three:
 
 ````example
 - a
@@ -2033,13 +2041,13 @@ from the fold and two columns left over make three:
   {"kind":"item","label":"a   b","content":[],"children":[]}]}
 ````
 
-Neither of those two is canonical — one line each is what their labels now are,
-so canonical form writes `- x` / `␣␣- a b` and `- a   b`. Each settles on the
-first round trip, as with L-9 and L-10.
+*(Informative)* Neither of those two is canonical — one line each is what their
+labels now are, so canonical form writes `- x` / `␣␣- a b` and `- a b`. Each
+settles on the first round trip, as with L-9 and L-10.
 
-A **hard** break is not folded, because it is not invisible. It survives as the
-backslash form L-9 records, and P-1 writes the line after it at the item's content
-column like any other:
+*(Informative)* A **hard** break is not folded, because it is not invisible. It
+survives as the backslash form L-9 records, and P-1 writes the line after it at
+the item's content column like any other:
 
 ````example
 - a\
@@ -2059,9 +2067,10 @@ column like any other:
     {"kind":"item","label":"a\\\nb","content":[],"children":[]}]}]}
 ````
 
-and no Unicode normalisation is applied, in either direction (E-7). The label
-below is `caf`, then `e`, then a combining acute accent — three code points, not
-the two that the precomposed spelling would give, though the two render alike:
+*(Informative)* and no Unicode normalisation is applied, in either direction
+(E-7). The label below is `caf`, then `e`, then a combining acute accent — three
+code points, not the two that the precomposed spelling would give, though the
+two render alike:
 
 ````example
 # café
@@ -2088,10 +2097,11 @@ the two.
 
 ### 2.7 Effect on round-trip
 
-For a canonical document, lift followed by projection returns the document byte
-for byte — §1.2.4 L1 already requires this, and the rules above are what make it
-achievable. For a conforming document that is not canonical, the tree is
-preserved and the bytes are normalised; the second round-trip is byte-stable.
+*(Informative)* For a canonical document, lift followed by projection returns
+the document byte for byte — §1.2.4 L1 already requires this, and the rules
+above are what make it achievable. For a conforming document that is not
+canonical, the tree is preserved and the bytes are normalised; the second
+round-trip is byte-stable.
 
 *(Informative)* Kind preservation is what makes the normalisation acceptable in
 practice. The changes a non-canonical document undergoes are confined to

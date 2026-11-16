@@ -15,6 +15,58 @@ tests or how a rule is read.
 
 ### Changed
 
+- **The rest of Chapter 2 is read, and #97's reading is complete.** The fourth
+  and last batch of [#97](https://github.com/mindmapmarkdown/spec/issues/97):
+  §2.3, §2.4, §2.5.2, §2.6 and §2.7 — 28 blocks, of which 26 become informative
+  and 2 stay normative. Every one of the 104 blocks RFC 0093 measured has now
+  been read once.
+
+  **#97's four sharply-named blocks are done.** Three of them were in this
+  batch — `**Why the two cases differ.**`, `**Why no line may end in
+  whitespace.**` and `**This is a test fixture encoding and nothing more.**` —
+  and RFC 0093 had already named each informative, the last of them against the
+  fifth row of its own classification table: *a statement about this
+  specification or its scope, not about an implementation*. The fourth,
+  `**Nothing in L-10 parses the block.**`, was marked in the second batch.
+
+  **Two stay normative, and both are rule text that a paragraph break
+  separated from its rule.** §2.4's first paragraph *defines* well-formed, which
+  S-3 then requires implementations to reject against; and §2.6's *"No line of a
+  recorded string may end in whitespace"* is E-10's own last paragraph. With
+  L-11's three definitions from the second batch that makes **four** blocks in
+  the count for the same reason — a rule whose body runs past one paragraph has
+  its continuation counted as prose, because the tool only excludes a block that
+  opens with `**L-11.**` and the like.
+
+  **One verdict changed on reading the rule it defers to.** §2.4's second
+  paragraph — *"A document whose tree would not be well-formed is not a
+  conforming document, and lift assigns it no tree"* — read as normative until
+  §1.2.3 was checked against it. Every clause is already there: *"whose tree is
+  well-formed (§2.4)"* in the definition of a conforming document, and *"It is
+  Markdown that this specification does not assign a tree to"* in its last
+  paragraph. The paragraph restates and cites; it is informative.
+
+  **§2.7 now carries no normative text at all.** Its one unmarked paragraph said
+  so itself — *"§1.2.4 L1 already requires this"* — and it takes a paragraph
+  marking rather than one on the heading: §2.7 is the last subsection of the
+  chapter, so a heading marking would have no later heading to stop at and would
+  reach past the chapter to the licence footer.
+
+  `UNREAD_PIN` 51 → **25**, which is its floor. All 25 are blocks a reading
+  settled as normative, so the pin now measures a set that is finished rather
+  than a backlog, and the tool's header and the pin's own comment are rewritten
+  to say what the number catches now.
+
+  **One question is left open, and it is in Chapter 1.** The first batch
+  recorded §1.1.1's two blocks as normative, calling them scope statements —
+  and RFC 0093's classification table counted five blocks of exactly that shape
+  as informative. §1.1.2's two are not in doubt: one is where a permission
+  lives, by RFC 0093's own accounting, and the other is the only statement that
+  HTML is out of scope, which the table above it does not list. §1.1.1's two
+  are. Reversing a verdict that has already merged belongs in its own change,
+  with its own reasoning, rather than inside a batch whose subject was
+  Chapter 2.
+
 - **§2.2's example lead-ins carry a marking.** The third batch of
   [#97](https://github.com/mindmapmarkdown/spec/issues/97): the 31 sentences
   that introduce §2.2's examples, all of them informative. This is the batch
