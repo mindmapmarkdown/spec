@@ -4,7 +4,7 @@
 |---|---|
 | **Version** | 0.1.0 |
 | **Status** | Draft |
-| **Last updated** | 2026-11-15 |
+| **Last updated** | 2026-11-16 |
 | **Latest text** | <https://github.com/mindmapmarkdown/spec/blob/main/spec.md> |
 | **Licence** | CC-BY-4.0 (see [`LICENSE`](LICENSE)) |
 
@@ -38,8 +38,8 @@ suspend that process; it only means the process has not yet had much to work on.
 
 #### 1.1.1 What this specification defines
 
-This specification defines a two-way correspondence between a Markdown document
-and a hierarchical tree, consisting of:
+*(Informative)* This specification defines a two-way correspondence between a
+Markdown document and a hierarchical tree, consisting of:
 
 1. **Lift** — the rules by which a document determines exactly one tree.
 2. **Canonical projection** — the rules by which a tree determines exactly one
@@ -50,8 +50,8 @@ and a hierarchical tree, consisting of:
 4. **Conformance** — what a document and an implementation each have to satisfy,
    and how that is tested.
 
-The correspondence is between a document and a **tree**. It is not a
-correspondence between a document and a mindmap. A mindmap is one of many
+*(Informative)* The correspondence is between a document and a **tree**. It is
+not a correspondence between a document and a mindmap. A mindmap is one of many
 projections of a tree, and is out of scope; see §1.1.2.
 
 *(Informative)* Both directions are constrained. A specification that defined

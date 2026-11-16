@@ -15,6 +15,46 @@ tests or how a rule is read.
 
 ### Changed
 
+- **§1.1.1's two blocks are informative, and #97's last open verdict is
+  settled.** [#107](https://github.com/mindmapmarkdown/spec/issues/107). The
+  fourth batch of [#97](https://github.com/mindmapmarkdown/spec/issues/97) left
+  one verdict in doubt: the first batch had recorded §1.1.1's two blocks
+  normative as *scope statements*, while RFC 0093's classification table counted
+  five blocks of exactly that shape informative. Both blocks fail §1.2.2's
+  content test — neither states behaviour an implementation could be found
+  non-conformant against — so both now carry a marking.
+
+  **The one argument against was a claim about shape, and measuring it reversed
+  it.** A paragraph marking's run stops at a list, so marking §1.1.1's lead-in
+  covers the lead-in alone and leaves the four numbered items below it unmarked.
+  That looked like an arrangement the document does not use. It is the one the
+  document already used most: before this change **52** marked blocks ended in a
+  colon, and **all 52** were followed by a fenced block — which §1.2.2 declares
+  normative outright. An informative lead-in above an unmarked normative
+  continuation is this specification's commonest shape, not a new one. §1.1.1's
+  is the 53rd, and the first whose continuation is a list rather than a fence.
+
+  **RFC 0016 is the other precedent, and this change leaves it intact.** Its
+  `R-1` removed §1.1.1 *item 4 — Node identity*, in a change classed Normative.
+  That edit was to the numbered **list**, not to either prose block; a list is
+  neither a paragraph nor a bold block, so it was never in #97's count, and it
+  stays normative. What RFC 0016 edited by RFC still takes an RFC to edit.
+
+  **The second block withdraws nothing.** *"The correspondence is between a
+  document and a **tree** … A mindmap is one of many projections of a tree, and
+  is out of scope; see §1.1.2"* ends by naming where its content lives, and
+  §1.1.2's table carries it — the *Kinds of view — mindmap, outline, graph,
+  slide, table* row. The positive half stays in §1.1.1's unmarked list, whose
+  items 1 and 2 are the two directions. And no requirement anywhere in the
+  document cites §1.1.1: `grep -n '1\.1\.1' spec.md` returns one hit, which is
+  §1.1.1's own heading.
+
+  `UNREAD_PIN` 25 → **23**, still at its floor. The pin's comment no longer
+  counts *scope statements* among the normative remainder: §1.1.2's two are in
+  the count because each is the only statement of its own content — one is where
+  a permission lives, the other the only statement that HTML is out of scope —
+  and not because of where in the document they sit.
+
 - **The rest of Chapter 2 is read, and #97's reading is complete.** The fourth
   and last batch of [#97](https://github.com/mindmapmarkdown/spec/issues/97):
   §2.3, §2.4, §2.5.2, §2.6 and §2.7 — 28 blocks, of which 26 become informative
