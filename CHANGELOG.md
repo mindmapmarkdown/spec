@@ -13,6 +13,38 @@ tests or how a rule is read.
 
 ## Unreleased
 
+Nothing since 0.1.1.
+
+---
+
+## 0.1.1 — 2026-11-17
+
+**No rule changed, and nothing that conformed stops conforming.** What changed
+is which prose claims to be a rule. §1.2.2 of [`spec.md`](spec.md) says that
+anything not marked *(Informative)* is normative, and the document had never
+been read against that sentence: **104** blocks of explanation sat unmarked,
+because a marking's run stops at a fence and most explanation in this
+specification sits immediately below a fenced example, out of every marking's
+reach.
+
+Each of the 104 has now been read once, one block at a time, against §1.2.2's
+own test — *does this create an obligation an implementation could be found
+non-conformant against?* **81** were explanation and now carry a marking: 77 by
+a paragraph marking of their own, and 4 under one heading marking. The **23**
+left unmarked are unmarked because a reading found each states a requirement,
+and every verdict's reasoning is in the entries below and the commits they name.
+Paragraph-level markings in [`spec.md`](spec.md) go from **36** to **113**.
+
+[`examples/examples.json`](examples/examples.json) differs from `v0.1.0` only in
+`start_line` and `end_line`. No example's input, expected tree or heading
+changed, so an implementation pinned to the suite sees renamed tests and not one
+changed assertion.
+
+Clarifying throughout ([`GOVERNANCE.md`
+§3](GOVERNANCE.md#3-classes-of-change)), which is why a release that touches 81
+blocks of the specification is a PATCH ([`VERSIONING.md`
+§2](VERSIONING.md#2-the-number)).
+
 ### Changed
 
 - **§1.1.1's two blocks are informative, and #97's last open verdict is
