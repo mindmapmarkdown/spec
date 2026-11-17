@@ -1,4 +1,4 @@
-# RFC 0000: Subtree exchange
+# RFC 0110: Subtree exchange
 
 | | |
 |---|---|
@@ -7,7 +7,7 @@
 | **Author(s)** | `정제영 <ok@baro.pro>` |
 | **Created** | 2026-11-17 |
 | **Comment period ends** | 2026-12-01 |
-| **Discussion** | `<this pull request>` |
+| **Discussion** | <https://github.com/mindmapmarkdown/spec/pull/110> |
 | **Supersedes** | — |
 | **Superseded by** | — |
 
