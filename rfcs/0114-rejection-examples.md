@@ -1,4 +1,4 @@
-# RFC 0000: Rejection examples
+# RFC 0114: Rejection examples
 
 | | |
 |---|---|
@@ -7,7 +7,7 @@
 | **Author(s)** | `정제영 <ok@baro.pro>` |
 | **Created** | 2026-11-18 |
 | **Comment period ends** | 2026-12-02 |
-| **Discussion** | <https://github.com/mindmapmarkdown/spec/pull/0000> |
+| **Discussion** | <https://github.com/mindmapmarkdown/spec/pull/114> |
 | **Supersedes** | — |
 | **Superseded by** | — |
 
