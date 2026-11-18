@@ -13,7 +13,34 @@ tests or how a rule is read.
 
 ## Unreleased
 
-Nothing since 0.1.1.
+### Changed
+
+- **`spec.md` says 0.1.1, which is what 0.1.1 shipped claiming not to be.**
+  `v0.1.1` was tagged, published, and attached to its GitHub release with a
+  `spec.md` whose header read **Version** `0.1.0`. The release commit touched
+  only this file, on the reasoning that the rules had not changed — true of the
+  rules, and false of the row that names which release they are. Anyone who
+  downloaded the specification from the 0.1.1 release read that it was 0.1.0.
+
+  The row is now `0.1.1` and **Last updated** is `2026-11-18`, the day it was
+  corrected. No rule, example or requirement changes, so this is **Editorial**
+  under [`GOVERNANCE.md` §3](GOVERNANCE.md#3-classes-of-change) and the suite is
+  byte-identical.
+
+  **`tools/check-version-row.mjs` stops it happening again**, and it is the same
+  bargain `check-last-updated.mjs` struck for the row beside it after that one
+  went stale for three months. It compares `spec.md`'s **Version** row with the
+  newest release heading in this file and fails when they disagree — which is
+  how the defect above was found, by writing the check and running it. Ten tests
+  pin it, including the two cases it must stay quiet on: a repository with
+  nothing released, and an `## Unreleased` heading above the newest release.
+
+  CHANGELOG.md rather than `git tag`, for three reasons.
+  [`VERSIONING.md` §6](VERSIONING.md#6-release-procedure) makes a dated entry
+  here a condition of releasing, so the entry exists by the time the row
+  matters; the check then needs no git and no network, so a shallow CI clone and
+  a contributor's machine get the same answer; and a tag can be pushed after the
+  merge that should have carried the row, which is the window the check closes.
 
 ---
 

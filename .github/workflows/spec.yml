@@ -89,6 +89,16 @@ jobs:
       - name: Every *(Informative)* marking reaches its own run
         run: node tools/check-informative.mjs
 
+      # 0.1.1 was tagged and published with a spec.md whose header said
+      # **Version** 0.1.0. The release commit touched only CHANGELOG.md, on the
+      # reasoning that the rules had not changed — true of the rules, false of
+      # the row that names which release they are, and spec.md is attached to
+      # the GitHub release (VERSIONING.md §6), so the stale row shipped to
+      # everyone who downloaded it. Same bargain as the date above: the row is
+      # part of the release rather than a detail after it.
+      - name: spec.md names the release CHANGELOG.md records
+        run: node tools/check-version-row.mjs
+
   links:
     name: links
     runs-on: ubuntu-latest
