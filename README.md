@@ -13,7 +13,7 @@ what the project is and why it exists, start at
 [the organisation page](https://github.com/mindmapmarkdown). If you are here to
 read the specification, implement it, or argue with it, this page is the map.
 
-> **⚠ Draft — released as 0.1.0 on 2026-11-14.**
+> **⚠ Draft — released as 0.1.1 on 2026-11-17.**
 >
 > [`spec.md`](spec.md) contains **Chapters 1 and 2** — scope, conformance and
 > terminology, then the rules that decide which tree a document denotes and
@@ -80,10 +80,10 @@ of claim and are not interchangeable.
 | [`spec.md`](spec.md) | The specification, with its normative examples written inline | Chapters 1–2 |
 | [`examples/examples.json`](examples/examples.json) | Conformance test cases, **generated** from the examples in `spec.md` and never hand-edited | 54 examples |
 | [`rfcs/`](rfcs/) | Proposals for normative change, including rejected ones | |
-| [`docs/`](docs/) | Informative material — an [overview](docs/overview.md) of how the pieces fit together, a [glossary](docs/glossary.md), a guide to [reading a worked example](docs/reading-examples.md), and [how languages are handled](docs/i18n.md) | |
+| [`docs/`](docs/) | Informative material — an [overview](docs/overview.md) of how the pieces fit together, a [glossary](docs/glossary.md), a guide to [reading a worked example](docs/reading-examples.md), [how languages are handled](docs/i18n.md), and a design exploration of [node correspondence](docs/l2-correspondence.md) | |
 | [`tools/`](tools/) | The generator that extracts `examples.json`, the link checker, and their tests | |
 | [`VERSIONING.md`](VERSIONING.md) | What a version number means, when it changes, and what 1.0 would require | |
-| [`CHANGELOG.md`](CHANGELOG.md) | What changed, and in which release | 0.1.0 — 2026-11-14 |
+| [`CHANGELOG.md`](CHANGELOG.md) | What changed, and in which release | 0.1.1 — 2026-11-17 |
 
 The generated-not-written rule for `examples.json` is the point of the
 arrangement: the specification and its test suite are the same source, so they
@@ -187,6 +187,7 @@ the succession story in [`GOVERNANCE.md`](GOVERNANCE.md).
 - [`docs/glossary.md`](docs/glossary.md) — the vocabulary, in plain language, for a first-time reader
 - [`docs/reading-examples.md`](docs/reading-examples.md) — how to read a worked example and the JSON tree it expects, from no prior JSON
 - [`docs/i18n.md`](docs/i18n.md) — which text is authoritative, how a translation is written, and why no runtime translation widget is used
+- [`docs/l2-correspondence.md`](docs/l2-correspondence.md) — what L2’s diff and merge need from node correspondence, what three candidate strategies measure out at, and the architectural choice a future RFC has to make
 - [`GOVERNANCE.md`](GOVERNANCE.md) — roles, change classes, RFC process, phase transitions, succession
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — how to work on the specification
 - [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) — participation
