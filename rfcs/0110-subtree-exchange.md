@@ -313,19 +313,38 @@ batches that followed were split by kind of decision rather than by position.
 
 ## Unresolved questions
 
-**Blocking — to resolve before the comment period ends.**
+**Resolved during the comment period**, 2026-11-20, by the maintainer, who is
+required to write down why (`GOVERNANCE.md` §4); the amendment is
+<https://github.com/mindmapmarkdown/spec/pull/115>. Neither answer changes a rule,
+an example, or a word of the proposed text, so the period that has run covers
+the text as it stands and still ends 2026-12-01.
 
-1. **The rule-label family.** This RFC uses `X-n`. The alternatives are a single
-   family for every L2 operation — `O-n` for *operation* — or one family per
-   operation, which would make four. `X-n` is proposed because it reads as
-   *exchange* and because a shared family would make the diff and merge RFCs
-   renumber each other's rules. The next free labels elsewhere are `L-15`,
-   `S-9`, `P-13`, `E-11`, and nothing in the document depends on the choice.
-2. **Whether Chapter 3 is the right home**, or whether §2.8 is. Chapter 3 is
-   proposed because Chapter 2 is titled *Canonical hierarchy* and is about the
-   correspondence between a document and a tree, while L2's operations are
-   tree-to-tree. A reader looking for them under *Canonical hierarchy* would not
-   find them.
+1. **The rule-label family: `X-n`, and a family per operation.** §2's own
+   labelling note settles it — *"Rules are labelled by what they govern: **L**
+   for lift, **S** for the trees lift can produce, **P** for canonical
+   projection, and **E** for the encoding the examples are written in."* Each
+   existing family is one mechanism. A shared `O-n` would be the only family
+   labelled by a **conformance level**, and L2 is not a mechanism; it is a claim
+   an implementation makes about four of them. So exchange takes `X-n`, and
+   correspondence, diff and merge each take their own when they are written —
+   `C`, `D` and `M` are free, and `X` collides with nothing. That a shared family
+   would make the diff and merge RFCs renumber each other's rules is a
+   consequence of the convention, not the reason for the choice.
+
+   Landing detail: Chapter 3's intro carries the same sentence for `X`, and §2's
+   is amended to say it lists Chapter 2's families. `L-15` is no longer free —
+   [RFC 0114](0114-rejection-examples.md) takes it; `S-9`, `P-13` and `E-11`
+   still are.
+2. **Chapter 3, not §2.8.** §2's intro states that chapter's own job: *"This
+   chapter fixes which tree a document denotes, which document a tree denotes,
+   and what must be true of a tree for the second question to have an answer at
+   all."* The subtree at a node is none of the three. §2.8 would therefore
+   require widening that sentence, and that sentence is where the chapter states
+   its subject — a tree-to-tree mechanism is not that subject. All three bullets
+   of §1.2.4 L2 are tree-to-tree, so all three belong in the same chapter; §2.8
+   would mean a §2.9 and a §2.10 after it, each one further from the subject the
+   chapter claims. The number is free: §1 and §2 are the only chapters, and
+   there is no appendix.
 
 **Deliberately left to a later RFC.**
 

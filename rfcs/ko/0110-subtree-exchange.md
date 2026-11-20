@@ -305,17 +305,36 @@ JSON의 부분 객체가 그대로 되도록 쓴다 — 그러면 읽는 사람�
 
 ## 미해결 질문
 
-**차단 질문 — 코멘트 기간이 끝나기 전에 정해야 한다.**
+**코멘트 기간 중에 해결했다** — 2026-11-20, 메인테이너가 결정하고 그 이유를
+적는다(`GOVERNANCE.md` §4). 이 개정의 논의는
+<https://github.com/mindmapmarkdown/spec/pull/115>이다. 두 답 모두 규칙도 예제도
+제안 본문의 한 단어도 바꾸지 않으므로, 지금까지 흐른 기간이 현재 본문을
+그대로 덮는다. 종료일은 2026-12-01 그대로다.
 
-1. **규칙 라벨 계열.** 이 RFC는 `X-n`을 쓴다. 대안은 L2 연산 전체에 한 계열을
-   쓰는 것(`O-n`, *operation*)이거나 연산마다 한 계열을 두는 것(그러면 넷이
-   된다)이다. `X-n`을 제안하는 이유는 *exchange*로 읽히고, 계열을 공유하면 diff
-   RFC와 merge RFC가 서로의 규칙 번호를 밀게 되기 때문이다. 다른 곳의 다음 빈
-   라벨은 `L-15`·`S-9`·`P-13`·`E-11`이며, 이 선택에 의존하는 것은 문서에 없다.
-2. **Chapter 3이 맞는 자리인지**, 아니면 §2.8인지. Chapter 3을 제안하는 이유는
-   Chapter 2의 제목이 *Canonical hierarchy*이고 그 내용이 문서와 트리 사이의
-   대응인데, L2의 연산은 트리 대 트리이기 때문이다. *Canonical hierarchy* 아래를
-   찾는 독자는 그것들을 찾지 못한다.
+1. **규칙 라벨 계열은 `X-n`, 그리고 연산마다 한 계열.** §2 자신의 라벨 주석이
+   정한다 — *"Rules are labelled by what they govern: **L** for lift, **S** for
+   the trees lift can produce, **P** for canonical projection, and **E** for the
+   encoding the examples are written in."* 기존 계열은 하나하나가 메커니즘
+   하나다. 공유 `O-n`은 **적합성 레벨**로 이름 붙은 유일한 계열이 될 텐데, L2는
+   메커니즘이 아니다 — 구현이 메커니즘 넷에 대해 내놓는 주장이다. 그래서 교환은
+   `X-n`을 쓰고, 대응·diff·merge는 쓰일 때 각자의 계열을 가진다. `C`·`D`·`M`이
+   비어 있고 `X`는 어느 것과도 겹치지 않는다. 계열을 공유하면 diff RFC와 merge
+   RFC가 서로의 규칙 번호를 밀게 된다는 것은 이 관례의 결과이지 선택의 이유가
+   아니다.
+
+   랜딩 세부: Chapter 3의 도입이 `X`에 대해 같은 문장을 담고, §2의 문장은 그것이
+   Chapter 2의 계열을 열거한다고 고친다. `L-15`는 더 이상 비어 있지 않다 —
+   [RFC 0114](0114-rejection-examples.md)가 가져간다. `S-9`·`P-13`·`E-11`은 아직
+   비어 있다.
+2. **§2.8이 아니라 Chapter 3.** §2의 도입이 그 장의 일을 스스로 진술한다 —
+   *"This chapter fixes which tree a document denotes, which document a tree
+   denotes, and what must be true of a tree for the second question to have an
+   answer at all."* 어느 노드의 하위 트리는 그 셋 중 어느 것도 아니다. 따라서
+   §2.8로 가려면 그 문장을 넓혀야 하고, 그 문장은 그 장이 자기 주제를 진술하는
+   자리다 — 트리 대 트리 메커니즘은 그 주제가 아니다. §1.2.4 L2의 세 항목이 모두
+   트리 대 트리이므로 셋이 같은 장에 속하며, §2.8이면 그 뒤에 §2.9와 §2.10이
+   붙어 하나씩 그 장이 내세운 주제에서 멀어진다. 번호는 비어 있다 — 장은 §1과
+   §2 둘뿐이고 부록은 없다.
 
 **뒤의 RFC로 일부러 넘긴다.**
 
