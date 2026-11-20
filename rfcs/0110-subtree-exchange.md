@@ -314,7 +314,8 @@ batches that followed were split by kind of decision rather than by position.
 ## Unresolved questions
 
 **Resolved during the comment period**, 2026-11-20, by the maintainer, who is
-required to write down why (`GOVERNANCE.md` §4). Neither answer changes a rule,
+required to write down why (`GOVERNANCE.md` §4); the amendment is
+<https://github.com/mindmapmarkdown/spec/pull/115>. Neither answer changes a rule,
 an example, or a word of the proposed text, so the period that has run covers
 the text as it stands and still ends 2026-12-01.
 

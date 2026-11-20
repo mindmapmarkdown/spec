@@ -345,11 +345,12 @@ informative 문장이 이미 말하는 것을 규범 형태로 되풀이할 뿐�
 ## 미해결 질문
 
 **코멘트 기간 중에 해결했다** — 2026-11-20, 메인테이너가 결정하고 그 이유를
-적는다(`GOVERNANCE.md` §4). 답 하나가 규칙의 이름을 바꾸므로, 기간을 이 개정에서
-다시 돌려 종료일을 **2026-12-04**로 둔다. [RFC 0093](0093-informative-marking.md)이
-세운 선례다 — 기간은 현재 모습의 본문을 덮어야 한다. §2는 라벨이 *"are stable
-and may be cited"*라고 말하므로, 두 번째 구현이 인용할 이름은 열하루가 아니라 꽉
-찬 열나흘 동안 공개된다.
+적는다(`GOVERNANCE.md` §4). 이 개정의 논의는
+<https://github.com/mindmapmarkdown/spec/pull/115>이다. 답 하나가 규칙의 이름을
+바꾸므로, 기간을 이 개정에서 다시 돌려 종료일을 **2026-12-04**로 둔다.
+[RFC 0093](0093-informative-marking.md)이 세운 선례다 — 기간은 현재 모습의
+본문을 덮어야 한다. §2는 라벨이 *"are stable and may be cited"*라고 말하므로, 두
+번째 구현이 인용할 이름은 열하루가 아니라 꽉 찬 열나흘 동안 공개된다.
 
 1. **제안대로 `non-conforming`과 `not-well-formed`.** 측정: `invalid`는
    `spec.md`에 **한 번도 나오지 않는다**. `conforming document`는 §1.2.3이,

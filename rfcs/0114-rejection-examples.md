@@ -350,7 +350,8 @@ Rejected on Motivation §5.
 ## Unresolved questions
 
 **Resolved during the comment period**, 2026-11-20, by the maintainer, who is
-required to write down why (`GOVERNANCE.md` §4). One answer renames a rule, so
+required to write down why (`GOVERNANCE.md` §4); the amendment is
+<https://github.com/mindmapmarkdown/spec/pull/115>. One answer renames a rule, so
 the period is re-run from this revision and now ends **2026-12-04**, on the
 precedent [RFC 0093](0093-informative-marking.md) set — a period has to cover
 the text as it stands. §2 says labels *"are stable and may be cited"*, so the
