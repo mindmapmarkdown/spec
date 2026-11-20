@@ -6,7 +6,7 @@
 | **Class** | Normative |
 | **Author(s)** | `정제영 <ok@baro.pro>` |
 | **Created** | 2026-11-18 |
-| **Comment period ends** | 2026-12-02 |
+| **Comment period ends** | 2026-12-04 |
 | **Discussion** | <https://github.com/mindmapmarkdown/spec/pull/114> |
 | **Supersedes** | — |
 | **Superseded by** | — |
@@ -94,8 +94,8 @@ was handed. That reading is available and it is probably the intended one; it is
 not what §2.4's surrounding text invites, and an informative sentence is the only
 place the narrower reading is corrected. `GOVERNANCE.md` §3 says a disputed class
 is *"treated as the more restrictive of the two"*, which is why this RFC is
-Normative rather than Clarifying: if the wide reading is right, `S-9` below
-changes nothing, and if it is wrong, `S-9` changes what conforms.
+Normative rather than Clarifying: if the wide reading is right, `L-15` below
+changes nothing, and if it is wrong, `L-15` changes what conforms.
 
 An example whose expected outcome is *no tree* needs a rule saying so. That is
 the whole of this RFC's normative content.
@@ -153,19 +153,19 @@ letter is what would make condition 3's pass mean less than it reads.
 
 ### §2.4 — the rule that is missing
 
-**S-9.** An **L1** implementation MUST NOT assign a tree to a document that is
+**L-15.** An **L1** implementation MUST NOT assign a tree to a document that is
 not a conforming document (§1.2.3).
 
 It lands beside `S-3`, which is the same requirement for the other direction,
 and the pair is then complete: `S-3` for a tree an implementation is handed,
-`S-9` for a document it is given. How either refusal is reported is outside this
+`L-15` for a document it is given. How either refusal is reported is outside this
 specification (§1.1.2), as RFC 0085 unresolved question 2 already decided —
 *"Whether it says why, and how, is product design."*
 
-**`S-9` is scoped to L1 and `S-3` is not, deliberately.** An L0 implementation is
+**`L-15` is scoped to L1 and `S-3` is not, deliberately.** An L0 implementation is
 every existing Markdown reader, editor, renderer, and diff tool, *"without
 modification"* (§1.2.4). `S-3` never reaches one, because an L0 implementation
-is never handed a tree. An unscoped `S-9` would reach all of them and require a
+is never handed a tree. An unscoped `L-15` would reach all of them and require a
 renderer to refuse to render — which fails L0, and §1.2.4 says a proposed
 requirement that fails L0 *"fails §1.4.1 with it."* The asymmetry is the scoping
 that keeps the rule inside L0's promise.
@@ -202,7 +202,7 @@ written for, one per line.
 **No new `E-rule` is proposed, and that is a choice rather than an omission.**
 §2.6's rules are about the tree encoding, and the `not-well-formed` kind reuses
 them unchanged; what is new is which trees appear and what is expected of them,
-and the expectation is `S-3` and `S-9`. The example *syntax* — the `example`
+and the expectation is `S-3` and `L-15`. The example *syntax* — the `example`
 info string, the `.` separator, the `→` and `␣` conventions — has never been
 normative in `spec.md` for the existing kind either; it lives in
 `tools/extract-examples.mjs` and [`CONTRIBUTING.md` §6](../CONTRIBUTING.md).
@@ -241,7 +241,7 @@ one and names the rule in the first column, except the last row.
 | `S-7` | not-well-formed | an item labelled `---` |
 | `S-8` | not-well-formed | a section label holding a line feed — refused, reported as `S-7` |
 
-`S-3` and `S-9` need no case of their own. They are the rules that say *refuse*,
+`S-3` and `L-15` need no case of their own. They are the rules that say *refuse*,
 so every row above tests one of them; a case for `S-3` alone would be a case
 with nothing in it.
 
@@ -333,9 +333,9 @@ this specification. Requiring the label would make a correct refusal
 non-conformant and turn the suite into a test of diagnostics — a quality of an
 implementation, not of its conformance.
 
-### Add `S-9` without the examples, or the examples without `S-9`
+### Add `L-15` without the examples, or the examples without `L-15`
 
-Both rejected, for the same reason in opposite directions. `S-9` alone restates
+Both rejected, for the same reason in opposite directions. `L-15` alone restates
 in normative form what §2.4's informative note already says, and nothing would
 test it — which is how the gap arose. The examples alone would give the
 `non-conforming` kind no requirement to assert against: an implementation could
@@ -349,26 +349,56 @@ Rejected on Motivation §5.
 
 ## Unresolved questions
 
-**Blocking — to resolve before the comment period ends.**
+**Resolved during the comment period**, 2026-11-20, by the maintainer, who is
+required to write down why (`GOVERNANCE.md` §4). One answer renames a rule, so
+the period is re-run from this revision and now ends **2026-12-04**, on the
+precedent [RFC 0093](0093-informative-marking.md) set — a period has to cover
+the text as it stands. §2 says labels *"are stable and may be cited"*, so the
+name a second implementation will cite is published for a full fourteen days
+rather than for eleven.
 
-1. **The two names.** `non-conforming` and `not-well-formed` are proposed because
-   they are this document's own terms — §1.2.3 defines *conforming document*,
-   §2.4 defines *well-formed* — so a reader meets no third vocabulary. They are
-   long for an info string, and `not-well-formed` is a hyphenated negation.
-   `invalid-document` and `invalid-tree` are shorter and name nothing this
-   document defines.
-2. **Whether the suite's own format should be normative** — for the new kinds and
-   the existing one together. It is not today: `E-1` to `E-10` specify the tree
-   encoding, and nothing specifies the fence, the info string, or the `.`
-   separator. A second implementation consuming `examples.json` relies on all of
-   it. This RFC proposes nothing here, deliberately, because the answer applies
-   to the existing kind as much as the new ones and should not arrive as a side
-   effect.
-3. **`S-9`'s label family.** `S-9` is proposed because it lands beside `S-3` and
-   §2.4 already holds the rejection requirement for trees. It is a statement
-   about lift, so `L-15` is the alternative. The next free labels are `L-15`,
-   `S-9`, `P-13` and `E-11`, and [RFC 0110](0110-subtree-exchange.md) has an
-   open question on `X-n` that does not touch any of them.
+1. **`non-conforming` and `not-well-formed`, as proposed.** Measured: `invalid`
+   appears **nowhere** in `spec.md`. `conforming document` is defined in §1.2.3
+   and `well-formed` in §2.4, so the proposed names send the reader of a failing
+   case to a definition, while `invalid-document` would send them to a word this
+   specification does not use. The length is paid once per case by a human
+   reading it, and by no parser.
+2. **No — the suite's format does not become normative, and it does get
+   specified.** Three grounds. *Scope*: `spec.md` specifies `md ↔ tree`, and the
+   file the suite ships in is neither. *Cost*: by `GOVERNANCE.md` §3 a normative
+   format makes every new example kind a Normative change and every change to
+   the format Breaking, and this RFC expects the suite to grow and names a third
+   and fourth kind as wanted (question 5). *And the need behind the question is
+   not met by making it normative* — it is met by writing it down, which
+   measurement says nothing does today: `examples/` holds `examples.json` and
+   nothing else, and `CONTRIBUTING.md` §6 documents the contributor's workflow
+   while specifying neither the fence, the info string, the `.` separator, nor
+   the shape of `examples.json` itself.
+
+   So this answer accepts an obligation in place of the one it declines.
+   `examples/README.md` specifies the artifact a consumer reads — the top-level
+   members, both arrays, every kind, and the separator — is versioned with the
+   suite, and moves to the `conformance` repository when that exists. It lands
+   with this RFC, not before. `E-1` to `E-10` keep the one part of the format
+   that *is* about `md ↔ tree`: the tree encoding.
+3. **`L-15`, not `S-9`.** The same sentence of §2 that decides
+   [RFC 0110](0110-subtree-exchange.md)'s label question decides this one: **S**
+   is *"for the trees lift can produce."* Every S-rule's subject is a tree or a
+   node, `S-3`'s included — *"a tree that is not well-formed."* This rule's
+   subject is a **document**, and what it requires is that lift produce **no**
+   tree for it; there is no tree here for an S-rule to govern. The rules whose
+   subject is a document are L-rules — `L-8`, *"Lift MUST be a function of the
+   document text alone"*, and `L-10`, *"If a document's first line…"* — and this
+   one is the exact dual of §1.2.4 L1's *"MUST lift every conforming document"*,
+   which is a statement about lift. Deciding `X-n` on that convention and `S-9`
+   against it would have been two principles, used once each.
+
+   The label is not the placement. `L-5`, `L-6` and `L-7` are printed in §2.3,
+   far from `L-1` to `L-4`, so a family is not confined to one section. `L-15`
+   is printed in §2.4 immediately before `S-3`, where the pair reads as one
+   thing, and §2.4.1's informative *"lift assigns it no tree"* is rewritten to
+   cite `L-15` rather than to assert it. The free labels left are `S-9`, `P-13`
+   and `E-11`.
 
 **Deliberately left to a later RFC.**
 
