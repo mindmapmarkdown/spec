@@ -72,8 +72,14 @@ gets to decide later that they were met.**
 2. **Every rule is tested, or its absence is explained.** Each normative rule has
    at least one example in the suite, or a recorded reason why the suite's format
    cannot express it.
-3. **Two independent implementations pass**, at the level each claims, written by
-   people who did not write the specification.
+3. **Two independent implementations pass at L1 or above**, at the level each
+   claims, written by people who did not write the specification. **An L0 claim
+   does not count toward this condition.** §1.2.4 places L0's requirement on
+   documents rather than on software, and records that every existing Markdown
+   reader, editor, renderer, and diff tool is an L0 implementation *without
+   modification* — so two L0 claims would meet this condition's letter while
+   demonstrating nothing. L1 is the lowest level at which passing the suite is
+   evidence that the specification can be implemented from the specification.
 4. **A migration guide exists** for every Breaking change since 0.1.
 
 The third is the one that cannot be arranged by writing more text, and it is
