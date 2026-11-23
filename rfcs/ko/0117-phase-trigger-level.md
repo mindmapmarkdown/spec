@@ -1,6 +1,6 @@
-# RFC 0000: Phase 2 → 3 구현 수에 레벨을 못 박는다
+# RFC 0117: Phase 2 → 3 구현 수에 레벨을 못 박는다
 
-> **번역본이다.** 정본은 영문 [`rfcs/0000-phase-trigger-level.md`](../0000-phase-trigger-level.md)이며,
+> **번역본이다.** 정본은 영문 [`rfcs/0117-phase-trigger-level.md`](../0117-phase-trigger-level.md)이며,
 > 이 번역과 원문이 어긋나면 **원문이 이긴다**. 규범 효력을 갖는 것은 원문뿐이고,
 > [`GOVERNANCE.md`](../../GOVERNANCE.md) §4의 결정도 원문을 대상으로 이루어진다.
 > 어긋난 곳을 발견하면 그것은 이 파일의 결함이므로
@@ -15,7 +15,7 @@
 | **작성자** | 정제영 `<ok@baro.pro>` |
 | **작성일** | 2026-11-24 |
 | **코멘트 기간 종료** | 2026-12-08 |
-| **논의** | `<풀 리퀘스트 링크>` |
+| **논의** | <https://github.com/mindmapmarkdown/spec/pull/117> |
 | **대체하는 RFC** | — |
 | **대체된 RFC** | — |
 

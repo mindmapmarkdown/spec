@@ -1,4 +1,4 @@
-# RFC 0000: A level for the Phase 2 → 3 implementation count
+# RFC 0117: A level for the Phase 2 → 3 implementation count
 
 | | |
 |---|---|
@@ -7,7 +7,7 @@
 | **Author(s)** | `정제영 <ok@baro.pro>` |
 | **Created** | 2026-11-24 |
 | **Comment period ends** | 2026-12-08 |
-| **Discussion** | `<link to the pull request>` |
+| **Discussion** | <https://github.com/mindmapmarkdown/spec/pull/117> |
 | **Supersedes** | — |
 | **Superseded by** | — |
 
