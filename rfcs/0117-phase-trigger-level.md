@@ -21,7 +21,9 @@ specification was written, and is satisfied today by software whose authors have
 never heard of it. This RFC pins the count to **L1 or above**, says in the same
 place why L0 cannot stand in, and fixes the sense of **"independent"** by
 pointing at the definition [`VERSIONING.md`
-§5](../VERSIONING.md#5-what-10-would-mean) condition 3 already carries.
+§5](../VERSIONING.md#5-what-10-would-mean) condition 3 already carries. It also
+settles which release a counted claim may name: a claim counts while no Breaking
+change has shipped since the release it names.
 
 Nothing in [`spec.md`](../spec.md) changes. No conformance requirement moves, no
 implementation changes behaviour, and the generated suite is byte-identical. This
@@ -112,7 +114,7 @@ untouched.
 ### The note below the table
 
 §5 already carries a paragraph under its table fixing the sense of `"External"`
-for the Phase 0 → 1 trigger. Two paragraphs join it in the same role — fixing
+for the Phase 0 → 1 trigger. Three paragraphs join it in the same role — fixing
 the terms the table uses, in the one place the table is read:
 
 ```markdown
@@ -128,7 +130,56 @@ number, and the first sentence of this section says why that matters.
 on software, and says what follows from that: every existing Markdown reader,
 editor, renderer, and diff tool is an L0 implementation *without modification*. A
 count that admitted L0 was met before this specification was written.
+
+A claim counts **while it is still true of the current release** — while no
+Breaking change has been released since the release the claim names. From 1.0
+onward that is readable from the number, because [`VERSIONING.md`
+§2](VERSIONING.md#2-the-number) gives a Breaking change a MAJOR bump, so a claim
+counts within its own MAJOR. During 0.x it is readable from
+[`CHANGELOG.md`](CHANGELOG.md), because [`VERSIONING.md`
+§3](VERSIONING.md#3-before-10) gives a Breaking change a MINOR bump there while
+§2 gives MINOR to Normative changes as well, so the number alone cannot tell the
+two apart. A PATCH release, and a MINOR release from 1.0 onward, never un-count a
+claim: §2 defines both as changes nothing that conformed stops conforming to.
 ```
+
+### Which release a claim may name
+
+[`VERSIONING.md` §4](../VERSIONING.md#4-what-a-conformance-claim-cites) requires
+a claim to name a level **and a release**, and a Phase 2 → 3 count is taken at a
+moment in time, so the two can be years apart. The third paragraph above settles
+which claims are still live at that moment, and this is the reasoning for it.
+
+The count measures one thing: that this specification can be implemented,
+independently, from its own text. A claim says that about the release it names
+and about nothing else. What decides whether it still says it about the text the
+project publishes today is therefore not the claim's age but whether anything
+since has broken it — and [`VERSIONING.md` §2](../VERSIONING.md#2-the-number)
+already has the word for that, defining a Breaking change as one where
+*"documents or implementations that conformed no longer do"*. So the rule is not
+a new judgment; it is §2's own definition applied to a count.
+
+This is deliberately not a treadmill. A PATCH release never un-counts a claim,
+and neither does a MINOR release from 1.0 onward, because §2 defines those as
+changes nothing that conformed stops conforming to. The count resets when, and
+only when, the claims it rests on have stopped being true — which is the moment
+at which a count of implementations would otherwise start overstating what the
+project has.
+
+Reading it costs no judgment at count time. From 1.0 the MAJOR numbers decide
+it. During 0.x [`CHANGELOG.md`](../CHANGELOG.md) decides it: [`VERSIONING.md`
+§6](../VERSIONING.md#6-release-procedure) makes a dated entry a condition of
+releasing, and the entries name their class under [`GOVERNANCE.md`
+§3](../GOVERNANCE.md#3-classes-of-change), so whether a Breaking change shipped
+between two releases is a published fact rather than a question put to whoever
+is counting. [`VERSIONING.md` §7](../VERSIONING.md#7-yanking) keeps the release a
+claim names readable forever, which is what makes an old claim checkable at all.
+
+The 0.x case is not hypothetical. Nothing in the §5 table gates Phase 2 → 3 on
+1.0, so the trigger can in principle fire before this specification has a 1.0 —
+and §3 gives Breaking changes a MINOR bump below it. A rule stated only in terms
+of MAJOR would have had nothing to say exactly where the specification moves
+most.
 
 ### Requirement language
 
@@ -224,6 +275,26 @@ edit a document this RFC otherwise leaves alone. Either direction removes the
 duplication, which is the part that matters; if a later RFC rearranges what the
 two documents own, the reference moves with it.
 
+**Count a claim against any release, however old.** The simplest rule, and it
+needs nothing further written: interoperability demonstrated at `0.3.0` was
+still demonstrated. Rejected because [`VERSIONING.md`
+§2](../VERSIONING.md#2-the-number) defines a Breaking change as one where
+*"documents or implementations that conformed no longer do"* — so once one has
+shipped, a claim against the release before it is a claim about a text the
+project no longer publishes. The count would go on proving that the
+specification is implementable from its text, about text nobody is being asked
+to implement.
+
+**Count a claim within the current MAJOR.** This was the author's recorded lean
+when the question was opened as blocking, and it is wrong for a reason the
+question itself supplied. §3 gives a Breaking change a MINOR bump below 1.0, and
+nothing in the §5 table gates Phase 2 → 3 on 1.0 — so during 0.x "the current
+MAJOR" is every release there has ever been, and a claim against `0.1.0` would
+count at `0.9.0` across eight Breaking releases. That is this RFC's own defect
+one level down: a condition whose letter is met by something that demonstrates
+nothing. It is recorded here rather than quietly dropped, because an RFC that
+hides which of its author's answers it threw away is harder to argue against.
+
 **Prior art.** OPML has neither conformance levels nor a phase ladder, so it
 offers nothing here. The standards bodies that gate advancement on
 implementations all gate on *independent, interoperating* ones rather than on
@@ -237,32 +308,16 @@ because neither has such a level. This specification does have one, deliberately
 
 ## Unresolved questions
 
-**Blocking — must be answered before the comment period ends.**
-
-Does a claim against an *older release* count? [`VERSIONING.md`
-§4](../VERSIONING.md#4-what-a-conformance-claim-cites) requires a conformance
-claim to name a level **and a release**: *"Mindmap Markdown 0.1.0, level L1"*. A
-Phase 2 → 3 count is taken at a moment in time, and the claims it counts have
-dates. If three implementations each claim L1 of `0.3.0` and the current release
-is `1.2.0`, has the trigger been met?
-
-Two answers are defensible, and this RFC does not pick one:
-
-- **Any release counts.** Interoperability demonstrated at `0.3.0` was still
-  demonstrated, and requiring re-certification on every release would make the
-  trigger a treadmill: a MINOR bump could un-meet a met condition, which §5's
-  first sentence argues against as strongly as it argues for a floor.
-- **The claim must name a release in the current MAJOR.** Three implementations
-  of a pre-1.0 specification say little about the one that shipped, and §2 of
-  `VERSIONING.md` defines a MAJOR bump as precisely the point where *"documents
-  or implementations that conformed no longer do"*.
-
-The author leans to the second, narrowed: **any release within the current
-MAJOR** — which under 1.x means any 1.x claim, and makes no demand at all during
-0.x, where §3 of `VERSIONING.md` says the number *"identifies a state; it does
-not promise stability"* anyway. It is recorded as blocking rather than decided
-because it changes what the amended sentence means, and answering it in the
-Decision section below is cheaper than amending the amendment later.
+**Nothing blocking.** Which release a counted claim may name was opened as
+blocking in this RFC's first revision, and is answered in *Which release a claim
+may name* above — on the same day, before any comment had been made against it.
+The two answers recorded there as defensible are both rejected in *Alternatives*,
+and the rule that replaced them was neither of them: it came out of reading §3,
+which gives a Breaking change a MINOR bump below 1.0 and so sinks the author's
+own lean. The fourteen days now run against text that says what it means, which
+is what [`GOVERNANCE.md` §4](../GOVERNANCE.md#4-decision-making)'s lazy
+consensus needs of the thing it counts silence against. The empty *Decision and
+rationale* below is the template's, and stays empty until the period ends.
 
 **Not blocking.**
 

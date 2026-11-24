@@ -29,7 +29,9 @@
 소프트웨어들로 충족된다. 이 RFC는 그 수를 **L1 이상**으로 못 박고, L0가 그
 자리를 대신할 수 없는 이유를 같은 자리에 적고, **"independent"(독립)** 의 뜻을
 [`VERSIONING.md` §5](../../VERSIONING.md#5-what-10-would-mean) 조건 3이 이미
-담고 있는 정의를 가리켜 고정한다.
+담고 있는 정의를 가리켜 고정한다. 그리고 세어지는 선언이 어떤 릴리스를 밝힐 수
+있는지를 함께 정한다 — 선언이 밝힌 릴리스 뒤로 Breaking 변경이 나가지 않은 동안
+그 선언은 세어진다.
 
 [`spec.md`](../../spec.md)는 한 글자도 바뀌지 않는다. 적합성 요구가 움직이지
 않고, 어떤 구현도 동작을 바꾸지 않으며, 생성되는 시험 묶음은 바이트 동일하다.
@@ -122,7 +124,7 @@ Phase 2 → 3 행은 이렇게 된다 — 안에 든 링크가 이 파일이 아
 ### 표 아래의 주석
 
 §5는 이미 표 아래에 Phase 0 → 1 방아쇠의 `"External"`의 뜻을 고정하는 문단을
-두고 있다. 같은 역할의 두 문단이 그 옆에 붙는다 — 표가 쓰는 말을, 표를 읽는 바로
+두고 있다. 같은 역할의 세 문단이 그 옆에 붙는다 — 표가 쓰는 말을, 표를 읽는 바로
 그 자리에서 고정한다:
 
 ```markdown
@@ -138,6 +140,17 @@ number, and the first sentence of this section says why that matters.
 on software, and says what follows from that: every existing Markdown reader,
 editor, renderer, and diff tool is an L0 implementation *without modification*. A
 count that admitted L0 was met before this specification was written.
+
+A claim counts **while it is still true of the current release** — while no
+Breaking change has been released since the release the claim names. From 1.0
+onward that is readable from the number, because [`VERSIONING.md`
+§2](VERSIONING.md#2-the-number) gives a Breaking change a MAJOR bump, so a claim
+counts within its own MAJOR. During 0.x it is readable from
+[`CHANGELOG.md`](CHANGELOG.md), because [`VERSIONING.md`
+§3](VERSIONING.md#3-before-10) gives a Breaking change a MINOR bump there while
+§2 gives MINOR to Normative changes as well, so the number alone cannot tell the
+two apart. A PATCH release, and a MINOR release from 1.0 onward, never un-count a
+claim: §2 defines both as changes nothing that conformed stops conforming to.
 ```
 
 옮기면: **"Independent"** 는 `VERSIONING.md` §5 조건 3이 주는 뜻 — 사양을 쓴
@@ -148,6 +161,50 @@ count that admitted L0 was met before this specification was written.
 요구를 소프트웨어가 아니라 문서에 두고 거기서 따라오는 결과를 함께 적기 때문이다
 — 기존의 모든 마크다운 리더·편집기·렌더러·diff 도구가 *수정 없이* L0 구현이다.
 L0를 세는 수는 이 사양이 쓰이기 전에 이미 충족되어 있었다.
+선언이 세어지는 것은 **그것이 현재 릴리스에 대해서도 여전히
+참인 동안**이다 — 선언이 밝힌 릴리스 뒤로 Breaking 변경이 나가지 않은 동안이다.
+1.0 이후에는 번호로 읽을 수 있다. `VERSIONING.md` §2가 Breaking 변경에 MAJOR
+올림을 주므로 선언은 자기 MAJOR 안에서 세어진다. 0.x 동안에는 `CHANGELOG.md`로
+읽는다. `VERSIONING.md` §3이 그 구간에서 Breaking 변경에 MINOR 올림을 주고 §2는
+MINOR를 Normative 변경에도 주므로, 번호만으로는 둘을 가릴 수 없다. PATCH
+릴리스와 1.0 이후의 MINOR 릴리스는 선언을 무효로 만들지 않는다. §2가 그 둘을
+적합했던 것이 적합하지 않게 되지는 않는 변경으로 정의하기 때문이다.
+
+### 선언이 밝힐 수 있는 릴리스
+
+[`VERSIONING.md` §4](../../VERSIONING.md#4-what-a-conformance-claim-cites)는
+선언이 **레벨과 릴리스**를 밝히도록 요구하고, Phase 2 → 3의 수는 어느 한 시점에
+세어진다. 둘은 몇 해 떨어져 있을 수 있다. 위의 세 번째 문단이 그 시점에 어떤
+선언이 아직 살아 있는지를 정하고, 그 근거가 이것이다.
+
+이 수가 재는 것은 하나다 — 이 사양이 그 자신의 글만으로, 독립적으로 구현될 수
+있다는 것. 선언은 그것을 자기가 밝힌 릴리스에 대해 말하고 다른 어떤 릴리스에
+대해서도 말하지 않는다. 그러므로 그 선언이 지금 프로젝트가 펴내는 글에 대해서도
+여전히 그 말을 하는지를 가르는 것은 선언의 나이가 아니라, 그 뒤에 그것을 깨뜨린
+일이 있었는지다. 그리고 [`VERSIONING.md`
+§2](../../VERSIONING.md#2-the-number)에는 이미 그 말이 있다 — Breaking 변경을
+*"적합했던 문서나 구현이 더는 적합하지 않게 되는"* 변경으로 정의한다. 그러니 이
+규칙은 새로운 판단이 아니고, §2가 가진 정의를 수에 적용한 것이다.
+
+이것은 일부러 러닝머신이 아니다. PATCH 릴리스는 선언을 무효로 만들지 않고, 1.0
+이후의 MINOR 릴리스도 그렇다. §2가 그 둘을 적합했던 것이 적합하지 않게 되지는
+않는 변경으로 정의하기 때문이다. 수가 초기화되는 때는 그 수가 딛고 선 선언들이
+참이기를 그쳤을 때이고, 그때뿐이다. 바로 그 순간부터 구현의 수는 프로젝트가 가진
+것을 과장하기 시작한다.
+
+세는 시점에 판단이 들어갈 자리는 없다. 1.0 이후에는 MAJOR 번호가 가른다. 0.x
+동안에는 [`CHANGELOG.md`](../../CHANGELOG.md)가 가른다. [`VERSIONING.md`
+§6](../../VERSIONING.md#6-release-procedure)이 날짜 붙은 항목을 릴리스의 조건으로
+삼고 항목들은 [`GOVERNANCE.md`
+§3](../../GOVERNANCE.md#3-classes-of-change)의 등급을 밝히므로, 두 릴리스 사이에
+Breaking 변경이 나갔는지는 세는 사람에게 묻는 질문이 아니라 공개된 사실이다.
+[`VERSIONING.md` §7](../../VERSIONING.md#7-yanking)은 선언이 밝힌 릴리스를
+영원히 읽을 수 있게 남겨 두고, 그래서 오래된 선언도 확인이 된다.
+
+0.x의 경우는 가정이 아니다. §5의 표에서 Phase 2 → 3을 1.0에 묶어 두는 것은
+아무것도 없으므로 이 사양에 1.0이 생기기 전에도 원리상 방아쇠는 당겨질 수 있고,
+§3은 그 아래에서 Breaking 변경을 MINOR 올림으로 만든다. MAJOR만으로 적힌 규칙은
+사양이 가장 많이 움직이는 바로 그 구간에서 할 말이 없었을 것이다.
 
 ### 요구 키워드
 
@@ -232,6 +289,24 @@ L0를 세는 수는 이 사양이 쓰이기 전에 이미 충족되어 있었다
 문서를 편집하게 되기 때문이다. 어느 방향이든 중복은 사라지고, 중요한 것은 그
 부분이다. 뒤에 어떤 RFC가 두 문서의 소유를 재배치한다면 이 참조도 함께 움직인다.
 
+**어느 릴리스든 세어진다.** 가장 간단한 규칙이고 더 쓸 것이 없다. `0.3.0`에서
+증명된 상호 운용성은 여전히 증명된 것이다. 기각하는 이유는 [`VERSIONING.md`
+§2](../../VERSIONING.md#2-the-number)가 Breaking 변경을 *"적합했던 문서나 구현이
+더는 적합하지 않게 되는"* 변경으로 정의하기 때문이다. 그런 변경이 한 번 나가면
+그 앞 릴리스에 대한 선언은 프로젝트가 더는 펴내지 않는 글에 대한 선언이 된다.
+그러면 그 수는 사양이 그 글만으로 구현될 수 있다는 것을, 아무도 구현하라고
+요구받지 않는 글에 대해 계속 증명하게 된다.
+
+**현재 MAJOR 안의 릴리스를 밝혀야 한다.** 질문을 봉쇄로 열었을 때 작성자가
+기울었던 답이고, 그 질문 자체가 제공한 이유로 틀렸다. §3은 1.0 아래에서 Breaking
+변경에 MINOR 올림을 주고, §5의 표에서 Phase 2 → 3을 1.0에 묶어 두는 것은
+아무것도 없다. 그러므로 0.x 동안 "현재 MAJOR"는 지금까지 있었던 모든 릴리스이고,
+`0.1.0`에 대한 선언이 Breaking 릴리스 여덟 개를 건너 `0.9.0`에서도 세어진다.
+이것은 이 RFC가 고치려는 결함을 한 단계 아래에서 되풀이하는 것이다 — 아무것도
+증명하지 않는 것으로 조건의 글자가 충족되는 결함. 조용히 버리지 않고 여기에 적어
+두는 이유는, 작성자의 답 가운데 무엇을 버렸는지 감추는 RFC는 반대하기가 더
+어렵기 때문이다.
+
 **선행 사례.** OPML에는 적합성 레벨도 Phase 사다리도 없으므로 여기에 줄 것이
 없다. 구현을 근거로 단계를 올리는 표준 단체들은 모두 "conformant"를 한정 없이
 쓰지 않고 **독립적이고 서로 통신하는(interoperating)** 구현을 센다. IETF는
@@ -244,41 +319,26 @@ Internet Standard로 올라갈 때 독립적으로 상호 동작하는 구현 �
 
 ## 미해결 질문
 
-**봉쇄 — 코멘트 기간이 끝나기 전에 답해야 한다.**
-
-**더 오래된 릴리스에 대한 선언도 세어지는가?**
-[`VERSIONING.md` §4](../../VERSIONING.md#4-what-a-conformance-claim-cites)는
-적합성 선언이 **레벨과 릴리스**를 함께 밝히도록 요구한다: *"Mindmap Markdown
-0.1.0, level L1"*. Phase 2 → 3의 수는 어느 한 시점에 세어지고, 세어지는
-선언들에는 날짜가 있다. 구현 셋이 각각 `0.3.0`의 L1을 선언했고 현재 릴리스가
-`1.2.0`이라면, 방아쇠는 당겨졌는가?
-
-변호 가능한 답이 둘이고, 이 RFC는 어느 쪽도 고르지 않는다.
-
-- **어느 릴리스든 세어진다.** `0.3.0`에서 증명된 상호 운용성은 여전히 증명된
-  것이고, 릴리스마다 재인증을 요구하면 방아쇠가 러닝머신이 된다. MINOR 올림
-  하나로 이미 충족된 조건이 미달이 될 수 있다는 뜻이고, §5의 첫 문장은 바닥선을
-  지지하는 만큼 그것도 반대한다.
-- **현재 MAJOR 안의 릴리스를 밝혀야 한다.** 1.0 이전 사양의 구현 셋은 실제로
-  나간 사양에 대해 말해 주는 바가 적고, `VERSIONING.md` §2는 MAJOR 올림을 바로
-  *"적합했던 문서나 구현이 더는 적합하지 않게 되는"* 지점으로 정의한다.
-
-작성자는 두 번째를 좁힌 쪽으로 기운다 — **현재 MAJOR 안의 어느 릴리스든**.
-1.x에서는 어떤 1.x 선언이든 되고, 0.x 동안에는 아무 요구도 하지 않는다.
-`VERSIONING.md` §3이 그 번호는 *"어느 상태를 가리킬 뿐 안정을 약속하지 않는다"*
-고 말하는 구간이기 때문이다. 결정하지 않고 봉쇄로 적어 두는 이유는, 이 답이
-고치려는 문장의 뜻 자체를 바꾸기 때문이고, 아래 결정 절에서 답하는 것이 나중에
-개정을 다시 개정하는 것보다 싸기 때문이다.
+**봉쇄는 없다.** 세어지는 선언이 어떤 릴리스를 밝힐 수 있는지는 이 RFC의 첫
+판에서 봉쇄로 열렸고, 위의 *선언이 밝힐 수 있는 릴리스*에서 답했다 — 같은 날,
+아직 그에 대한 어떤 코멘트도 달리지 않은 때다. 거기서 변호 가능하다고 적었던 두
+답은 둘 다 *대안*에서 기각했고, 그 자리에 들어온 규칙은 그 둘 중 어느 것도
+아니다. 1.0 아래에서 Breaking 변경을 MINOR 올림으로 만드는 §3을 읽다가 나온
+규칙이고, 바로 그 §3이 작성자 자신의 기울기를 가라앉혔다. 이제 열나흘은 뜻이
+정해진 글을 상대로 흐르며, [`GOVERNANCE.md`
+§4](../../GOVERNANCE.md#4-decision-making)의 게으른 합의가 침묵을 세는 대상에게
+요구하는 것이 바로 그것이다. 아래의 빈 *결정과 근거*는 템플릿의 것이고, 기간이
+끝날 때까지 비워 둔다.
 
 **봉쇄가 아닌 것.**
 
-**L2가 시험 가능해지면 바닥선을 다시 볼 것인가.**
-[RFC 0110](0110-subtree-exchange.md)은 3장과 L2의 세 항목 중 하나를
-착지시킨다. diff와 merge는 각각 RFC가 필요하다. 셋이 모두 쓰이고 시험 묶음이
-그것들을 판정할 수 있게 되면, 뒤에 오는 RFC가 "재단 이전은 어려운 부분에 관한 것이니 Phase 2 →
-3의 수는 L2를 원해야 한다"고 주장할 수 있다. 존재하지 않는 글을 상대로는 그
-주장을 할 수 없으므로 여기서는 하지 않는다 — 그리고 `L1 이상`은 이미 L2 구현을
-세어 준다.
+**L2가 시험 가능해지면 바닥선을 다시 볼 것인가.** [RFC
+0110](0110-subtree-exchange.md)은 3장과 L2의 세 항목 중 하나를 착지시킨다.
+diff와 merge는 각각 RFC가 필요하다. 셋이 모두 쓰이고 시험 묶음이 그것들을
+판정할 수 있게 되면, 뒤에 오는 RFC가 "재단 이전은 어려운 부분에 관한 것이니
+Phase 2 → 3의 수는 L2를 원해야 한다"고 주장할 수 있다. 존재하지 않는 글을
+상대로는 그 주장을 할 수 없으므로 여기서는 하지 않는다 — 그리고 `L1 이상`은
+이미 L2 구현을 세어 준다.
 
 **프로젝트가 세는 적합성 선언의 등록부를 둘 것인가.** 오늘 그것을 기록하는 곳은
 없다. [`README.md`](../../README.md)가 `mindmapmd`를 산문으로 언급하는 것이
