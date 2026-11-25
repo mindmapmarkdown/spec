@@ -217,6 +217,17 @@ not touched and the suite is generated from it.
   rejected, this RFC still stands on its own reasoning, but the two documents
   would then disagree about whether L0 counts — a reason to decide them together,
   and the reason this RFC names the dependency rather than assuming it.
+- **`VERSIONING.md` §5 condition 3 does not get this RFC's release rule**, and
+  gets a stricter one in <https://github.com/mindmapmarkdown/spec/pull/118>. The
+  two counts measure different things. This one measures an ecosystem fact — that
+  the specification *has been* implemented independently — which a later Normative
+  release does not undo, so a claim here survives everything short of a Breaking
+  change. Condition 3 measures whether the text about to be frozen as 1.0 passes,
+  and conditions 1 and 2 close the rule set and require every rule to have an
+  example, so there a pass against an earlier suite is a pass against fewer
+  examples. Its rule is therefore the whole suite rather than the Breaking line:
+  identical `examples/examples.json`, or the claim does not count. The same
+  question, answered twice, because the answers belong to different questions.
 - **`VERSIONING.md` §4** is cited for what a conformance claim must name. It is
   not restated here, because a procedure stated in two files is a procedure that
   will disagree with itself.
