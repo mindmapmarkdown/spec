@@ -80,6 +80,18 @@ gets to decide later that they were met.**
    modification* — so two L0 claims would meet this condition's letter while
    demonstrating nothing. L1 is the lowest level at which passing the suite is
    evidence that the specification can be implemented from the specification.
+   **The pass is against the suite 1.0 ships.** §4 requires a claim to name the
+   release it was tested against, *"because the suite that decides it changes
+   between releases"* — so a pass of an earlier release is a pass of an earlier
+   set of examples, and condition 2 above is what makes the difference matter: at
+   1.0 every rule has an example, and a pass that predates some of them is no
+   evidence about the rules it never ran. The test is the file rather than the
+   class: a claim counts when `examples/examples.json` for the release it names
+   is identical to the one 1.0 ships. Editorial and Clarifying releases leave it
+   identical and Normative or Breaking ones do not, but the comparison is what
+   decides, because the suite is the thing an implementation actually ran
+   against. Nothing here asks a claim to name 1.0, which does not exist while
+   these conditions are being evaluated; it asks the suite to be the same one.
 4. **A migration guide exists** for every Breaking change since 0.1.
 
 The third is the one that cannot be arranged by writing more text, and it is
